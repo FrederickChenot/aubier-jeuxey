@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-anthracite: #3a3d42;
+  --color-cedar: #c8813a;
+  --color-cedar-light: #e8b87a;
+  --color-sage: #8aab94;
+  --color-sage-light: #b8cfc0;
+  --color-creme: #f7f5f0;
+  --color-oak: #d4a96a;
+
+  --font-playfair: "Playfair Display", serif;
+  --font-dm: "DM Sans", sans-serif;
+}
+
+:root {
+  --background: #f7f5f0;
+  --foreground: #3a3d42;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-dm), sans-serif;
+}
+
+/* react-calendar overrides */
+.react-calendar {
+  border: none;
+  background: transparent;
+  font-family: var(--font-dm), sans-serif;
+  width: 100%;
+}
+
+.react-calendar__tile--active,
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background: #c8813a;
+  color: white;
+}
+
+.react-calendar__tile--now {
+  background: #b8cfc0;
+}
+
+.react-calendar__tile:disabled {
+  background: #fee2e2;
+  color: #ef4444;
+  text-decoration: line-through;
+}
+
+.react-calendar__tile:enabled:hover {
+  background: #e8b87a;
+}

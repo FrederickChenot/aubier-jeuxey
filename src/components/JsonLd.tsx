@@ -1,0 +1,54 @@
+export default function JsonLd() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "LodgingBusiness",
+        "@id": "https://laubier.fr/#lodging",
+        name: "L'Aubier",
+        description:
+          "Studio design entièrement rénové en 2025, au cœur des Vosges à Jeuxey. Terrasse bambous, parking, WiFi fibre.",
+        url: "https://laubier.fr",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Jeuxey",
+          postalCode: "88000",
+          addressCountry: "FR",
+        },
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: 48.19,
+          longitude: 6.43,
+        },
+        priceRange: "€€",
+        numberOfRooms: 1,
+        amenityFeature: [
+          { "@type": "LocationFeatureSpecification", name: "WiFi", value: true },
+          { "@type": "LocationFeatureSpecification", name: "Parking", value: true },
+          { "@type": "LocationFeatureSpecification", name: "Climatisation", value: true },
+          { "@type": "LocationFeatureSpecification", name: "Terrasse", value: true },
+        ],
+        offers: {
+          "@type": "Offer",
+          price: "75",
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://laubier.fr/#breadcrumb",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Accueil", item: "https://laubier.fr" },
+        ],
+      },
+    ],
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
