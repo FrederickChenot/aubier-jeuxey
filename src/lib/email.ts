@@ -1,10 +1,12 @@
-import { Resend } from "resend";
+import { BrevoClient } from "@getbrevo/brevo";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
-function getResend() {
-  return new Resend(process.env.RESEND_API_KEY ?? "re_placeholder");
+function getMailer() {
+  return new BrevoClient({ apiKey: process.env.BREVO_API_KEY! });
 }
+
+const SENDER = { name: "L'Aubier", email: "contact@aubier-vosges.fr" };
 
 interface ReservationData {
   guestName: string;
@@ -24,11 +26,11 @@ function formatDate(d: string) {
 }
 
 export async function sendOwnerNotification(data: ReservationData) {
-  await getResend().emails.send({
-    from: "L'Aubier <noreply@laubier.fr>",
-    to: process.env.OWNER_EMAIL!,
+  await getMailer().transactionalEmails.sendTransacEmail({
+    sender: SENDER,
+    to: [{ email: process.env.OWNER_EMAIL! }],
     subject: `Nouvelle réservation — ${data.guestName} · ${formatDate(data.checkin)}`,
-    html: `
+    htmlContent: `
       <h2>Nouvelle réservation confirmée</h2>
       <table>
         <tr><td><strong>Voyageur</strong></td><td>${data.guestName}</td></tr>
@@ -46,11 +48,11 @@ export async function sendOwnerNotification(data: ReservationData) {
 }
 
 export async function sendGuestConfirmation(data: ReservationData, icsContent: string) {
-  await getResend().emails.send({
-    from: "L'Aubier <noreply@laubier.fr>",
-    to: data.guestEmail,
+  await getMailer().transactionalEmails.sendTransacEmail({
+    sender: SENDER,
+    to: [{ email: data.guestEmail, name: data.guestName }],
     subject: `Confirmation de votre séjour à L'Aubier · ${formatDate(data.checkin)}`,
-    html: `
+    htmlContent: `
       <h2>Votre réservation est confirmée !</h2>
       <p>Bonjour ${data.guestName},</p>
       <p>Nous avons bien reçu votre paiement et votre séjour est confirmé.</p>
@@ -65,21 +67,18 @@ export async function sendGuestConfirmation(data: ReservationData, icsContent: s
       <p>Le fichier calendrier (.ics) est joint à cet email. Retrouvez également votre séjour sur <a href="https://laubier.fr/reservation/success">notre site</a>.</p>
       <p>À très bientôt dans les Vosges !<br>L'équipe de L'Aubier</p>
     `,
-    attachments: [
-      {
-        filename: "sejour-laubier.ics",
-        content: Buffer.from(icsContent).toString("base64"),
-      },
+    attachment: [
+      { name: "sejour-laubier.ics", content: Buffer.from(icsContent).toString("base64") },
     ],
   });
 }
 
 export async function sendContactEmail(name: string, email: string, message: string) {
-  await getResend().emails.send({
-    from: "L'Aubier <noreply@laubier.fr>",
-    to: process.env.OWNER_EMAIL!,
-    replyTo: email,
+  await getMailer().transactionalEmails.sendTransacEmail({
+    sender: SENDER,
+    to: [{ email: process.env.OWNER_EMAIL! }],
+    replyTo: { email, name },
     subject: `Message de contact — ${name}`,
-    html: `<p><strong>De :</strong> ${name} (${email})</p><p>${message.replace(/\n/g, "<br>")}</p>`,
+    htmlContent: `<p><strong>De :</strong> ${name} (${email})</p><p>${message.replace(/\n/g, "<br>")}</p>`,
   });
 }
