@@ -53,18 +53,17 @@ export async function sendGuestConfirmation(data: ReservationData, icsContent: s
     to: [{ email: data.guestEmail, name: data.guestName }],
     subject: `Confirmation de votre séjour à L'Aubier · ${formatDate(data.checkin)}`,
     htmlContent: `
-      <h2>Votre réservation est confirmée !</h2>
+      <h2>Votre demande de réservation est bien reçue !</h2>
       <p>Bonjour ${data.guestName},</p>
-      <p>Nous avons bien reçu votre paiement et votre séjour est confirmé.</p>
+      <p>Nous avons bien reçu votre demande et nous vous contacterons très prochainement pour confirmer votre séjour.</p>
       <h3>Détails du séjour</h3>
       <table>
         <tr><td><strong>Arrivée</strong></td><td>${formatDate(data.checkin)}</td></tr>
         <tr><td><strong>Départ</strong></td><td>${formatDate(data.checkout)}</td></tr>
         <tr><td><strong>Voyageurs</strong></td><td>${data.guestsCount} personne(s)</td></tr>
-        <tr><td><strong>Montant payé</strong></td><td>${data.depositAmount ?? data.totalPrice} €</td></tr>
-        ${data.depositAmount ? `<tr><td><strong>Solde restant</strong></td><td>${data.totalPrice - data.depositAmount} € (à régler sur place)</td></tr>` : ""}
+        <tr><td><strong>Total estimé</strong></td><td>${data.totalPrice} €</td></tr>
       </table>
-      <p>Le fichier calendrier (.ics) est joint à cet email. Retrouvez également votre séjour sur <a href="https://laubier.fr/reservation/success">notre site</a>.</p>
+      <p>Le fichier calendrier (.ics) est joint à cet email pour bloquer les dates dans votre agenda.</p>
       <p>À très bientôt dans les Vosges !<br>L'équipe de L'Aubier</p>
     `,
     attachment: [

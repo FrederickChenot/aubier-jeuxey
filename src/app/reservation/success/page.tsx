@@ -4,8 +4,8 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Réservation confirmée",
-  description: "Votre réservation à L'Aubier est confirmée. Merci !",
+  title: "Demande envoyée",
+  description: "Votre demande de réservation à L'Aubier a bien été reçue. Nous vous répondons très vite !",
 };
 
 export default function SuccessPage() {
@@ -21,26 +21,26 @@ export default function SuccessPage() {
           </div>
 
           <h1 className="font-[family-name:var(--font-playfair)] text-3xl italic text-[#3a3d42] mb-3">
-            Réservation confirmée !
+            Demande envoyée !
           </h1>
           <p className="text-[#8aab94] mb-8">
-            Un email de confirmation avec tous les détails de votre séjour vous a été envoyé.
-            Le fichier calendrier (.ics) y est joint pour ajouter votre séjour à votre agenda.
+            Votre demande de réservation a bien été reçue. Un email de confirmation vous a été envoyé.
+            Le propriétaire vous contactera très prochainement pour confirmer votre séjour.
           </p>
 
           <div className="bg-white rounded-xl p-6 border border-[#b8cfc0]/30 mb-8 text-left space-y-3">
-            <p className="text-sm font-medium text-[#3a3d42]">Ce qui vous attend</p>
+            <p className="text-sm font-medium text-[#3a3d42]">La suite</p>
             <div className="flex gap-3 text-sm text-[#8aab94]">
               <span>📧</span>
-              <span>Email de confirmation avec vos détails</span>
+              <span>Email de confirmation dans votre boîte mail</span>
             </div>
             <div className="flex gap-3 text-sm text-[#8aab94]">
               <span>📅</span>
-              <span>Fichier .ics joint pour votre agenda</span>
+              <span>Fichier .ics joint pour bloquer les dates dans votre agenda</span>
             </div>
             <div className="flex gap-3 text-sm text-[#8aab94]">
               <span>📱</span>
-              <span>Contact du propriétaire 48h avant votre arrivée</span>
+              <span>Le propriétaire vous contacte pour finaliser</span>
             </div>
             <div className="flex gap-3 text-sm text-[#8aab94]">
               <span>🔑</span>

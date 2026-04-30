@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { format, addDays, differenceInCalendarDays } from "date-fns";
-import { PRICE_PER_NIGHT, CLEANING_FEE, DEPOSIT, DEPOSIT_THRESHOLD_NIGHTS, DEPOSIT_RATE } from "@/lib/stripe";
+import { PRICE_PER_NIGHT, CLEANING_FEE, DEPOSIT } from "@/lib/stripe";
 
 const today = new Date();
 
@@ -38,14 +38,11 @@ export default function ReservationForm({
     message: "",
   });
   const [loading, setLoading] = useState(false);
-  const [useDeposit, setUseDeposit] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const nights = Math.max(0, differenceInCalendarDays(new Date(checkout), new Date(checkin)));
   const nightsTotal = nights * PRICE_PER_NIGHT;
   const total = nightsTotal + CLEANING_FEE;
-  const canDeposit = nights > DEPOSIT_THRESHOLD_NIGHTS;
-  const depositAmount = canDeposit ? Math.ceil(total * DEPOSIT_RATE) : null;
-  const amountDue = useDeposit && depositAmount ? depositAmount : total;
 
   async function checkAvailability() {
     if (nights <= 0) {
@@ -69,24 +66,24 @@ export default function ReservationForm({
     if (ok) setStep(2);
   }
 
-  async function handleStep3() {
+  async function handleSubmit() {
     setLoading(true);
+    setSubmitError(null);
     try {
-      const res = await fetch("/api/stripe/session", {
+      const res = await fetch("/api/reservation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          checkin,
-          checkout,
-          ...form,
-          totalPrice: total,
-          depositAmount: useDeposit ? depositAmount : null,
-          amountDue,
-        }),
+        body: JSON.stringify({ checkin, checkout, ...form, totalPrice: total }),
       });
-      const { url } = await res.json();
-      window.location.href = url;
+      if (!res.ok) {
+        const { error } = await res.json();
+        setSubmitError(error ?? "Une erreur est survenue. Veuillez réessayer.");
+        setLoading(false);
+        return;
+      }
+      router.push("/reservation/success");
     } catch {
+      setSubmitError("Une erreur est survenue. Veuillez réessayer.");
       setLoading(false);
     }
   }
@@ -94,7 +91,7 @@ export default function ReservationForm({
   const steps = [
     { n: 1, label: "Dates" },
     { n: 2, label: "Coordonnées" },
-    { n: 3, label: "Paiement" },
+    { n: 3, label: "Confirmation" },
   ];
 
   return (
@@ -259,7 +256,7 @@ export default function ReservationForm({
         </div>
       )}
 
-      {/* Step 3 — Recap + payment */}
+      {/* Step 3 — Recap + submit */}
       {step === 3 && (
         <div className="bg-white rounded-2xl p-6 border border-[#b8cfc0]/30">
           <h2 className="font-[family-name:var(--font-playfair)] text-xl italic text-[#3a3d42] mb-6">
@@ -284,37 +281,17 @@ export default function ReservationForm({
               <span>{form.guestsCount}</span>
             </div>
             <div className="border-t border-[#b8cfc0] pt-3 flex justify-between">
-              <span className="text-[#8aab94]">Total séjour</span>
+              <span className="text-[#8aab94]">Total estimé</span>
               <span className="font-medium text-[#c8813a]">{total} €</span>
             </div>
           </div>
 
-          {canDeposit && depositAmount && (
-            <div className="bg-[#f7f5f0] rounded-xl p-4 mb-6">
-              <p className="text-sm font-medium text-[#3a3d42] mb-3">Mode de paiement</p>
-              <div className="space-y-2">
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="radio"
-                    checked={!useDeposit}
-                    onChange={() => setUseDeposit(false)}
-                    className="accent-[#c8813a]"
-                  />
-                  <span className="text-sm text-[#3a3d42]">Paiement total — {total} €</span>
-                </label>
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="radio"
-                    checked={useDeposit}
-                    onChange={() => setUseDeposit(true)}
-                    className="accent-[#c8813a]"
-                  />
-                  <span className="text-sm text-[#3a3d42]">
-                    Acompte 30% — {depositAmount} € maintenant · {total - depositAmount} € sur place
-                  </span>
-                </label>
-              </div>
-            </div>
+          <p className="text-xs text-[#8aab94] mb-6">
+            Aucun paiement en ligne. Le propriétaire vous contactera pour confirmer et convenir des modalités.
+          </p>
+
+          {submitError && (
+            <p className="text-red-500 text-sm mb-4">{submitError}</p>
           )}
 
           <div className="flex gap-3">
@@ -325,11 +302,11 @@ export default function ReservationForm({
               ← Retour
             </button>
             <button
-              onClick={handleStep3}
+              onClick={handleSubmit}
               disabled={loading}
               className="flex-1 bg-[#c8813a] hover:bg-[#e8b87a] disabled:opacity-40 text-white font-medium py-3 rounded-lg transition-colors"
             >
-              {loading ? "Redirection…" : `Payer ${amountDue} € →`}
+              {loading ? "Envoi en cours…" : "Envoyer ma demande →"}
             </button>
           </div>
         </div>

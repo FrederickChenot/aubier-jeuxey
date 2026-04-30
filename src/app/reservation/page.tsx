@@ -5,7 +5,7 @@ import ReservationForm from "./ReservationForm";
 
 export const metadata: Metadata = {
   title: "Réservation",
-  description: "Réservez votre séjour à L'Aubier directement, sans frais de plateforme. Paiement sécurisé via Stripe.",
+  description: "Réservez votre séjour à L'Aubier directement, sans frais de plateforme.",
 };
 
 type Props = {
@@ -24,7 +24,7 @@ export default async function ReservationPage({ searchParams }: Props) {
             <h1 className="font-[family-name:var(--font-playfair)] text-4xl italic text-[#f7f5f0] mb-2">
               Réservation
             </h1>
-            <p className="text-[#8aab94]">Paiement sécurisé · Sans frais de plateforme</p>
+            <p className="text-[#8aab94]">Réservation directe · Sans frais de plateforme</p>
           </div>
         </div>
 
