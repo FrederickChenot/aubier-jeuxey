@@ -50,10 +50,28 @@ export async function POST(request: NextRequest) {
   });
   ev.uid(`reservation-${reservation.id}@aubier-vosges.fr`);
 
-  await Promise.all([
-    sendOwnerNotification({ guestName, guestEmail, guestPhone, guestsCount: Number(guestsCount), checkin, checkout, totalPrice: Number(totalPrice), message }),
-    sendGuestConfirmation({ guestName, guestEmail, guestPhone, guestsCount: Number(guestsCount), checkin, checkout, totalPrice: Number(totalPrice), message }, cal.toString()),
+  const ownerEmail = process.env.OWNER_EMAIL;
+  console.log("[reservation] OWNER_EMAIL défini :", !!ownerEmail, "→", ownerEmail ?? "(vide)");
+  console.log("[reservation] BREVO_API_KEY défini :", !!process.env.BREVO_API_KEY);
+
+  const data = { guestName, guestEmail, guestPhone, guestsCount: Number(guestsCount), checkin, checkout, totalPrice: Number(totalPrice), message };
+
+  const [ownerResult, guestResult] = await Promise.allSettled([
+    sendOwnerNotification(data),
+    sendGuestConfirmation(data, cal.toString()),
   ]);
+
+  if (ownerResult.status === "rejected") {
+    console.error("[reservation] ÉCHEC email propriétaire :", ownerResult.reason);
+  } else {
+    console.log("[reservation] email propriétaire envoyé OK");
+  }
+
+  if (guestResult.status === "rejected") {
+    console.error("[reservation] ÉCHEC email voyageur :", guestResult.reason);
+  } else {
+    console.log("[reservation] email voyageur envoyé OK");
+  }
 
   return Response.json({ ok: true });
 }

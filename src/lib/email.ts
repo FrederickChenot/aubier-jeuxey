@@ -26,9 +26,11 @@ function formatDate(d: string) {
 }
 
 export async function sendOwnerNotification(data: ReservationData) {
+  const ownerEmail = process.env.OWNER_EMAIL;
+  if (!ownerEmail) throw new Error("OWNER_EMAIL n'est pas défini dans les variables d'environnement");
   await getMailer().transactionalEmails.sendTransacEmail({
     sender: SENDER,
-    to: [{ email: process.env.OWNER_EMAIL! }],
+    to: [{ email: ownerEmail }],
     subject: `Nouvelle réservation — ${data.guestName} · ${formatDate(data.checkin)}`,
     htmlContent: `
       <h2>Nouvelle réservation confirmée</h2>
@@ -73,9 +75,11 @@ export async function sendGuestConfirmation(data: ReservationData, icsContent: s
 }
 
 export async function sendContactEmail(name: string, email: string, message: string) {
+  const ownerEmail = process.env.OWNER_EMAIL;
+  if (!ownerEmail) throw new Error("OWNER_EMAIL n'est pas défini dans les variables d'environnement");
   await getMailer().transactionalEmails.sendTransacEmail({
     sender: SENDER,
-    to: [{ email: process.env.OWNER_EMAIL! }],
+    to: [{ email: ownerEmail }],
     replyTo: { email, name },
     subject: `Message de contact — ${name}`,
     htmlContent: `<p><strong>De :</strong> ${name} (${email})</p><p>${message.replace(/\n/g, "<br>")}</p>`,
