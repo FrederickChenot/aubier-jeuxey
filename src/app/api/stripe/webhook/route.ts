@@ -47,9 +47,9 @@ export async function POST(request: NextRequest) {
       start: new Date(m.checkin),
       end: new Date(m.checkout),
       summary: "Séjour à L'Aubier · Jeuxey · Vosges",
-      description: "Confirmation de votre séjour à L'Aubier.\nContact : contact@laubier.fr",
+      description: "Confirmation de votre séjour à L'Aubier.\nContact : contact@aubier-vosges.fr",
     });
-    ev.uid(`reservation-${reservation.id}@laubier.fr`);
+    ev.uid(`reservation-${reservation.id}@aubier-vosges.fr`);
     const icsContent = cal.toString();
 
     await Promise.all([
