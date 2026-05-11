@@ -1,13 +1,24 @@
-import { withAuth } from "next-auth/middleware";
+import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-// withAuth exempts automatically the configured pages.signIn URL (/admin/login)
-export default withAuth({
-  pages: {
-    signIn: "/admin/login",
-  },
-});
+export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Let /admin/login through unconditionally
+  if (pathname === "/admin/login") return NextResponse.next();
+
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  if (!token) {
+    return NextResponse.redirect(new URL("/admin/login", request.url));
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
-  // Matches /admin AND /admin/* — withAuth lets /admin/login through automatically
   matcher: ["/admin/:path*"],
 };
