@@ -2,16 +2,15 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { getDb } from "@/lib/db";
-import ReservationsManager from "./ReservationsManager";
+import { getSettings } from "@/lib/settings";
+import ParametresManager from "./ParametresManager";
 
-export default async function AdminReservationsPage() {
+export default async function AdminParametresPage() {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/admin/login");
 
   const sql = getDb();
-  const reservations = await sql`
-    SELECT * FROM reservations ORDER BY checkin DESC
-  `;
+  const settings = await getSettings(sql);
 
-  return <ReservationsManager reservations={reservations as any[]} />;
+  return <ParametresManager settings={settings} />;
 }

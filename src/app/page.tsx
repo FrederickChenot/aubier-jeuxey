@@ -9,6 +9,8 @@ import WhyDirect from "@/components/WhyDirect";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
 import JsonLd from "@/components/JsonLd";
+import { getDb } from "@/lib/db";
+import { getSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
   title: "L'Aubier — Studio design · Jeuxey · Vosges",
@@ -17,12 +19,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: "L'Aubier — Studio design · Jeuxey · Vosges",
     description: "Studio rénové 2025 dans les Vosges. 75€/nuit sans frais de plateforme.",
-    url: "https://laubier.fr",
+    url: "https://www.aubier-vosges.fr",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };
 
-export default function Home() {
+export default async function Home() {
+  const sql = getDb();
+  const settings = await getSettings(sql);
+
   return (
     <>
       <Navbar />
@@ -30,7 +35,11 @@ export default function Home() {
         <Hero />
         <Gallery />
         <Amenities />
-        <PriceCalculator />
+        <PriceCalculator
+          pricePerNight={settings.prix_nuit}
+          cleaningFee={settings.frais_menage}
+          deposit={settings.caution}
+        />
         <LocationSection />
         <WhyDirect />
       </main>

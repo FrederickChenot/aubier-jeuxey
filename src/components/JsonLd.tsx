@@ -4,11 +4,11 @@ export default function JsonLd() {
     "@graph": [
       {
         "@type": "LodgingBusiness",
-        "@id": "https://laubier.fr/#lodging",
+        "@id": "https://www.aubier-vosges.fr/#lodging",
         name: "L'Aubier",
         description:
           "Studio design entièrement rénové en 2025, au cœur des Vosges à Jeuxey. Terrasse bambous, parking, WiFi fibre.",
-        url: "https://laubier.fr",
+        url: "https://www.aubier-vosges.fr",
         address: {
           "@type": "PostalAddress",
           addressLocality: "Jeuxey",
@@ -37,9 +37,9 @@ export default function JsonLd() {
       },
       {
         "@type": "BreadcrumbList",
-        "@id": "https://laubier.fr/#breadcrumb",
+        "@id": "https://www.aubier-vosges.fr/#breadcrumb",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Accueil", item: "https://laubier.fr" },
+          { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.aubier-vosges.fr" },
         ],
       },
     ],

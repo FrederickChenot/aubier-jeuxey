@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#3a3d42"/>
+  <rect x="0" y="0" width="1200" height="8" fill="#c8813a"/>
+  <rect x="0" y="622" width="1200" height="8" fill="#c8813a"/>
+  <text x="600" y="260" font-family="Georgia,serif" font-style="italic" font-size="96" fill="#f7f5f0" text-anchor="middle">L'Aubier</text>
+  <text x="600" y="350" font-family="Georgia,serif" font-size="36" fill="#8aab94" text-anchor="middle">Studio design · Jeuxey · Vosges</text>
+  <text x="600" y="420" font-family="Georgia,serif" font-size="28" fill="#c8813a" text-anchor="middle">75€/nuit · aubier-vosges.fr</text>
+  <text x="600" y="480" font-family="Georgia,serif" font-size="22" fill="#b8cfc0" text-anchor="middle">Rénovation 2025 · Réservation directe</text>
+</svg>

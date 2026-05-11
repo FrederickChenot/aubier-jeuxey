@@ -2,16 +2,14 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { getDb } from "@/lib/db";
-import ReservationsManager from "./ReservationsManager";
+import DisponibilitesManager from "./DisponibilitesManager";
 
-export default async function AdminReservationsPage() {
+export default async function AdminDisponibilitesPage() {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/admin/login");
 
   const sql = getDb();
-  const reservations = await sql`
-    SELECT * FROM reservations ORDER BY checkin DESC
-  `;
+  const blocked = await sql`SELECT * FROM blocked_dates ORDER BY date_start DESC`;
 
-  return <ReservationsManager reservations={reservations as any[]} />;
+  return <DisponibilitesManager blocked={blocked as any[]} />;
 }

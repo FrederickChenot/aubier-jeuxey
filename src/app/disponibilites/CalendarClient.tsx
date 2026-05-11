@@ -23,12 +23,16 @@ export default function CalendarClient({ blockedDates }: Props) {
     router.push(`/reservation?checkin=${d}`);
   }
 
+  const today = new Date();
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
   return (
     <div className="bg-white rounded-2xl shadow-sm p-6 border border-[#b8cfc0]/30">
       <Calendar
         onClickDay={handleClick}
         tileDisabled={({ date }) => isBlocked(date)}
         minDate={new Date()}
+        defaultActiveStartDate={startOfMonth}
         locale="fr-FR"
         className="w-full"
       />

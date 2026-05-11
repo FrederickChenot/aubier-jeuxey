@@ -26,8 +26,8 @@ export default function Footer() {
           <p className="text-xs uppercase tracking-widest text-[#8aab94] mb-3">Contact</p>
           <ul className="space-y-2 text-sm">
             <li>
-              <a href="mailto:contact@laubier.fr" className="hover:text-[#f7f5f0] transition-colors">
-                contact@laubier.fr
+              <a href="mailto:contact@aubier-vosges.fr" className="hover:text-[#f7f5f0] transition-colors">
+                contact@aubier-vosges.fr
               </a>
             </li>
           </ul>

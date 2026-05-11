@@ -11,8 +11,8 @@ const reasons = [
   },
   {
     pct: "Vite",
-    title: "Confirmation immédiate",
-    desc: "Paiement sécurisé via Stripe, confirmation par email avec .ics en quelques secondes.",
+    title: "Confirmation par email sous 24h",
+    desc: "Réservation directe, sans plateforme intermédiaire. Vous recevez un email de confirmation avec fichier .ics.",
   },
 ];
 

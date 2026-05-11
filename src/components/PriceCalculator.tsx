@@ -3,18 +3,23 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { format, differenceInCalendarDays, addDays } from "date-fns";
-import { fr } from "date-fns/locale";
-import { PRICE_PER_NIGHT, CLEANING_FEE, DEPOSIT, DEPOSIT_THRESHOLD_NIGHTS, DEPOSIT_RATE } from "@/lib/stripe";
+import { DEPOSIT_THRESHOLD_NIGHTS, DEPOSIT_RATE } from "@/lib/stripe";
 
-export default function PriceCalculator() {
+interface Props {
+  pricePerNight: number;
+  cleaningFee: number;
+  deposit: number;
+}
+
+export default function PriceCalculator({ pricePerNight, cleaningFee, deposit }: Props) {
   const router = useRouter();
   const today = new Date();
   const [checkin, setCheckin] = useState(format(addDays(today, 7), "yyyy-MM-dd"));
   const [checkout, setCheckout] = useState(format(addDays(today, 10), "yyyy-MM-dd"));
 
   const nights = Math.max(0, differenceInCalendarDays(new Date(checkout), new Date(checkin)));
-  const nightsTotal = nights * PRICE_PER_NIGHT;
-  const total = nightsTotal + CLEANING_FEE;
+  const nightsTotal = nights * pricePerNight;
+  const total = nightsTotal + cleaningFee;
   const showDeposit = nights > DEPOSIT_THRESHOLD_NIGHTS;
   const depositAmount = showDeposit ? Math.ceil(total * DEPOSIT_RATE) : null;
 
@@ -34,7 +39,6 @@ export default function PriceCalculator() {
         </p>
 
         <div className="max-w-2xl mx-auto bg-[#f7f5f0] rounded-2xl p-6 md:p-8">
-          {/* Date inputs */}
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div>
               <label className="text-xs uppercase tracking-widest text-[#8aab94] block mb-1">Arrivée</label>
@@ -58,20 +62,19 @@ export default function PriceCalculator() {
             </div>
           </div>
 
-          {/* Breakdown */}
           {nights > 0 ? (
             <div className="space-y-3 mb-6">
               <div className="flex justify-between text-sm text-[#3a3d42]">
-                <span>{PRICE_PER_NIGHT} € × {nights} nuit{nights > 1 ? "s" : ""}</span>
+                <span>{pricePerNight} € × {nights} nuit{nights > 1 ? "s" : ""}</span>
                 <span>{nightsTotal} €</span>
               </div>
               <div className="flex justify-between text-sm text-[#3a3d42]">
                 <span>Frais de ménage</span>
-                <span>{CLEANING_FEE} €</span>
+                <span>{cleaningFee} €</span>
               </div>
               <div className="flex justify-between text-sm text-[#8aab94] italic">
                 <span>Caution (non débitée)</span>
-                <span>{DEPOSIT} €</span>
+                <span>{deposit} €</span>
               </div>
               <div className="border-t border-[#b8cfc0] pt-3 flex justify-between font-medium text-[#3a3d42]">
                 <span>Total</span>
