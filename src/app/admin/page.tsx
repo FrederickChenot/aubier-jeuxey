@@ -52,7 +52,7 @@ export default async function AdminPage() {
       this_month_count: String(stats[0].this_month_count),
       this_month_revenue: String(stats[0].this_month_revenue),
     };
-    nextArrival = nextArrivalRows[0] ?? null;
+    nextArrival = (nextArrivalRows[0] as any) ?? null;
 
     const occupiedDays = new Set<string>();
     for (const r of monthResRows) {
