@@ -12,12 +12,15 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-        if (credentials.email !== process.env.ADMIN_EMAIL) return null;
 
-        const valid = await bcrypt.compare(
-          credentials.password,
-          process.env.ADMIN_PASSWORD_HASH!
-        );
+        const adminEmail = process.env.ADMIN_EMAIL;
+        const adminHash = process.env.ADMIN_PASSWORD_HASH;
+
+        // Missing env vars → refuse silently instead of throwing
+        if (!adminEmail || !adminHash) return null;
+        if (credentials.email !== adminEmail) return null;
+
+        const valid = await bcrypt.compare(credentials.password, adminHash);
         if (!valid) return null;
 
         return { id: "1", email: credentials.email, name: "Admin" };
