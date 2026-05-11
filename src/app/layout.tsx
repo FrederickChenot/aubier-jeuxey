@@ -23,7 +23,10 @@ export const metadata: Metadata = {
   description:
     "Studio design entièrement rénové en 2025 au cœur des Vosges. Réservez en direct et économisez 15% vs Airbnb. 75€/nuit, terrasse bambous, cuisine équipée.",
   keywords: ["location vacances Vosges", "studio Jeuxey", "gîte Vosges", "location courte durée"],
-  metadataBase: new URL("https://laubier.fr"),
+  metadataBase: new URL("https://www.aubier-vosges.fr"),
+  verification: {
+    google: "6xptqfoJkblP71xlM3R2FGLmRxlL9PQFvNtm6ZypTYo",
+  },
   openGraph: {
     siteName: "L'Aubier",
     locale: "fr_FR",
