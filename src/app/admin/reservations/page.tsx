@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
@@ -9,10 +11,13 @@ export default async function AdminReservationsPage() {
   try { session = await getServerSession(authOptions); } catch { session = null; }
   if (!session) redirect("/admin/login");
 
-  const sql = getDb();
-  const reservations = await sql`
-    SELECT * FROM reservations ORDER BY checkin DESC
-  `;
+  let reservations: any[] = [];
+  try {
+    const sql = getDb();
+    reservations = await sql`SELECT * FROM reservations ORDER BY checkin DESC`;
+  } catch (e) {
+    console.error("DB error /admin/reservations:", e);
+  }
 
-  return <ReservationsManager reservations={reservations as any[]} />;
+  return <ReservationsManager reservations={reservations} />;
 }

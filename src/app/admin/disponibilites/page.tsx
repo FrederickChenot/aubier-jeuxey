@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
@@ -9,8 +11,13 @@ export default async function AdminDisponibilitesPage() {
   try { session = await getServerSession(authOptions); } catch { session = null; }
   if (!session) redirect("/admin/login");
 
-  const sql = getDb();
-  const blocked = await sql`SELECT * FROM blocked_dates ORDER BY date_start DESC`;
+  let blocked: any[] = [];
+  try {
+    const sql = getDb();
+    blocked = await sql`SELECT * FROM blocked_dates ORDER BY date_start DESC`;
+  } catch (e) {
+    console.error("DB error /admin/disponibilites:", e);
+  }
 
-  return <DisponibilitesManager blocked={blocked as any[]} />;
+  return <DisponibilitesManager blocked={blocked} />;
 }

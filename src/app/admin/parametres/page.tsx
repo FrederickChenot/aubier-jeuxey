@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
@@ -10,8 +12,13 @@ export default async function AdminParametresPage() {
   try { session = await getServerSession(authOptions); } catch { session = null; }
   if (!session) redirect("/admin/login");
 
-  const sql = getDb();
-  const settings = await getSettings(sql);
+  let settings = { prix_nuit: 75, frais_menage: 40, caution: 300 };
+  try {
+    const sql = getDb();
+    settings = await getSettings(sql);
+  } catch (e) {
+    console.error("DB error /admin/parametres:", e);
+  }
 
   return <ParametresManager settings={settings} />;
 }
