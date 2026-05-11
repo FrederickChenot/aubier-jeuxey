@@ -5,7 +5,12 @@ import { getDb } from "@/lib/db";
 import AdminDashboard from "./AdminDashboard";
 
 export default async function AdminPage() {
-  const session = await getServerSession(authOptions);
+  let session;
+  try {
+    session = await getServerSession(authOptions);
+  } catch {
+    session = null;
+  }
   if (!session) redirect("/admin/login");
 
   const sql = getDb();

@@ -1,5 +1,6 @@
 import { withAuth } from "next-auth/middleware";
 
+// withAuth exempts automatically the configured pages.signIn URL (/admin/login)
 export default withAuth({
   pages: {
     signIn: "/admin/login",
@@ -7,5 +8,6 @@ export default withAuth({
 });
 
 export const config = {
-  matcher: ["/admin/((?!login$).+)"],
+  // Matches /admin AND /admin/* — withAuth lets /admin/login through automatically
+  matcher: ["/admin/:path*"],
 };
