@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -11,8 +9,7 @@ import WhyDirect from "@/components/WhyDirect";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
 import JsonLd from "@/components/JsonLd";
-import { getDb } from "@/lib/db";
-import { getSettings } from "@/lib/settings";
+import type { SiteSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
   title: "L'Aubier — Studio design · Jeuxey · Vosges",
@@ -26,9 +23,21 @@ export const metadata: Metadata = {
   },
 };
 
+const DEFAULTS: SiteSettings = { prix_nuit: 75, frais_menage: 40, caution: 300 };
+
+async function loadSettings(): Promise<SiteSettings> {
+  if (!process.env.DATABASE_URL) return DEFAULTS;
+  try {
+    const { getDb } = await import("@/lib/db");
+    const { getSettings } = await import("@/lib/settings");
+    return await getSettings(getDb());
+  } catch {
+    return DEFAULTS;
+  }
+}
+
 export default async function Home() {
-  const sql = getDb();
-  const settings = await getSettings(sql);
+  const settings = await loadSettings();
 
   return (
     <>
