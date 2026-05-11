@@ -14,7 +14,24 @@ export default async function AdminReservationsPage() {
   let reservations: any[] = [];
   try {
     const sql = getDb();
-    reservations = await sql`SELECT * FROM reservations ORDER BY checkin DESC`;
+    const rows = await sql`
+      SELECT
+        id,
+        guest_name,
+        guest_email,
+        guest_phone,
+        checkin::text,
+        checkout::text,
+        adults,
+        children,
+        total_price,
+        status,
+        notes,
+        created_at::text
+      FROM reservations
+      ORDER BY checkin DESC
+    `;
+    reservations = rows as any[];
   } catch (e) {
     console.error("DB error /admin/reservations:", e);
   }
