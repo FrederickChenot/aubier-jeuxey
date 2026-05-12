@@ -51,7 +51,7 @@ export default function BlogPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-16 min-h-screen bg-[#f7f5f0]">
+      <main className="pt-[100px] min-h-screen bg-[#f7f5f0]">
         <div className="bg-[#3a3d42] py-16 px-4">
           <div className="max-w-6xl mx-auto">
             <h1 className="font-[family-name:var(--font-playfair)] text-4xl italic text-[#f7f5f0] mb-2">

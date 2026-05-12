@@ -24,7 +24,7 @@ export default function LogementPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-16">
+      <main className="pt-[100px]">
         {/* Header */}
         <div className="bg-[#3a3d42] py-16 px-4">
           <div className="max-w-6xl mx-auto">

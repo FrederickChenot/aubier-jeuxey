@@ -42,7 +42,7 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`${playfair.variable} ${dmSans.variable}`}>
       <body className="min-h-screen flex flex-col antialiased">
-        <div style={{ backgroundColor: "#c8813a" }} className="w-full h-9 flex items-center justify-center shrink-0">
+        <div style={{ backgroundColor: "#c8813a" }} className="fixed top-0 left-0 right-0 z-50 h-9 flex items-center justify-center">
           <p className="text-white text-xs font-medium tracking-wide text-center px-4">
             🌿 Ouverture juillet 2026 — Réservations ouvertes, profitez des premiers tarifs
           </p>

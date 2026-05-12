@@ -13,7 +13,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#3a3d42]/95 backdrop-blur-sm">
+    <header className="fixed top-9 left-0 right-0 z-40 bg-[#3a3d42]/95 backdrop-blur-sm">
       <nav className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="font-[family-name:var(--font-playfair)] text-xl italic text-[#f7f5f0]">
           L&apos;Aubier

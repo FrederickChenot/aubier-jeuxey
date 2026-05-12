@@ -12,7 +12,7 @@ export default function SuccessPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-16 min-h-screen bg-[#f7f5f0] flex items-center justify-center px-4">
+      <main className="pt-[100px] min-h-screen bg-[#f7f5f0] flex items-center justify-center px-4">
         <div className="max-w-lg w-full text-center">
           <div className="w-16 h-16 rounded-full bg-[#8aab94] flex items-center justify-center mx-auto mb-6">
             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
