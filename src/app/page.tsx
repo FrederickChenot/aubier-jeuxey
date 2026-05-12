@@ -19,7 +19,6 @@ export const metadata: Metadata = {
     title: "L'Aubier — Studio design · Jeuxey · Vosges",
     description: "Studio 37 m² rénové 2025 dans les Vosges. Terrasse privative, parking, douche italienne. 75€/nuit.",
     url: "https://www.aubier-vosges.fr",
-    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };
 
