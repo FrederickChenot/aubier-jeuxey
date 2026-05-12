@@ -37,12 +37,12 @@ export default function LogementPage() {
         {/* Details strip */}
         <div className="bg-[#f7f5f0] border-b border-[#b8cfc0]/30 py-4 px-4">
           <div className="max-w-6xl mx-auto flex flex-wrap gap-6 text-sm text-[#3a3d42]">
-            <span>🏠 Studio (35 m²)</span>
+            <span>🏠 Studio plain-pied (37 m²)</span>
             <span>👥 2 voyageurs max</span>
-            <span>🛏️ 1 lit double</span>
-            <span>🚿 Salle de bain privée</span>
-            <span>🏡 Terrasse privative</span>
-            <span>🚗 Parking inclus</span>
+            <span>🛏️ Lit double 140×190 cm</span>
+            <span>🚿 Douche italienne · WC suspendu · sèche-serviette</span>
+            <span>🏡 Terrasse privative bambous</span>
+            <span>🚗 1 place privée</span>
           </div>
         </div>
 
@@ -76,11 +76,11 @@ export default function LogementPage() {
               </h2>
               <ul className="space-y-3 text-sm text-[#3a3d42]">
                 <li><strong>Arrivée :</strong> 16h – 20h (horaires flexibles sur demande)</li>
-                <li><strong>Départ :</strong> avant 11h</li>
-                <li><strong>Caution :</strong> 300 € (non débitée, libérée 24h après départ)</li>
+                <li><strong>Départ :</strong> avant 10h</li>
+                <li><strong>Caution :</strong> 300 € (non débitée, libérée 48h après départ)</li>
                 <li><strong>Ménage :</strong> 40 € inclus dans le tarif</li>
-                <li><strong>Animaux :</strong> nous contacter</li>
-                <li><strong>Fumeur :</strong> uniquement en extérieur</li>
+                <li><strong>Animaux :</strong> non acceptés</li>
+                <li><strong>Fumeur :</strong> non fumeur (toléré en extérieur uniquement)</li>
               </ul>
             </div>
             <div>

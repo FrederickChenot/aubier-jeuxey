@@ -9,6 +9,7 @@ const nav = [
   { href: "/admin/reservations", label: "Réservations" },
   { href: "/admin/disponibilites", label: "Disponibilités" },
   { href: "/admin/parametres", label: "Paramètres" },
+  { href: "/reglement", label: "Règlement" },
 ];
 
 export default function AdminSidebar() {

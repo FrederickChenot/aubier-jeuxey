@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { format, addDays, differenceInCalendarDays } from "date-fns";
+import Link from "next/link";
 import { PRICE_PER_NIGHT, CLEANING_FEE, DEPOSIT } from "@/lib/stripe";
 
 const today = new Date();
@@ -37,6 +38,7 @@ export default function ReservationForm({
     guestsCount: 1,
     message: "",
   });
+  const [reglementAccepted, setReglementAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -238,6 +240,24 @@ export default function ReservationForm({
             </div>
           </div>
 
+          <div className="mt-4">
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={reglementAccepted}
+                onChange={(e) => setReglementAccepted(e.target.checked)}
+                className="mt-0.5 w-4 h-4 accent-[#c8813a] flex-shrink-0"
+              />
+              <span className="text-sm text-[#3a3d42]">
+                J&apos;ai lu et j&apos;accepte le{" "}
+                <Link href="/reglement" target="_blank" className="text-[#c8813a] underline hover:text-[#e8b87a]">
+                  règlement intérieur
+                </Link>{" "}
+                *
+              </span>
+            </label>
+          </div>
+
           <div className="flex gap-3 mt-6">
             <button
               onClick={() => setStep(1)}
@@ -247,7 +267,7 @@ export default function ReservationForm({
             </button>
             <button
               onClick={() => setStep(3)}
-              disabled={!form.guestName || !form.guestEmail || !form.guestPhone}
+              disabled={!form.guestName || !form.guestEmail || !form.guestPhone || !reglementAccepted}
               className="flex-1 bg-[#c8813a] hover:bg-[#e8b87a] disabled:opacity-40 text-white font-medium py-3 rounded-lg transition-colors"
             >
               Continuer →

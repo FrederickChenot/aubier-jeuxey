@@ -14,10 +14,10 @@ import type { SiteSettings } from "@/lib/settings";
 export const metadata: Metadata = {
   title: "L'Aubier — Studio design · Jeuxey · Vosges",
   description:
-    "Studio design entièrement rénové en 2025 au cœur des Vosges. Réservez en direct et économisez 15% vs Airbnb. 75€/nuit, terrasse bambous, cuisine équipée.",
+    "Studio 37 m² plain-pied entièrement rénové en 2025, au cœur des Vosges. Lit 140×190, douche italienne, terrasse bambous privative, parking inclus. 75€/nuit sans frais de plateforme.",
   openGraph: {
     title: "L'Aubier — Studio design · Jeuxey · Vosges",
-    description: "Studio rénové 2025 dans les Vosges. 75€/nuit sans frais de plateforme.",
+    description: "Studio 37 m² rénové 2025 dans les Vosges. Terrasse privative, parking, douche italienne. 75€/nuit.",
     url: "https://www.aubier-vosges.fr",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },

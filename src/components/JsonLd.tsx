@@ -7,7 +7,7 @@ export default function JsonLd() {
         "@id": "https://www.aubier-vosges.fr/#lodging",
         name: "L'Aubier",
         description:
-          "Studio design entièrement rénové en 2025, au cœur des Vosges à Jeuxey. Terrasse bambous, parking, WiFi fibre.",
+          "Studio 37 m² plain-pied entièrement rénové en 2025 à Jeuxey (Vosges). Lit double 140×190, douche italienne, terrasse bambous privative, parking inclus, WiFi fibre.",
         url: "https://www.aubier-vosges.fr",
         address: {
           "@type": "PostalAddress",

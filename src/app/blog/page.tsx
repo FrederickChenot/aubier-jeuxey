@@ -11,23 +11,37 @@ export const metadata: Metadata = {
 
 const articles = [
   {
+    slug: "week-end-epinal",
+    title: "Week-end à Épinal — que faire en 2 jours ?",
+    excerpt: "Marché du samedi, Basilique Saint-Maurice, Musée de l'Image, randonnée au lac de Bouzey et route vers Gérardmer : le programme idéal.",
+    date: "2025-04-20",
+    tag: "Tourisme",
+  },
+  {
+    slug: "architecture-vosges",
+    title: "Architecture contemporaine dans les Vosges — entre bois et modernité",
+    excerpt: "Bardage cèdre, mélèze, toits plats et éco-constructions : l'architecture vosgienne contemporaine réinvente le rapport à la forêt.",
+    date: "2025-04-05",
+    tag: "Architecture",
+  },
+  {
     slug: "randonnees-vosges",
     title: "Les 5 plus belles randonnées autour de Jeuxey",
-    excerpt: "Des sentiers pour tous les niveaux au départ du village, entre forêts de sapins et crêtes vosgiennes.",
+    excerpt: "Lac de Bouzey, Roche Charlot, Sentier des Dix, Cascades de Tendon : 30 sentiers balisés, 315 km accessibles depuis Jeuxey.",
     date: "2025-03-15",
     tag: "Randonnée",
   },
   {
     slug: "epinal-art-deco",
     title: "Épinal, capitale de l'image et joyau Art Déco",
-    excerpt: "À 15 minutes du studio, Épinal cache une architecture remarquable et un musée de l'image unique en Europe.",
+    excerpt: "Basilique Saint-Maurice, Musée de l'Image unique en Europe, quartier médiéval et bords de Moselle à 15 min de L'Aubier.",
     date: "2025-02-20",
     tag: "Culture",
   },
   {
     slug: "gastronomie-vosgienne",
     title: "Gastronomie vosgienne : ce qu'il faut goûter",
-    excerpt: "Munster AOP, quiche lorraine, tarte aux myrtilles, mirabelle… Le guide complet des saveurs locales.",
+    excerpt: "Munster AOP, quiche lorraine, tarte aux myrtilles, Marcaire, eau-de-vie de mirabelle… et le marché du samedi à Épinal.",
     date: "2025-01-10",
     tag: "Gastronomie",
   },

@@ -19,6 +19,7 @@ export default function Footer() {
             <li><Link href="/disponibilites" className="hover:text-[#f7f5f0] transition-colors">Disponibilités</Link></li>
             <li><Link href="/reservation" className="hover:text-[#f7f5f0] transition-colors">Réserver</Link></li>
             <li><Link href="/blog" className="hover:text-[#f7f5f0] transition-colors">Blog</Link></li>
+            <li><Link href="/reglement" className="hover:text-[#f7f5f0] transition-colors">Règlement intérieur</Link></li>
           </ul>
         </div>
 
@@ -33,7 +34,7 @@ export default function Footer() {
           </ul>
           <div className="mt-4">
             <Link href="/api/ical" className="text-xs text-[#8aab94] hover:text-[#f7f5f0] transition-colors">
-              Calendrier iCal
+              Exporter le calendrier (.ics)
             </Link>
           </div>
         </div>

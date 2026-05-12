@@ -4,58 +4,156 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 
-const articles: Record<string, { title: string; date: string; tag: string; content: string }> = {
+const articles: Record<string, { title: string; date: string; tag: string; content: string; description?: string }> = {
   "randonnees-vosges": {
     title: "Les 5 plus belles randonnées autour de Jeuxey",
     date: "2025-03-15",
     tag: "Randonnée",
+    description: "Cinq itinéraires pédestres au départ de Jeuxey : lac de Bouzey, forêt d'Épinal, sentier des Dix, cascades de Tendon et tour de Bouzey en VTT.",
     content: `
-Les Vosges offrent un terrain de jeu exceptionnel pour les amateurs de randonnée. Au départ de Jeuxey,
-plusieurs sentiers balisés par le Club Vosgien permettent d'explorer forêts de sapins, chaumes et crêtes panoramiques.
+Les Vosges offrent un terrain de jeu exceptionnel pour les amateurs de randonnée. À partir de Jeuxey, 30 sentiers balisés représentant plus de 315 km sont accessibles, tracés et entretenus par le Club Vosgien d'Épinal (clubvosgienepinal.com). Pour les traces GPS, Komoot propose de nombreuses sorties référencées dans le secteur.
 
-**1. Le tour du Fossard** — 12 km, dénivelé 350m. Une boucle forestière classique avec vue sur la plaine lorraine.
+**1. Boucle du Lac de Bouzey** — 11 km · Facile · 3h · Dénivelé 150 m
+Depuis Épinal, ce parcours longe le canal d'alimentation du lac et emprunte l'ancienne voie ferrée de la ceinture fortifiée. Le lac de Bouzey, miroir d'eau entouré de forêts, offre une atmosphère paisible tout au long du circuit. Idéal pour une première randonnée familiale dans les Vosges.
 
-**2. La Roche du Diable** — 8 km, facile. Un rocher offrant un panorama sur la vallée de la Moselle.
+**2. Forêt d'Épinal — Roche Charlot et Roche Goutteuse** — 13 km · Facile · 4h
+Plongeon dans la forêt communale d'Épinal, l'une des plus grandes forêts urbaines de France. Le sentier mène aux deux rochers emblématiques offrant des vues dégagées sur la plaine lorraine. Vous croiserez des arbres remarquables plusieurs fois centenaires et une faune discrète mais présente.
 
-**3. Les Hautes Chaumes** — 15 km, intermédiaire. Paysages ouverts sur les crêtes entre Vosges et Alsace.
+**3. Sentier des Dix — panorama sur Épinal** — 10 km · Facile · 3h · Dénivelé 321 m
+Ce sentier grimpe progressivement sur les collines sous-vosgiennes pour offrir plusieurs points de vue spectaculaires sur la ville d'Épinal, la Moselle et les crêtes vosgiennes en arrière-plan. La montée est progressive et le chemin parfaitement balisé.
 
-**4. Cascade de Tendon** — 6 km, facile, idéal en famille. La plus haute cascade des Vosges.
+**4. Cascades de Tendon** — 7,5 km · Modéré · 2h
+À seulement 35 minutes de Jeuxey, les cascades de Tendon (la Grande et la Petite) sont parmi les plus photographiées des Vosges. Le sentier forestier serpente le long du ruisseau dans un cadre sauvage et humide, particulièrement beau au printemps et en automne.
 
-**5. Lac de Gérardmer en boucle** — 10 km, départ depuis le lac. Forêts et vues lacustres tout au long.
+**5. Tour de Bouzey — La Sorcière — Le Sotré** — 26 km · VTT ou pédestre
+Ce grand parcours varié alterne entre forêts de résineux, prairies et rives du lac. La montée vers La Sorcière récompense par des panoramas étendus. En version VTT, c'est l'une des sorties incontournables du massif vosgien côté Épinal.
+
+Pour préparer vos randonnées depuis L'Aubier, renseignez-vous auprès du Club Vosgien d'Épinal ou consultez les traces GPS sur Komoot. Chaussures de marche indispensables même sur les sentiers faciles.
     `,
   },
   "epinal-art-deco": {
     title: "Épinal, capitale de l'image et joyau Art Déco",
     date: "2025-02-20",
     tag: "Culture",
+    description: "À 15 minutes de L'Aubier, Épinal révèle sa Basilique Saint-Maurice, son Musée de l'Image unique en Europe, son patrimoine Art Déco et ses bords de Moselle.",
     content: `
-À seulement 15 minutes de L'Aubier, Épinal est une ville surprenante qui mérite une demi-journée d'exploration.
+À seulement 15 minutes de L'Aubier, Épinal est une ville surprenante qui mêle patrimoine médiéval, architecture Art Déco et culture populaire. Elle mérite largement une demi-journée d'exploration, voire une journée entière.
 
-**Le Musée de l'Image** abrite la plus grande collection d'images d'Épinal au monde — ces estampes populaires
-gravées et coloriées qui ont traversé les siècles.
+**La Basilique Saint-Maurice** (XIIe siècle)
+Dominant le centre historique, cette basilique romane vosgienne est le monument emblématique d'Épinal. Sa construction s'étend du XIIe au XVIe siècle, offrant un mélange harmonieux de styles roman et gothique. À ses pieds s'étend le **Quartier des Chanoinesses**, un ensemble médiéval remarquablement préservé datant du XIIIe siècle, avec ses ruelles pavées et ses maisons à colombages.
 
-**L'architecture Art Déco** s'étale sur plusieurs rues du centre-ville, reconstruit après la Première Guerre mondiale.
-La Basilique Saint-Maurice et la préfecture sont deux exemples remarquables.
+**Le Musée de l'Image**
+Unique en Europe, ce musée conserve et valorise l'imagerie populaire d'Épinal depuis 1796. Les célèbres "images d'Épinal" — estampes gravées, coloriées et diffusées dans toute la France — ont traversé les siècles pour illustrer l'histoire, les contes et la vie quotidienne. La collection permanente est saisissante ; les expositions temporaires régulièrement renouvelées.
 
-**Les Jardins du Cours** longent la Moselle et offrent une promenade idéale en toute saison.
+**L'architecture Art Déco**
+Après les destructions de la Première Guerre mondiale, Épinal a été reconstruite dans le style Art Déco des années 1920-1930. Le centre-ville concentre de nombreux hôtels particuliers et bâtiments publics ornés de ferronneries, céramiques et bas-reliefs caractéristiques de cette époque.
+
+**La Moselle et le Canal des Vosges**
+La Moselle traverse Épinal en son cœur, créant des promenades agréables sur ses berges aménagées. Le Canal des Vosges longe également la ville, vestige du réseau fluvial qui faisait d'Épinal un centre commercial actif. Épinal est classée parmi les villes les plus boisées de France : les parcs et espaces verts occupent une place remarquable dans le tissu urbain.
+
+Une visite combinant la basilique, le musée de l'Image et une promenade au bord de la Moselle constitue une journée complète et très agréable au départ de L'Aubier.
     `,
   },
   "gastronomie-vosgienne": {
     title: "Gastronomie vosgienne : ce qu'il faut goûter",
     date: "2025-01-10",
     tag: "Gastronomie",
+    description: "Munster AOP, quiche lorraine, tarte aux myrtilles, mirabelle, Bergkäse, Marcaire… Le guide complet des saveurs vosgiennes et lorraines à découvrir près de Jeuxey.",
     content: `
-La Lorraine et les Vosges ont une identité gastronomique forte, marquée par les produits de terroir et les traditions rurales.
+La Lorraine et les Vosges ont une identité gastronomique forte, marquée par les produits de terroir, les traditions rurales et les recettes transmises de génération en génération. Voici ce qu'il ne faut absolument pas manquer lors de votre séjour à L'Aubier.
 
-**Munster AOP** — le fromage à croûte lavée des hautes chaumes vosgiennes. À déguster chaud ou avec du cumin.
+**Munster AOP**
+Le fromage emblématique des Vosges, à croûte lavée orangée et à pâte molle. Affiné dans des caves vosgiennes, il se décline en version douce (jeune) ou corsée (affiné). À déguster chaud sur une tartine ou accompagné de cumin et pommes de terre — une association classique de la cuisine montagnarde.
 
-**Quiche lorraine** — originaire de Lorraine, à base d'œufs, crème, lardons fumés. Simple et parfaite.
+**Quiche lorraine**
+Contrairement à une idée reçue, la recette traditionnelle ne comprend pas de fromage — et certaines versions authentiques n'incluent pas non plus de lardons. La vraie quiche lorraine se compose d'œufs, de crème fraîche épaisse et d'une pâte brisée fine. Simple, parfaite.
 
-**Tarte aux myrtilles** — les myrtilles des Vosges sont ramassées à la main en forêt chaque été.
+**Tarte aux myrtilles**
+Les myrtilles sauvages des Vosges sont ramassées à la main en forêt chaque été. La tarte aux myrtilles vosgiennes est d'une finesse incomparable comparée aux versions industrielles. Goûtez-la dans une boulangerie ou pâtisserie artisanale.
 
-**Mirabelle de Lorraine** — petite prune dorée, AOP et fêtée chaque août à Metz. En tarte, en confit, en eau-de-vie.
+**Eau-de-vie de mirabelle et kirsch vosgien**
+La mirabelle de Lorraine est une petite prune dorée AOP, fêtée chaque août à Metz. En tarte, en confiture, en eau-de-vie — elle est l'emblème sucré de la région. Le kirsch vosgien, distillé à partir de cerises, complète la gamme des eaux-de-vie locales à fort caractère.
 
-**Bière de Blanche Fontaine** — brasserie artisanale vosgienne à découvrir.
+**Bergkäse et Raclette de montagne**
+Les fermes vosgiennes produisent des fromages de montagne à pâte pressée cuite, proches du Bergkäse alpin. Fondants et savoureux, ils se retrouvent dans les fermes-auberges des chaumes (prairies d'altitude). La raclette de montagne vosgienne est une autre spécialité à déguster à la saison froide.
+
+**Marcaire**
+Spécialité méconnue des chaumes vosgiennes, le Marcaire est un fromage blanc aux herbes fraîches, servi traditionnellement avec des pommes de terre en robe des champs. On le trouve dans les fermes-auberges d'altitude, souvent dans des cadres magnifiques.
+
+**Marchés locaux d'Épinal**
+Le marché du samedi matin à Épinal est l'un des plus animés du département des Vosges. Producteurs locaux, fromagers, maraîchers et artisans s'y retrouvent dans la ville basse. C'est l'occasion idéale de faire le plein de produits frais pour composer un repas vosgien authentique dans votre studio.
+    `,
+  },
+  "architecture-vosges": {
+    title: "Architecture contemporaine dans les Vosges — entre bois et modernité",
+    date: "2025-04-05",
+    tag: "Architecture",
+    description: "Bardage mélèze, toits plats, grandes baies vitrées, éco-constructions passives : l'architecture vosgienne contemporaine réinvente le chalet. L'Aubier en est un exemple.",
+    content: `
+Les Vosges ne sont pas seulement une destination de nature et de randonnée. Elles sont aussi le théâtre discret d'une architecture contemporaine remarquable, où le bois local dialogue avec les exigences modernes du confort, de l'esthétique et de la durabilité.
+
+**Le renouveau du bardage bois**
+Le bardage bois est une tradition constructive vosgienne ancienne, mais les architectes contemporains l'ont réinventé. Exit le lambris vieilli, place aux bardages horizontaux en mélèze naturel grisonnant, en cèdre pré-grisé ou en pin traité thermiquement. Ces essences locales vieillissent avec grâce, sans traitement chimique, et s'intègrent parfaitement dans le paysage forestier vosgien.
+
+**Mélèze, cèdre et pin : les bois de l'architecture vosgienne**
+Le mélèze est apprécié pour sa durabilité naturelle et sa résistance aux intempéries. Le cèdre, plus stable, offre une teinte chaude qui évolue lentement vers le gris argenté. Le pin traité thermiquement (rétification) devient imputrescible sans adjuvants chimiques. Ces trois essences dominent aujourd'hui l'architecture bois contemporaine dans les Vosges et le Massif Central.
+
+**Le style chalet revisité**
+L'influence du chalet vosgien traditionnel est forte, mais les architectes contemporains ont rompu avec ses codes les plus contraignants. Toits plats ou à faible pente, grandes baies vitrées au sud pour capter la lumière hivernale, volumes épurés, ouverture sur la forêt : c'est le chalet du XXIe siècle. Les débords de toit protègent des pluies vosgiennes tout en créant des terrasses couvertes naturelles.
+
+**Éco-constructions et maisons passives**
+Les Vosges comptent un nombre croissant de constructions labellisées passives ou à énergie positive. Les ossatures bois isolées au chanvre, les pompes à chaleur géothermiques et les toitures végétalisées se multiplient. Cette dynamique est portée par une filière bois locale active et des artisans formés aux nouvelles techniques.
+
+**L'Aubier : une architecture qui dialogue avec la forêt**
+Le studio L'Aubier incarne cette philosophie : bardage cèdre naturel en façade, parquet chêne en chevrons à l'intérieur, cuisine vert sauge en résonance avec la végétation extérieure. La terrasse bambous et le brise-vue bois créent une continuité entre l'espace de vie et le jardin. Chaque matériau a été choisi pour sa cohérence avec l'environnement vosgien.
+
+**Francis Hallé et la philosophie de l'aubier**
+Francis Hallé, botaniste et défenseur des forêts primaires, a popularisé la notion d'aubier comme métaphore de la vitalité. L'aubier est la partie vivante du bois, entre l'écorce et le cœur — la zone où la sève circule, où l'arbre grandit. Donner ce nom à un studio de location, c'est affirmer une philosophie : construire avec le bois, dans le respect de la forêt qui nous entoure.
+    `,
+  },
+  "week-end-epinal": {
+    title: "Week-end à Épinal — que faire en 2 jours ?",
+    date: "2025-04-20",
+    tag: "Tourisme",
+    description: "Programme complet pour un week-end réussi à Épinal depuis L'Aubier : marché, Basilique, Musée de l'Image, randonnée au lac de Bouzey, et route vers Gérardmer.",
+    content: `
+Vous séjournez à L'Aubier et souhaitez profiter au maximum de votre week-end dans les Vosges ? Voici un programme en deux jours qui combine culture, nature et gastronomie, avec Épinal comme base de départ — à seulement 15 minutes de Jeuxey.
+
+---
+
+**Jour 1 — Épinal et ses trésors**
+
+**Matin : marché et vieille ville**
+Si vous arrivez un samedi, commencez par le marché d'Épinal qui se tient le matin dans la ville basse. Producteurs locaux, fromagers, primeurs et artisans s'y retrouvent dans une atmosphère chaleureuse typiquement lorraine. Idéal pour rapporter Munster, mirabelles ou eau-de-vie.
+
+Après le marché, remontez vers la **Basilique Saint-Maurice** (XIIe siècle), monument roman vosgien dominant la vieille ville. Prenez le temps de déambuler dans le **Quartier des Chanoinesses** autour de la basilique, avec ses ruelles médiévales et ses maisons à colombages.
+
+**Après-midi : Musée de l'Image et bords de Moselle**
+L'après-midi, consacrez 1h30 au **Musée de l'Image**, unique en Europe. La collection d'images d'Épinal — ces estampes populaires colorées diffusées dans toute la France depuis 1796 — est fascinante et accessible à tous. En sortant, longez les **bords de la Moselle** aménagés pour une promenade digestive.
+
+**Soir : dîner à Épinal**
+Épinal dispose de plusieurs bonnes tables en centre-ville. *(À compléter avec des adresses locales recommandées.)*
+
+---
+
+**Jour 2 — Nature et grands espaces**
+
+**Matin : randonnée au Lac de Bouzey ou en Forêt d'Épinal**
+Deux options selon votre forme :
+- **Lac de Bouzey** (11 km, 3h, dénivelé 150 m) — boucle facile longeant le canal et les rives du lac, idéale pour une matinée tranquille.
+- **Forêt d'Épinal, Roche Charlot et Roche Goutteuse** (13 km, 4h) — plus sauvage, avec de beaux points de vue depuis les rochers.
+
+**Après-midi : route vers Gérardmer**
+À 30 minutes d'Épinal, le **Lac de Gérardmer** est le plus grand lac naturel des Vosges. La promenade autour du lac (11 km, tout plat) est accessible à tous. Si le temps le permet, continuez sur la **Route des Crêtes** pour des panoramas sur les deux versants vosgiens.
+
+---
+
+**Infos pratiques**
+
+- **Parking :** gratuit dans plusieurs parkings du centre-ville d'Épinal, notamment près du marché.
+- **Gare SNCF d'Épinal :** à environ 15 minutes de L'Aubier en voiture. Liaisons directes vers Nancy, Metz et Paris.
+- **Office de tourisme d'Épinal :** en centre-ville, topoguides et conseils randonnées disponibles.
+- **Distance Jeuxey → Gérardmer :** environ 45 minutes par la RD 157.
     `,
   },
 };
@@ -68,9 +166,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = articles[slug];
   if (!article) return { title: "Article introuvable" };
+  const desc = article.description ?? article.content.trim().slice(0, 155);
   return {
     title: article.title,
-    description: article.content.trim().slice(0, 155),
+    description: desc,
+    openGraph: {
+      title: `${article.title} | L'Aubier`,
+      description: desc,
+      url: `https://www.aubier-vosges.fr/blog/${slug}`,
+    },
   };
 }
 
@@ -121,7 +225,7 @@ export default async function BlogArticle({ params }: Props) {
               href="/reservation"
               className="text-sm bg-[#c8813a] hover:bg-[#e8b87a] text-white px-4 py-2 rounded transition-colors"
             >
-              Réserver L'Aubier
+              Réserver L&apos;Aubier
             </Link>
           </div>
         </div>
