@@ -1,3 +1,5 @@
+import MapEmbed from "@/components/MapEmbed";
+
 const pills = [
   { label: "Épinal", detail: "15 min" },
   { label: "Gérardmer", detail: "30 min" },
@@ -30,13 +32,7 @@ export default function LocationSection() {
           ))}
         </div>
 
-        {/* Map placeholder */}
-        <div className="w-full h-64 md:h-80 bg-[#b8cfc0]/30 rounded-2xl flex items-center justify-center border border-[#b8cfc0]/50">
-          <div className="text-center">
-            <p className="text-[#8aab94] text-sm">Carte interactive</p>
-            <p className="text-[#b8cfc0] text-xs mt-1">Intégrer Google Maps ou Mapbox ici</p>
-          </div>
-        </div>
+        <MapEmbed />
       </div>
     </section>
   );

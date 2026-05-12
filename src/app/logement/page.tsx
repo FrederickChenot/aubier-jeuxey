@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Amenities from "@/components/Amenities";
+import MapEmbed from "@/components/MapEmbed";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -95,6 +96,16 @@ export default function LogementPage() {
                 <li>🏛️ Épinal (ville art déco) — 15 min</li>
               </ul>
             </div>
+          </div>
+        </section>
+
+        {/* Map */}
+        <section className="py-12 px-4 bg-white">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="font-[family-name:var(--font-playfair)] text-2xl italic text-[#3a3d42] mb-6">
+              Localisation
+            </h2>
+            <MapEmbed />
           </div>
         </section>
 
