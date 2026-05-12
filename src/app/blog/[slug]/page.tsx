@@ -11,24 +11,24 @@ const articles: Record<string, { title: string; date: string; tag: string; conte
     tag: "Randonnée",
     description: "Cinq itinéraires pédestres au départ de Jeuxey : lac de Bouzey, forêt d'Épinal, sentier des Dix, cascades de Tendon et tour de Bouzey en VTT.",
     content: `
-Les Vosges offrent un terrain de jeu exceptionnel pour les amateurs de randonnée. À partir de Jeuxey, 30 sentiers balisés représentant plus de 315 km sont accessibles, tracés et entretenus par le Club Vosgien d'Épinal (clubvosgienepinal.com). Pour les traces GPS, Komoot propose de nombreuses sorties référencées dans le secteur.
+Les Vosges offrent un terrain de jeu exceptionnel pour les amateurs de randonnée. Selon sentiers-en-france.eu, 30 sentiers balisés représentant plus de 315 km sont accessibles autour de Jeuxey. Le Club Vosgien d'Épinal (clubvosgienepinal.com) propose plus de 270 itinéraires balisés avec traces GPX téléchargeables. Pour la navigation sur le terrain, l'application Komoot est la référence pour les cartes interactives et les profils de dénivelé.
 
 **1. Boucle du Lac de Bouzey** — 11 km · Facile · 3h · Dénivelé 150 m
-Depuis Épinal, ce parcours longe le canal d'alimentation du lac et emprunte l'ancienne voie ferrée de la ceinture fortifiée. Le lac de Bouzey, miroir d'eau entouré de forêts, offre une atmosphère paisible tout au long du circuit. Idéal pour une première randonnée familiale dans les Vosges.
+Depuis Épinal, ce parcours longe le canal d'alimentation du lac et emprunte l'ancienne voie ferrée de la ceinture fortifiée d'Épinal. Le lac de Bouzey, miroir d'eau entouré de forêts, offre une atmosphère paisible tout au long du circuit. Idéal pour une première randonnée familiale dans les Vosges.
 
 **2. Forêt d'Épinal — Roche Charlot et Roche Goutteuse** — 13 km · Facile · 4h
-Plongeon dans la forêt communale d'Épinal, l'une des plus grandes forêts urbaines de France. Le sentier mène aux deux rochers emblématiques offrant des vues dégagées sur la plaine lorraine. Vous croiserez des arbres remarquables plusieurs fois centenaires et une faune discrète mais présente.
+Plongeon dans la forêt communale d'Épinal, l'une des plus grandes forêts urbaines de France. Bien ombragé, le sentier mène aux deux rochers emblématiques offrant des vues dégagées sur la plaine lorraine. Vous croiserez des arbres remarquables plusieurs fois centenaires.
 
 **3. Sentier des Dix — panorama sur Épinal** — 10 km · Facile · 3h · Dénivelé 321 m
-Ce sentier grimpe progressivement sur les collines sous-vosgiennes pour offrir plusieurs points de vue spectaculaires sur la ville d'Épinal, la Moselle et les crêtes vosgiennes en arrière-plan. La montée est progressive et le chemin parfaitement balisé.
+Départ depuis la carrière Collot, ce sentier grimpe sur les collines sous-vosgiennes pour offrir plusieurs points de vue spectaculaires sur la ville d'Épinal, la Moselle et les crêtes vosgiennes en arrière-plan.
 
-**4. Cascades de Tendon** — 7,5 km · Modéré · 2h
-À seulement 35 minutes de Jeuxey, les cascades de Tendon (la Grande et la Petite) sont parmi les plus photographiées des Vosges. Le sentier forestier serpente le long du ruisseau dans un cadre sauvage et humide, particulièrement beau au printemps et en automne.
+**4. Cascades de Tendon** — 7,5 km · Modéré · 2h · Dénivelé 300 m
+À seulement 35 minutes de Jeuxey, les cascades de Tendon (la Grande et la Petite) sont parmi les plus photographiées des Vosges. Le sentier forestier varié serpente le long du ruisseau dans un cadre sauvage et humide, particulièrement beau au printemps et en automne.
 
 **5. Tour de Bouzey — La Sorcière — Le Sotré** — 26 km · VTT ou pédestre
-Ce grand parcours varié alterne entre forêts de résineux, prairies et rives du lac. La montée vers La Sorcière récompense par des panoramas étendus. En version VTT, c'est l'une des sorties incontournables du massif vosgien côté Épinal.
+Ce grand parcours varié alterne entre forêts de résineux, prairies et rives du lac. La montée vers La Sorcière récompense par des panoramas étendus. L'une des sorties incontournables du secteur en version VTT.
 
-Pour préparer vos randonnées depuis L'Aubier, renseignez-vous auprès du Club Vosgien d'Épinal ou consultez les traces GPS sur Komoot. Chaussures de marche indispensables même sur les sentiers faciles.
+Pour préparer vos sorties, rendez-vous sur clubvosgienepinal.com pour les traces GPX ou sur l'application Komoot pour les cartes interactives. Chaussures de marche indispensables, même sur les sentiers cotés facile.
     `,
   },
   "epinal-art-deco": {
@@ -40,7 +40,7 @@ Pour préparer vos randonnées depuis L'Aubier, renseignez-vous auprès du Club 
 À seulement 15 minutes de L'Aubier, Épinal est une ville surprenante qui mêle patrimoine médiéval, architecture Art Déco et culture populaire. Elle mérite largement une demi-journée d'exploration, voire une journée entière.
 
 **La Basilique Saint-Maurice** (XIIe siècle)
-Dominant le centre historique, cette basilique romane vosgienne est le monument emblématique d'Épinal. Sa construction s'étend du XIIe au XVIe siècle, offrant un mélange harmonieux de styles roman et gothique. À ses pieds s'étend le **Quartier des Chanoinesses**, un ensemble médiéval remarquablement préservé datant du XIIIe siècle, avec ses ruelles pavées et ses maisons à colombages.
+Dominant le centre historique, cette basilique romane vosgienne est le monument emblématique d'Épinal. Le cœur historique de la ville s'est développé autour de cet édifice religieux depuis l'époque des évêques de Metz vers 980. Sa construction s'étend du XIIe au XVIe siècle, offrant un mélange harmonieux de styles roman et gothique. À ses pieds s'étend le **Quartier des Chanoinesses**, un ensemble médiéval remarquablement préservé datant du XIIIe siècle, avec ses hôtels particuliers, ruelles pavées et maisons à colombages.
 
 **Le Musée de l'Image**
 Unique en Europe, ce musée conserve et valorise l'imagerie populaire d'Épinal depuis 1796. Les célèbres "images d'Épinal" — estampes gravées, coloriées et diffusées dans toute la France — ont traversé les siècles pour illustrer l'histoire, les contes et la vie quotidienne. La collection permanente est saisissante ; les expositions temporaires régulièrement renouvelées.
@@ -48,10 +48,10 @@ Unique en Europe, ce musée conserve et valorise l'imagerie populaire d'Épinal 
 **L'architecture Art Déco**
 Après les destructions de la Première Guerre mondiale, Épinal a été reconstruite dans le style Art Déco des années 1920-1930. Le centre-ville concentre de nombreux hôtels particuliers et bâtiments publics ornés de ferronneries, céramiques et bas-reliefs caractéristiques de cette époque.
 
-**La Moselle et le Canal des Vosges**
-La Moselle traverse Épinal en son cœur, créant des promenades agréables sur ses berges aménagées. Le Canal des Vosges longe également la ville, vestige du réseau fluvial qui faisait d'Épinal un centre commercial actif. Épinal est classée parmi les villes les plus boisées de France : les parcs et espaces verts occupent une place remarquable dans le tissu urbain.
+**La Moselle, le Canal des Vosges et les espaces naturels**
+La Moselle traverse Épinal en son cœur, créant des promenades agréables sur ses berges aménagées. Le Canal des Vosges longe également la ville. Épinal est classée parmi les villes les plus boisées de France. Pour une balade en famille, l'**Arboretum de la Voivre** et le **parc boisé du Mont Carmel** offrent de beaux espaces verts à quelques minutes du centre.
 
-Une visite combinant la basilique, le musée de l'Image et une promenade au bord de la Moselle constitue une journée complète et très agréable au départ de L'Aubier.
+Une visite combinant la basilique, le musée de l'Image, une promenade au bord de la Moselle et un tour dans l'un des parcs constitue une journée complète et très agréable au départ de L'Aubier.
     `,
   },
   "gastronomie-vosgienne": {
@@ -131,8 +131,12 @@ Après le marché, remontez vers la **Basilique Saint-Maurice** (XIIe siècle), 
 **Après-midi : Musée de l'Image et bords de Moselle**
 L'après-midi, consacrez 1h30 au **Musée de l'Image**, unique en Europe. La collection d'images d'Épinal — ces estampes populaires colorées diffusées dans toute la France depuis 1796 — est fascinante et accessible à tous. En sortant, longez les **bords de la Moselle** aménagés pour une promenade digestive.
 
-**Soir : dîner à Épinal**
-Épinal dispose de plusieurs bonnes tables en centre-ville. *(À compléter avec des adresses locales recommandées.)*
+**Soir : où dîner ?**
+Deux adresses recommandées dans le secteur :
+
+**La Grange Obriot** — 64 rue de la Passée, 88460 La Baffe (20 min d'Épinal). Cuisine du terroir vosgien par le chef Claudy Obriot, ancien chef des Ducs de Lorraine. Cadre chaleureux bois et pierre, produits frais et de saison, recettes de nos grands-mères revisitées. Site : lagrangeobriot.com — réservation fortement conseillée.
+
+**Ipso Facto** — 17 rue de la Maix, 88000 Épinal. Ouvert en 2024 en plein cœur du quartier historique. Cuisine française traditionnelle à base de produits frais locaux (œufs Ferme Bourquin, chèvres Ferme des Granges). Terrasse 40 couverts. Note 4,9/5. Tél : 03 29 31 11 44 — ouvert mardi au samedi, midi et soir.
 
 ---
 
