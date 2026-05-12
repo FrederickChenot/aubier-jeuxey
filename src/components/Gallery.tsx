@@ -1,6 +1,6 @@
 export default function Gallery() {
   const photos = [
-    { src: "/photos/salon.jpg", alt: "Salon avec parquet chêne chevrons", className: "row-span-2" },
+    { src: "/photos/salon.jpg", alt: "Salon avec sol stratifié lames effet bois", className: "row-span-2" },
     { src: "/photos/cuisine.jpg", alt: "Cuisine vert sauge et bois" },
     { src: "/photos/chambre.jpg", alt: "Espace nuit" },
     { src: "/photos/terrasse.jpg", alt: "Terrasse avec bambous" },

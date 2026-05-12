@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 const photos = [
-  { label: "Salon — parquet chêne chevrons" },
+  { label: "Salon — sol stratifié lames effet bois" },
   { label: "Cuisine vert sauge et bois" },
   { label: "Espace nuit" },
   { label: "Salle de bain" },

@@ -105,7 +105,7 @@ L'influence du chalet vosgien traditionnel est forte, mais les architectes conte
 Les Vosges comptent un nombre croissant de constructions labellisées passives ou à énergie positive. Les ossatures bois isolées au chanvre, les pompes à chaleur géothermiques et les toitures végétalisées se multiplient. Cette dynamique est portée par une filière bois locale active et des artisans formés aux nouvelles techniques.
 
 **L'Aubier : une architecture qui dialogue avec la forêt**
-Le studio L'Aubier incarne cette philosophie : bardage cèdre naturel en façade, parquet chêne en chevrons à l'intérieur, cuisine vert sauge en résonance avec la végétation extérieure. La terrasse bambous et le brise-vue bois créent une continuité entre l'espace de vie et le jardin. Chaque matériau a été choisi pour sa cohérence avec l'environnement vosgien.
+Le studio L'Aubier incarne cette philosophie : bardage cèdre naturel en façade, sol stratifié en lames effet bois à l'intérieur, cuisine vert sauge en résonance avec la végétation extérieure. La terrasse bambous et le brise-vue bois créent une continuité entre l'espace de vie et le jardin. Chaque choix de matériau vise la cohérence avec l'environnement vosgien.
 
 **Francis Hallé et la philosophie de l'aubier**
 Francis Hallé, botaniste et défenseur des forêts primaires, a popularisé la notion d'aubier comme métaphore de la vitalité. L'aubier est la partie vivante du bois, entre l'écorce et le cœur — la zone où la sève circule, où l'arbre grandit. Donner ce nom à un studio de location, c'est affirmer une philosophie : construire avec le bois, dans le respect de la forêt qui nous entoure.
