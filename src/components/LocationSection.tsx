@@ -2,7 +2,7 @@ import MapEmbed from "@/components/MapEmbed";
 
 const pills = [
   { label: "Épinal", detail: "15 min" },
-  { label: "Gérardmer", detail: "30 min" },
+  { label: "Gérardmer", detail: "42 km" },
   { label: "Nancy", detail: "1h" },
   { label: "Colmar", detail: "1h15" },
   { label: "Strasbourg", detail: "1h30" },

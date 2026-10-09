@@ -80,8 +80,8 @@ export default async function LogementPage() {
                 À proximité
               </h2>
               <ul className="space-y-3 text-sm text-[#3a3d42]">
-                <li>🛒 Supermarché — 3 km</li>
-                <li>🌊 Lac de Gérardmer — 30 min</li>
+                <li>🛒 Hypermarché Carrefour — moins de 1 km</li>
+                <li>🌊 Lac de Gérardmer — 42 km</li>
                 <li>⛷️ Domaines skiables — 35 min</li>
                 <li>🥾 Sentiers balisés du Club Vosgien à proximité</li>
                 <li>🏛️ Épinal (ville art déco) — 15 min</li>

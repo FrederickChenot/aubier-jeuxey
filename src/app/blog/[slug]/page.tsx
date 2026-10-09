@@ -157,7 +157,7 @@ Deux options selon votre forme :
 - **Parking :** gratuit dans plusieurs parkings du centre-ville d'Épinal, notamment près du marché.
 - **Gare SNCF d'Épinal :** à environ 15 minutes de L'Aubier en voiture. Liaisons directes vers Nancy, Metz et Paris.
 - **Office de tourisme d'Épinal :** en centre-ville, topoguides et conseils randonnées disponibles.
-- **Distance Jeuxey → Gérardmer :** environ 30 minutes par la RD 157.
+- **Distance Jeuxey → Gérardmer :** à environ 42 km de L'Aubier.
     `,
   },
 };
