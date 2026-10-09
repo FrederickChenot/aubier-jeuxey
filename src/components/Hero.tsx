@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function Hero() {
+export default function Hero({ pricePerNight }: { pricePerNight: number }) {
   return (
     <section className="relative min-h-screen bg-[#3a3d42] flex items-center justify-center text-center px-4">
       {/* Gradient overlay for depth */}
@@ -44,7 +44,7 @@ export default function Hero() {
         {/* Key stats */}
         <div className="mt-16 grid grid-cols-3 gap-4 max-w-sm mx-auto">
           <div>
-            <p className="text-[#c8813a] text-2xl font-medium">75€</p>
+            <p className="text-[#c8813a] text-2xl font-medium">{pricePerNight}€</p>
             <p className="text-[#8aab94] text-xs">la nuit</p>
           </div>
           <div className="border-x border-white/10">

@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getDb } from "@/lib/db";
@@ -31,5 +32,10 @@ export async function PATCH(request: NextRequest) {
   }
 
   const settings = await getSettings(sql);
+
+  revalidatePath("/");
+  revalidatePath("/logement");
+  revalidatePath("/reservation");
+
   return Response.json(settings);
 }

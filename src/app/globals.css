@@ -26,29 +26,52 @@ body {
 
 /* react-calendar overrides */
 .react-calendar {
-  border: none;
+  border: none !important;
   background: transparent;
   font-family: var(--font-dm), sans-serif;
   width: 100%;
 }
 
-.react-calendar__tile--active,
-.react-calendar__tile--active:enabled:hover,
-.react-calendar__tile--active:enabled:focus {
-  background: #c8813a;
-  color: white;
+.react-calendar__tile {
+  border-radius: 10px !important;
+  padding: 14px 6px !important;
 }
 
-.react-calendar__tile--now {
-  background: #b8cfc0;
+/* Les week-ends gardent la même couleur de texte que les autres jours */
+.react-calendar__month-view__days__day--weekend {
+  color: var(--color-anthracite) !important;
 }
 
-.react-calendar__tile:disabled {
-  background: #fee2e2;
-  color: #ef4444;
+/* Dates libres : cliquables, fond vert sauge clair, survol cedar */
+.react-calendar__tile.tile-free {
+  background: rgba(184, 207, 192, 0.4) !important;
+  color: var(--color-anthracite) !important;
+}
+
+.react-calendar__tile.tile-free:enabled:hover,
+.react-calendar__tile.tile-free:enabled:focus {
+  background: var(--color-cedar) !important;
+  color: white !important;
+}
+
+/* Dates occupées : non cliquables, fond rouge clair, texte rouge barré */
+.react-calendar__tile.tile-blocked,
+.react-calendar__tile.tile-blocked:disabled {
+  background: #fee2e2 !important;
+  color: #ef4444 !important;
   text-decoration: line-through;
 }
 
-.react-calendar__tile:enabled:hover {
-  background: #e8b87a;
+/* Dates passées : grisées, sans fond, sans barré */
+.react-calendar__tile.tile-past,
+.react-calendar__tile.tile-past:disabled {
+  background: transparent !important;
+  color: #c4c4c4 !important;
+  text-decoration: none !important;
+}
+
+/* Aujourd'hui : simple bordure cedar, pas de fond jaune */
+.react-calendar__tile--now {
+  background: transparent !important;
+  box-shadow: inset 0 0 0 2px var(--color-cedar);
 }

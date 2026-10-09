@@ -78,10 +78,11 @@ export async function POST(request: NextRequest) {
     RETURNING *
   `;
 
-  const cal = ical({ name: "L'Aubier", timezone: "Europe/Paris" });
+  const cal = ical({ name: "L'Aubier" });
   const ev = cal.createEvent({
-    start: checkinDate,
-    end: checkoutDate,
+    start: checkin,
+    end: checkout,
+    allDay: true,
     summary: "Séjour à L'Aubier · Jeuxey · Vosges",
     description: "Votre demande de séjour à L'Aubier a été enregistrée.\nContact : contact@aubier-vosges.fr",
   });

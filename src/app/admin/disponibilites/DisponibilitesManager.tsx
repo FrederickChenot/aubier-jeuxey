@@ -9,7 +9,13 @@ interface BlockedDate {
   date_start: string;
   date_end: string;
   reason: string | null;
+  source: string;
 }
+
+const sourceLabels: Record<string, string> = {
+  manual: "Manuel",
+  airbnb: "Airbnb",
+};
 
 export default function DisponibilitesManager({ blocked }: { blocked: BlockedDate[] }) {
   const router = useRouter();
@@ -98,19 +104,26 @@ export default function DisponibilitesManager({ blocked }: { blocked: BlockedDat
                 {blocked.map((b) => (
                   <li key={b.id} className="px-5 py-3 flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-[#3a3d42]">
+                      <p className="text-sm text-[#3a3d42] flex items-center gap-2">
                         {new Date(b.date_start).toLocaleDateString("fr-FR")}
                         {" → "}
                         {new Date(b.date_end).toLocaleDateString("fr-FR")}
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-[#b8cfc0]/30 text-[#3a3d42]">
+                          {sourceLabels[b.source] ?? b.source}
+                        </span>
                       </p>
                       {b.reason && <p className="text-xs text-[#8aab94]">{b.reason}</p>}
                     </div>
-                    <button
-                      onClick={() => removeBlock(b.id)}
-                      className="text-xs text-red-400 hover:text-red-600 transition-colors"
-                    >
-                      Supprimer
-                    </button>
+                    {b.source === "airbnb" ? (
+                      <span className="text-xs text-[#8aab94] italic">Géré par Airbnb</span>
+                    ) : (
+                      <button
+                        onClick={() => removeBlock(b.id)}
+                        className="text-xs text-red-400 hover:text-red-600 transition-colors"
+                      >
+                        Supprimer
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>

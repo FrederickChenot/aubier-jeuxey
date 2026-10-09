@@ -4,12 +4,16 @@ import Footer from "@/components/Footer";
 import Amenities from "@/components/Amenities";
 import MapEmbed from "@/components/MapEmbed";
 import Link from "next/link";
+import { getDb } from "@/lib/db";
+import { getSettings, type SiteSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
   title: "Le logement",
   description:
     "Découvrez L'Aubier en détail : galerie complète, équipements, superficie et informations pratiques pour votre séjour dans les Vosges.",
 };
+
+const DEFAULT_SETTINGS: SiteSettings = { prix_nuit: 75, frais_menage: 40, caution: 300 };
 
 const photos = [
   { label: "Salon — sol stratifié lames effet bois" },
@@ -20,7 +24,14 @@ const photos = [
   { label: "Façade bardage bois" },
 ];
 
-export default function LogementPage() {
+export default async function LogementPage() {
+  let settings = DEFAULT_SETTINGS;
+  try {
+    settings = await getSettings(getDb());
+  } catch {
+    // keep defaults
+  }
+
   return (
     <>
       <Navbar />
@@ -78,8 +89,8 @@ export default function LogementPage() {
               <ul className="space-y-3 text-sm text-[#3a3d42]">
                 <li><strong>Arrivée :</strong> 16h – 20h (horaires flexibles sur demande)</li>
                 <li><strong>Départ :</strong> avant 10h</li>
-                <li><strong>Caution :</strong> 300 € (non débitée, libérée 48h après départ)</li>
-                <li><strong>Ménage :</strong> 40 € inclus dans le tarif</li>
+                <li><strong>Caution :</strong> {settings.caution} € (non débitée, libérée 48h après départ)</li>
+                <li><strong>Ménage :</strong> {settings.frais_menage} € inclus dans le tarif</li>
                 <li><strong>Animaux :</strong> non acceptés</li>
                 <li><strong>Fumeur :</strong> non fumeur (toléré en extérieur uniquement)</li>
               </ul>

@@ -18,12 +18,18 @@ CREATE TABLE IF NOT EXISTS reservations (
 );
 
 CREATE TABLE IF NOT EXISTS blocked_dates (
-  id          SERIAL PRIMARY KEY,
-  date_start  DATE NOT NULL,
-  date_end    DATE NOT NULL,
-  reason      TEXT,
-  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  id            SERIAL PRIMARY KEY,
+  date_start    DATE NOT NULL,
+  date_end      DATE NOT NULL,
+  reason        TEXT,
+  source        TEXT NOT NULL DEFAULT 'manual',
+  external_uid  TEXT,
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- NULLs are distinct in a unique index, donc les blocages manuels (external_uid NULL)
+-- ne se bloquent jamais entre eux ; seuls les doublons (source, external_uid) airbnb sont rejetés.
+CREATE UNIQUE INDEX IF NOT EXISTS idx_blocked_dates_source_uid ON blocked_dates (source, external_uid);
 
 CREATE TABLE IF NOT EXISTS page_views (
   id         SERIAL PRIMARY KEY,

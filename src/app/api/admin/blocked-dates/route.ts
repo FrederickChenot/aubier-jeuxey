@@ -26,6 +26,9 @@ export async function DELETE(request: NextRequest) {
   if (!id) return Response.json({ error: "id required" }, { status: 400 });
 
   const sql = getDb();
-  await sql`DELETE FROM blocked_dates WHERE id = ${id}`;
+  const [row] = await sql`
+    DELETE FROM blocked_dates WHERE id = ${id} AND source != 'airbnb' RETURNING id
+  `;
+  if (!row) return Response.json({ error: "Blocage introuvable ou géré par Airbnb." }, { status: 404 });
   return Response.json({ success: true });
 }

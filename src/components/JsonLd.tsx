@@ -1,4 +1,4 @@
-export default function JsonLd() {
+export default function JsonLd({ pricePerNight }: { pricePerNight: number }) {
   const schema = {
     "@context": "https://schema.org",
     "@graph": [
@@ -30,7 +30,7 @@ export default function JsonLd() {
         ],
         offers: {
           "@type": "Offer",
-          price: "75",
+          price: String(pricePerNight),
           priceCurrency: "EUR",
           availability: "https://schema.org/InStock",
         },
