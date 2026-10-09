@@ -1,6 +1,15 @@
 import Link from "next/link";
 
-export default function Hero({ pricePerNight }: { pricePerNight: number }) {
+interface Props {
+  pricePerNight: number;
+  cadeauDirect: string;
+}
+
+export default function Hero({ pricePerNight, cadeauDirect }: Props) {
+  const badgeText = cadeauDirect
+    ? `Réservez en direct : ${cadeauDirect}`
+    : "Réservez en direct auprès du propriétaire";
+
   return (
     <section className="relative min-h-screen bg-[#3a3d42] flex items-center justify-center text-center px-4">
       {/* Gradient overlay for depth */}
@@ -10,7 +19,7 @@ export default function Hero({ pricePerNight }: { pricePerNight: number }) {
         {/* Badge */}
         <div className="inline-block mb-8 px-4 py-2 bg-[#c8813a]/20 border border-[#c8813a]/40 rounded-full">
           <p className="text-[#e8b87a] text-sm font-medium">
-            Réservez en direct : cadeau de bienvenue offert
+            {badgeText}
           </p>
         </div>
 

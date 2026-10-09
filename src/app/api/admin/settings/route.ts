@@ -23,11 +23,13 @@ export async function PATCH(request: NextRequest) {
   const textKeys = ["cadeau_direct"];
   const sql = getDb();
 
-  for (const [key, value] of Object.entries(body)) {
+  for (const [key, rawValue] of Object.entries(body)) {
+    let value = rawValue;
     if (numericKeys.includes(key)) {
       if (isNaN(Number(value)) || Number(value) < 0) continue;
     } else if (textKeys.includes(key)) {
-      if (typeof value !== "string" || !value.trim() || value.length > 200) continue;
+      if (typeof value !== "string" || value.length > 200) continue;
+      value = value.trim();
     } else {
       continue;
     }

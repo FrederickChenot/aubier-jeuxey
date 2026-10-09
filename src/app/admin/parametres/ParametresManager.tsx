@@ -80,7 +80,7 @@ export default function ParametresManager({ settings }: { settings: Settings }) 
             <h2 className="font-medium text-[#3a3d42] mb-6">Réservation directe</h2>
             <div>
               <label className="text-xs uppercase tracking-widest text-[#8aab94] block mb-1">
-                Cadeau de bienvenue
+                Cadeau réservation directe (vide = désactivé)
               </label>
               <input
                 type="text"
@@ -90,7 +90,7 @@ export default function ParametresManager({ settings }: { settings: Settings }) 
                 className="w-full border border-[#b8cfc0] rounded-lg px-3 py-2 text-sm text-[#3a3d42] focus:outline-none focus:ring-2 focus:ring-[#c8813a]"
               />
               <p className="text-xs text-[#8aab94] mt-1">
-                Affiché dans la section « Pourquoi réserver en direct ? » de l'accueil
+                Affiché dans la section « Pourquoi réserver en direct ? » et le badge de l'accueil. Laisser vide pour ne rien afficher.
               </p>
             </div>
           </div>

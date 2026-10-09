@@ -3,22 +3,30 @@ interface Props {
 }
 
 export default function WhyDirect({ cadeauDirect }: Props) {
+  const thirdCard = cadeauDirect
+    ? {
+        icon: "🎁",
+        title: "Un cadeau de bienvenue",
+        desc: `${cadeauDirect} pour toute réservation sur le site.`,
+      }
+    : {
+        icon: "✉️",
+        title: "Réservation simple",
+        desc: "Réponse sous 48h par email.",
+      };
+
   const reasons = [
     {
-      icon: "🎁",
-      title: "Un cadeau de bienvenue",
-      desc: `${cadeauDirect} pour toute réservation sur le site.`,
+      icon: "📞",
+      title: "Contact direct avec le propriétaire",
+      desc: "Chaque demande est étudiée personnellement.",
     },
     {
       icon: "🕐",
       title: "Départ tardif possible",
       desc: "Jusqu'à 12h si le logement n'est pas reloué le jour même, sur demande.",
     },
-    {
-      icon: "📞",
-      title: "Contact direct avec le propriétaire",
-      desc: "Chaque demande est étudiée personnellement.",
-    },
+    thirdCard,
   ];
 
   return (

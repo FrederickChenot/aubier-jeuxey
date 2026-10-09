@@ -7,7 +7,7 @@ export interface SiteSettings {
   cadeau_direct: string;
 }
 
-const DEFAULT_CADEAU_DIRECT = "Panier d'accueil vosgien offert";
+const DEFAULT_CADEAU_DIRECT = "";
 
 export async function getSettings(sql: NeonQueryFunction<false, false>): Promise<SiteSettings> {
   try {

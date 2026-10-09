@@ -18,7 +18,7 @@ const DEFAULT_SETTINGS: SiteSettings = {
   prix_nuit: 75,
   frais_menage: 40,
   caution: 300,
-  cadeau_direct: "Panier d'accueil vosgien offert",
+  cadeau_direct: "",
 };
 
 export default async function LogementPage() {

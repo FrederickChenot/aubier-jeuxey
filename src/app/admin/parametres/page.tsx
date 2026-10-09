@@ -12,7 +12,7 @@ export default async function AdminParametresPage() {
   try { session = await getServerSession(authOptions); } catch { session = null; }
   if (!session) redirect("/admin/login");
 
-  let settings = { prix_nuit: 75, frais_menage: 40, caution: 300, cadeau_direct: "Panier d'accueil vosgien offert" };
+  let settings = { prix_nuit: 75, frais_menage: 40, caution: 300, cadeau_direct: "" };
   try {
     const sql = getDb();
     settings = await getSettings(sql);

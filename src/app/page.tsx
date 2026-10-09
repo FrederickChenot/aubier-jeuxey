@@ -15,7 +15,7 @@ const DEFAULTS: SiteSettings = {
   prix_nuit: 75,
   frais_menage: 40,
   caution: 300,
-  cadeau_direct: "Panier d'accueil vosgien offert",
+  cadeau_direct: "",
 };
 
 async function loadSettings(): Promise<SiteSettings> {
@@ -50,7 +50,7 @@ export default async function Home() {
     <>
       <Navbar />
       <main>
-        <Hero pricePerNight={settings.prix_nuit} />
+        <Hero pricePerNight={settings.prix_nuit} cadeauDirect={settings.cadeau_direct} />
         <Gallery />
         <Amenities />
         <PriceCalculator settings={settings} />
