@@ -1,22 +1,26 @@
-const reasons = [
-  {
-    pct: "−15%",
-    title: "Pas de frais Airbnb",
-    desc: "Les plateformes facturent jusqu'à 15% de frais voyageur. Ici : zéro.",
-  },
-  {
-    pct: "Direct",
-    title: "Contact direct avec le propriétaire",
-    desc: "Questions, demandes spéciales, flexibilité. Nous parlons directement.",
-  },
-  {
-    pct: "Vite",
-    title: "Confirmation par email sous 24h",
-    desc: "Réservation directe, sans plateforme intermédiaire. Vous recevez un email de confirmation avec fichier .ics.",
-  },
-];
+interface Props {
+  cadeauDirect: string;
+}
 
-export default function WhyDirect() {
+export default function WhyDirect({ cadeauDirect }: Props) {
+  const reasons = [
+    {
+      icon: "🎁",
+      title: "Un cadeau de bienvenue",
+      desc: `${cadeauDirect} pour toute réservation sur le site.`,
+    },
+    {
+      icon: "🕐",
+      title: "Départ tardif possible",
+      desc: "Jusqu'à 12h si le logement n'est pas reloué le jour même, sur demande.",
+    },
+    {
+      icon: "📞",
+      title: "Contact direct avec le propriétaire",
+      desc: "Chaque demande est étudiée personnellement.",
+    },
+  ];
+
   return (
     <section className="py-16 px-4 bg-white">
       <div className="max-w-6xl mx-auto">
@@ -24,15 +28,13 @@ export default function WhyDirect() {
           Pourquoi réserver en direct ?
         </h2>
         <p className="text-[#8aab94] text-sm text-center mb-10">
-          Le même logement, le même confort, moins cher
+          Le même logement, le même confort, une relation directe
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {reasons.map((r) => (
             <div key={r.title} className="text-center p-6">
-              <p className="text-4xl font-[family-name:var(--font-playfair)] italic text-[#c8813a] mb-3">
-                {r.pct}
-              </p>
+              <p className="text-4xl mb-3">{r.icon}</p>
               <p className="font-medium text-[#3a3d42] mb-2">{r.title}</p>
               <p className="text-sm text-[#8aab94]">{r.desc}</p>
             </div>

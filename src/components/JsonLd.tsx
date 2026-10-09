@@ -7,7 +7,7 @@ export default function JsonLd({ pricePerNight }: { pricePerNight: number }) {
         "@id": "https://www.aubier-vosges.fr/#lodging",
         name: "L'Aubier",
         description:
-          "Studio 37 m² plain-pied entièrement rénové en 2025 à Jeuxey (Vosges). Lit double 140×190, douche italienne, terrasse bambous privative, parking inclus, WiFi fibre.",
+          "Studio 37 m² plain-pied entièrement rénové en 2025 à Jeuxey (Vosges). Lit double 140×190, douche italienne, terrasse privative et jardin japonais, parking inclus.",
         url: "https://www.aubier-vosges.fr",
         address: {
           "@type": "PostalAddress",
@@ -23,10 +23,10 @@ export default function JsonLd({ pricePerNight }: { pricePerNight: number }) {
         priceRange: "€€",
         numberOfRooms: 1,
         amenityFeature: [
-          { "@type": "LocationFeatureSpecification", name: "WiFi", value: true },
           { "@type": "LocationFeatureSpecification", name: "Parking", value: true },
           { "@type": "LocationFeatureSpecification", name: "Climatisation", value: true },
           { "@type": "LocationFeatureSpecification", name: "Terrasse", value: true },
+          { "@type": "LocationFeatureSpecification", name: "Jardin japonais", value: true },
         ],
         offers: {
           "@type": "Offer",

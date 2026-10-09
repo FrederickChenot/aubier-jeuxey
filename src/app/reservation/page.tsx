@@ -10,7 +10,12 @@ export const metadata: Metadata = {
   description: "Réservez votre séjour à L'Aubier directement, sans frais de plateforme.",
 };
 
-const DEFAULT_SETTINGS: SiteSettings = { prix_nuit: 75, frais_menage: 40, caution: 300 };
+const DEFAULT_SETTINGS: SiteSettings = {
+  prix_nuit: 75,
+  frais_menage: 40,
+  caution: 300,
+  cadeau_direct: "Panier d'accueil vosgien offert",
+};
 
 type Props = {
   searchParams: Promise<{ checkin?: string; checkout?: string }>;
@@ -29,7 +34,7 @@ export default async function ReservationPage({ searchParams }: Props) {
   return (
     <>
       <Navbar />
-      <main className="pt-[100px] min-h-screen bg-[#f7f5f0]">
+      <main className="pt-16 min-h-screen bg-[#f7f5f0]">
         <div className="bg-[#3a3d42] py-16 px-4">
           <div className="max-w-3xl mx-auto">
             <h1 className="font-[family-name:var(--font-playfair)] text-4xl italic text-[#f7f5f0] mb-2">

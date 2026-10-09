@@ -11,7 +11,12 @@ import CookieBanner from "@/components/CookieBanner";
 import JsonLd from "@/components/JsonLd";
 import type { SiteSettings } from "@/lib/settings";
 
-const DEFAULTS: SiteSettings = { prix_nuit: 75, frais_menage: 40, caution: 300 };
+const DEFAULTS: SiteSettings = {
+  prix_nuit: 75,
+  frais_menage: 40,
+  caution: 300,
+  cadeau_direct: "Panier d'accueil vosgien offert",
+};
 
 async function loadSettings(): Promise<SiteSettings> {
   if (!process.env.DATABASE_URL) return DEFAULTS;
@@ -29,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: "L'Aubier — Studio design · Jeuxey · Vosges",
-    description: `Studio 37 m² plain-pied entièrement rénové en 2025, au cœur des Vosges. Lit 140×190, douche italienne, terrasse bambous privative, parking inclus. ${settings.prix_nuit}€/nuit sans frais de plateforme.`,
+    description: `Studio 37 m² plain-pied entièrement rénové en 2025, au cœur des Vosges. Lit 140×190, douche italienne, terrasse privative et jardin japonais, parking inclus. ${settings.prix_nuit}€/nuit sans frais de plateforme.`,
     openGraph: {
       title: "L'Aubier — Studio design · Jeuxey · Vosges",
       description: `Studio 37 m² rénové 2025 dans les Vosges. Terrasse privative, parking, douche italienne. ${settings.prix_nuit}€/nuit.`,
@@ -50,7 +55,7 @@ export default async function Home() {
         <Amenities />
         <PriceCalculator settings={settings} />
         <LocationSection />
-        <WhyDirect />
+        <WhyDirect cadeauDirect={settings.cadeau_direct} />
       </main>
       <Footer />
       <CookieBanner />

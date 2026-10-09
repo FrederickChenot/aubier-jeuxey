@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Gallery from "@/components/Gallery";
 import Amenities from "@/components/Amenities";
 import MapEmbed from "@/components/MapEmbed";
 import Link from "next/link";
@@ -13,16 +14,12 @@ export const metadata: Metadata = {
     "Découvrez L'Aubier en détail : galerie complète, équipements, superficie et informations pratiques pour votre séjour dans les Vosges.",
 };
 
-const DEFAULT_SETTINGS: SiteSettings = { prix_nuit: 75, frais_menage: 40, caution: 300 };
-
-const photos = [
-  { label: "Salon — sol stratifié lames effet bois" },
-  { label: "Cuisine vert sauge et bois" },
-  { label: "Espace nuit" },
-  { label: "Salle de bain" },
-  { label: "Terrasse bambous" },
-  { label: "Façade bardage bois" },
-];
+const DEFAULT_SETTINGS: SiteSettings = {
+  prix_nuit: 75,
+  frais_menage: 40,
+  caution: 300,
+  cadeau_direct: "Panier d'accueil vosgien offert",
+};
 
 export default async function LogementPage() {
   let settings = DEFAULT_SETTINGS;
@@ -35,7 +32,7 @@ export default async function LogementPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-[100px]">
+      <main className="pt-16">
         {/* Header */}
         <div className="bg-[#3a3d42] py-16 px-4">
           <div className="max-w-6xl mx-auto">
@@ -53,29 +50,12 @@ export default async function LogementPage() {
             <span>👥 2 voyageurs max</span>
             <span>🛏️ Lit double 140×190 cm</span>
             <span>🚿 Douche italienne · WC suspendu · sèche-serviette</span>
-            <span>🏡 Terrasse privative bambous</span>
+            <span>🌿 Terrasse privative & jardin japonais</span>
             <span>🚗 1 place privée</span>
           </div>
         </div>
 
-        {/* Full gallery */}
-        <section className="py-12 px-4 bg-white">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="font-[family-name:var(--font-playfair)] text-2xl italic text-[#3a3d42] mb-6">
-              Galerie complète
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {photos.map((p) => (
-                <div
-                  key={p.label}
-                  className="aspect-[4/3] bg-gradient-to-br from-[#b8cfc0]/40 to-[#d4a96a]/20 rounded-xl flex items-center justify-center"
-                >
-                  <span className="text-[#8aab94] text-sm">{p.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <Gallery title="Galerie complète" />
 
         <Amenities />
 
@@ -87,10 +67,10 @@ export default async function LogementPage() {
                 Informations pratiques
               </h2>
               <ul className="space-y-3 text-sm text-[#3a3d42]">
-                <li><strong>Arrivée :</strong> 16h – 20h (horaires flexibles sur demande)</li>
+                <li><strong>Arrivée :</strong> autonome (boîte à clés) à partir de 16h, sans heure limite</li>
                 <li><strong>Départ :</strong> avant 10h</li>
                 <li><strong>Caution :</strong> {settings.caution} € (non débitée, libérée 48h après départ)</li>
-                <li><strong>Ménage :</strong> {settings.frais_menage} € inclus dans le tarif</li>
+                <li><strong>Ménage :</strong> {settings.frais_menage} € par séjour, ajoutés au total</li>
                 <li><strong>Animaux :</strong> non acceptés</li>
                 <li><strong>Fumeur :</strong> non fumeur (toléré en extérieur uniquement)</li>
               </ul>
@@ -103,7 +83,7 @@ export default async function LogementPage() {
                 <li>🛒 Supermarché — 3 km</li>
                 <li>🌊 Lac de Gérardmer — 30 min</li>
                 <li>⛷️ Domaines skiables — 35 min</li>
-                <li>🥾 Sentiers GR — départ depuis Jeuxey</li>
+                <li>🥾 Sentiers balisés du Club Vosgien à proximité</li>
                 <li>🏛️ Épinal (ville art déco) — 15 min</li>
               </ul>
             </div>

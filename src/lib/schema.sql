@@ -43,5 +43,9 @@ CREATE INDEX IF NOT EXISTS idx_reservations_dates ON reservations (checkin, chec
 CREATE INDEX IF NOT EXISTS idx_blocked_dates ON blocked_dates (date_start, date_end);
 
 CREATE TABLE IF NOT EXISTS settings (key VARCHAR PRIMARY KEY, value TEXT);
-INSERT INTO settings VALUES ('prix_nuit', '75'), ('frais_menage', '40'), ('caution', '300')
+INSERT INTO settings VALUES
+  ('prix_nuit', '75'),
+  ('frais_menage', '40'),
+  ('caution', '300'),
+  ('cadeau_direct', 'Panier d''accueil vosgien offert')
 ON CONFLICT (key) DO NOTHING;

@@ -19,12 +19,18 @@ export async function PATCH(request: NextRequest) {
   if (!session) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await request.json() as Record<string, string>;
-  const allowed = ["prix_nuit", "frais_menage", "caution"];
+  const numericKeys = ["prix_nuit", "frais_menage", "caution"];
+  const textKeys = ["cadeau_direct"];
   const sql = getDb();
 
   for (const [key, value] of Object.entries(body)) {
-    if (!allowed.includes(key)) continue;
-    if (isNaN(Number(value)) || Number(value) < 0) continue;
+    if (numericKeys.includes(key)) {
+      if (isNaN(Number(value)) || Number(value) < 0) continue;
+    } else if (textKeys.includes(key)) {
+      if (typeof value !== "string" || !value.trim() || value.length > 200) continue;
+    } else {
+      continue;
+    }
     await sql`
       INSERT INTO settings (key, value) VALUES (${key}, ${value})
       ON CONFLICT (key) DO UPDATE SET value = ${value}

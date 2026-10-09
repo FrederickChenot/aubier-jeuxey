@@ -7,6 +7,7 @@ interface Settings {
   prix_nuit: number;
   frais_menage: number;
   caution: number;
+  cadeau_direct: string;
 }
 
 export default function ParametresManager({ settings }: { settings: Settings }) {
@@ -14,6 +15,7 @@ export default function ParametresManager({ settings }: { settings: Settings }) 
     prix_nuit: String(settings.prix_nuit),
     frais_menage: String(settings.frais_menage),
     caution: String(settings.caution),
+    cadeau_direct: settings.cadeau_direct,
   });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -26,11 +28,7 @@ export default function ParametresManager({ settings }: { settings: Settings }) 
     const res = await fetch("/api/admin/settings", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        prix_nuit: values.prix_nuit,
-        frais_menage: values.frais_menage,
-        caution: values.caution,
-      }),
+      body: JSON.stringify(values),
     });
     setSaving(false);
     if (res.ok) {
@@ -41,7 +39,7 @@ export default function ParametresManager({ settings }: { settings: Settings }) 
     }
   }
 
-  const fields: { key: keyof typeof values; label: string; unit: string; help: string }[] = [
+  const numberFields: { key: "prix_nuit" | "frais_menage" | "caution"; label: string; unit: string; help: string }[] = [
     { key: "prix_nuit", label: "Tarif par nuit", unit: "€", help: "Affiché sur la page d'accueil et dans le calculateur" },
     { key: "frais_menage", label: "Frais de ménage", unit: "€", help: "Ajoutés au total de chaque réservation" },
     { key: "caution", label: "Caution", unit: "€", help: "Non débitée, affichée à titre indicatif" },
@@ -56,10 +54,10 @@ export default function ParametresManager({ settings }: { settings: Settings }) 
             Paramètres
           </h1>
 
-          <div className="bg-white rounded-xl border border-[#b8cfc0]/30 p-6">
+          <div className="bg-white rounded-xl border border-[#b8cfc0]/30 p-6 mb-6">
             <h2 className="font-medium text-[#3a3d42] mb-6">Tarifs</h2>
             <div className="space-y-5">
-              {fields.map(({ key, label, unit, help }) => (
+              {numberFields.map(({ key, label, unit, help }) => (
                 <div key={key}>
                   <label className="text-xs uppercase tracking-widest text-[#8aab94] block mb-1">{label}</label>
                   <div className="flex items-center gap-2">
@@ -76,18 +74,37 @@ export default function ParametresManager({ settings }: { settings: Settings }) 
                 </div>
               ))}
             </div>
+          </div>
 
-            <div className="mt-8 flex items-center gap-4">
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="bg-[#c8813a] hover:bg-[#e8b87a] disabled:opacity-40 text-white px-6 py-2.5 rounded-lg text-sm transition-colors"
-              >
-                {saving ? "Sauvegarde…" : "Sauvegarder"}
-              </button>
-              {saved && <p className="text-sm text-[#8aab94]">Enregistré.</p>}
-              {error && <p className="text-sm text-red-500">{error}</p>}
+          <div className="bg-white rounded-xl border border-[#b8cfc0]/30 p-6">
+            <h2 className="font-medium text-[#3a3d42] mb-6">Réservation directe</h2>
+            <div>
+              <label className="text-xs uppercase tracking-widest text-[#8aab94] block mb-1">
+                Cadeau de bienvenue
+              </label>
+              <input
+                type="text"
+                maxLength={200}
+                value={values.cadeau_direct}
+                onChange={(e) => setValues({ ...values, cadeau_direct: e.target.value })}
+                className="w-full border border-[#b8cfc0] rounded-lg px-3 py-2 text-sm text-[#3a3d42] focus:outline-none focus:ring-2 focus:ring-[#c8813a]"
+              />
+              <p className="text-xs text-[#8aab94] mt-1">
+                Affiché dans la section « Pourquoi réserver en direct ? » de l'accueil
+              </p>
             </div>
+          </div>
+
+          <div className="mt-6 flex items-center gap-4">
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="bg-[#c8813a] hover:bg-[#e8b87a] disabled:opacity-40 text-white px-6 py-2.5 rounded-lg text-sm transition-colors"
+            >
+              {saving ? "Sauvegarde…" : "Sauvegarder"}
+            </button>
+            {saved && <p className="text-sm text-[#8aab94]">Enregistré.</p>}
+            {error && <p className="text-sm text-red-500">{error}</p>}
           </div>
 
           <p className="text-xs text-[#8aab94] mt-4">

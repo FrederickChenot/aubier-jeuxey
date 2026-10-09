@@ -17,7 +17,7 @@ const articles = [
   {
     n: 1,
     title: "Arrivée et départ",
-    text: "Arrivée à partir de 16h00. Départ avant 10h00. Tout départ tardif non convenu préalablement avec le propriétaire pourra être facturé.",
+    text: "Arrivée autonome (boîte à clés) à partir de 16h, sans heure limite. Départ avant 10h. Tout départ tardif non convenu préalablement avec le propriétaire pourra être facturé.",
   },
   {
     n: 2,
@@ -70,7 +70,7 @@ export default function ReglementPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-[100px] min-h-screen bg-[#f7f5f0]">
+      <main className="pt-16 min-h-screen bg-[#f7f5f0]">
         <div className="bg-[#3a3d42] py-16 px-4">
           <div className="max-w-3xl mx-auto">
             <h1 className="font-[family-name:var(--font-playfair)] text-3xl md:text-4xl italic text-[#f7f5f0] mb-2">

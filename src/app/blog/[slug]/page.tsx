@@ -7,7 +7,7 @@ import Link from "next/link";
 const articles: Record<string, { title: string; date: string; tag: string; content: string; description?: string }> = {
   "randonnees-vosges": {
     title: "Les 5 plus belles randonnées autour de Jeuxey",
-    date: "2025-03-15",
+    date: "2026-03-15",
     tag: "Randonnée",
     description: "Cinq itinéraires pédestres au départ de Jeuxey : lac de Bouzey, forêt d'Épinal, sentier des Dix, cascades de Tendon et tour de Bouzey en VTT.",
     content: `
@@ -33,7 +33,7 @@ Pour préparer vos sorties, rendez-vous sur clubvosgienepinal.com pour les trace
   },
   "epinal-art-deco": {
     title: "Épinal, capitale de l'image et joyau Art Déco",
-    date: "2025-02-20",
+    date: "2026-02-20",
     tag: "Culture",
     description: "À 15 minutes de L'Aubier, Épinal révèle sa Basilique Saint-Maurice, son Musée de l'Image unique en Europe, son patrimoine Art Déco et ses bords de Moselle.",
     content: `
@@ -56,7 +56,7 @@ Une visite combinant la basilique, le musée de l'Image, une promenade au bord d
   },
   "gastronomie-vosgienne": {
     title: "Gastronomie vosgienne : ce qu'il faut goûter",
-    date: "2025-01-10",
+    date: "2026-01-10",
     tag: "Gastronomie",
     description: "Munster AOP, quiche lorraine, tarte aux myrtilles, mirabelle, Bergkäse, Marcaire… Le guide complet des saveurs vosgiennes et lorraines à découvrir près de Jeuxey.",
     content: `
@@ -86,7 +86,7 @@ Le marché du samedi matin à Épinal est l'un des plus animés du département 
   },
   "architecture-vosges": {
     title: "Architecture contemporaine dans les Vosges — entre bois et modernité",
-    date: "2025-04-05",
+    date: "2026-04-05",
     tag: "Architecture",
     description: "Bardage mélèze, toits plats, grandes baies vitrées, éco-constructions passives : l'architecture vosgienne contemporaine réinvente le chalet. L'Aubier en est un exemple.",
     content: `
@@ -105,7 +105,7 @@ L'influence du chalet vosgien traditionnel est forte, mais les architectes conte
 Les Vosges comptent un nombre croissant de constructions labellisées passives ou à énergie positive. Les ossatures bois isolées au chanvre, les pompes à chaleur géothermiques et les toitures végétalisées se multiplient. Cette dynamique est portée par une filière bois locale active et des artisans formés aux nouvelles techniques.
 
 **L'Aubier : une architecture qui dialogue avec la forêt**
-Le studio L'Aubier incarne cette philosophie : bardage cèdre naturel en façade, sol stratifié en lames effet bois à l'intérieur, cuisine vert sauge en résonance avec la végétation extérieure. La terrasse bambous et le brise-vue bois créent une continuité entre l'espace de vie et le jardin. Chaque choix de matériau vise la cohérence avec l'environnement vosgien.
+Le studio L'Aubier incarne cette philosophie : bardage bois miel et gris en façade, sol en parquet de chêne flottant à l'intérieur, cuisine vert citron et blanc en contrepoint lumineux. La terrasse privative et le jardin japonais créent une continuité entre l'espace de vie et le jardin. Chaque choix de matériau vise la cohérence avec l'environnement vosgien.
 
 **Francis Hallé et la philosophie de l'aubier**
 Francis Hallé, botaniste et défenseur des forêts primaires, a popularisé la notion d'aubier comme métaphore de la vitalité. L'aubier est la partie vivante du bois, entre l'écorce et le cœur — la zone où la sève circule, où l'arbre grandit. Donner ce nom à un studio de location, c'est affirmer une philosophie : construire avec le bois, dans le respect de la forêt qui nous entoure.
@@ -113,7 +113,7 @@ Francis Hallé, botaniste et défenseur des forêts primaires, a popularisé la 
   },
   "week-end-epinal": {
     title: "Week-end à Épinal — que faire en 2 jours ?",
-    date: "2025-04-20",
+    date: "2026-04-20",
     tag: "Tourisme",
     description: "Programme complet pour un week-end réussi à Épinal depuis L'Aubier : marché, Basilique, Musée de l'Image, randonnée au lac de Bouzey, et route vers Gérardmer.",
     content: `
@@ -136,7 +136,7 @@ Deux adresses recommandées dans le secteur :
 
 **La Grange Obriot** — 64 rue de la Passée, 88460 La Baffe (20 min d'Épinal). Cuisine du terroir vosgien par le chef Claudy Obriot, ancien chef des Ducs de Lorraine. Cadre chaleureux bois et pierre, produits frais et de saison, recettes de nos grands-mères revisitées. Site : lagrangeobriot.com — réservation fortement conseillée.
 
-**Ipso Facto** — 17 rue de la Maix, 88000 Épinal. Ouvert en 2024 en plein cœur du quartier historique. Cuisine française traditionnelle à base de produits frais locaux (œufs Ferme Bourquin, chèvres Ferme des Granges). Terrasse 40 couverts. Note 4,9/5. Tél : 03 29 31 11 44 — ouvert mardi au samedi, midi et soir.
+**Ipso Facto** — 17 rue de la Maix, 88000 Épinal. Ouvert en 2024 en plein cœur du quartier historique. Cuisine française traditionnelle à base de produits frais locaux (œufs Ferme Bourquin, chèvres Ferme des Granges). Terrasse 40 couverts. Ouvert mardi au samedi, midi et soir.
 
 ---
 
@@ -157,10 +157,69 @@ Deux options selon votre forme :
 - **Parking :** gratuit dans plusieurs parkings du centre-ville d'Épinal, notamment près du marché.
 - **Gare SNCF d'Épinal :** à environ 15 minutes de L'Aubier en voiture. Liaisons directes vers Nancy, Metz et Paris.
 - **Office de tourisme d'Épinal :** en centre-ville, topoguides et conseils randonnées disponibles.
-- **Distance Jeuxey → Gérardmer :** environ 45 minutes par la RD 157.
+- **Distance Jeuxey → Gérardmer :** environ 30 minutes par la RD 157.
     `,
   },
 };
+
+function renderInline(text: string): React.ReactNode[] {
+  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+    part.startsWith("**") && part.endsWith("**") ? (
+      <strong key={i}>{part.slice(2, -2)}</strong>
+    ) : (
+      part
+    )
+  );
+}
+
+function renderMarkdown(content: string) {
+  const blocks = content.trim().split("\n\n");
+
+  return blocks.map((block, i) => {
+    const trimmed = block.trim();
+    if (trimmed === "---") {
+      return <hr key={i} className="border-t border-[#b8cfc0]/40 my-8" />;
+    }
+
+    const lines = trimmed.split("\n").map((l) => l.trim()).filter(Boolean);
+    const headingMatch = lines[0]?.match(/^\*\*(.+)\*\*$/);
+
+    if (headingMatch && lines.length === 1) {
+      return (
+        <h2 key={i} className="font-[family-name:var(--font-playfair)] text-2xl italic text-[#3a3d42] mt-8 mb-3">
+          {headingMatch[1]}
+        </h2>
+      );
+    }
+
+    const heading = headingMatch?.[1] ?? null;
+    const bodyLines = headingMatch ? lines.slice(1) : lines;
+    const isList = bodyLines.length > 0 && bodyLines.every((l) => l.startsWith("- "));
+
+    return (
+      <div key={i}>
+        {heading && (
+          <h3 className="font-[family-name:var(--font-playfair)] text-lg italic text-[#3a3d42] mt-6 mb-2">
+            {heading}
+          </h3>
+        )}
+        {isList ? (
+          <ul className="list-disc list-inside text-[#3a3d42] text-sm leading-7 mb-4 space-y-1">
+            {bodyLines.map((l, j) => (
+              <li key={j}>{renderInline(l.slice(2))}</li>
+            ))}
+          </ul>
+        ) : (
+          bodyLines.map((l, j) => (
+            <p key={j} className="text-[#3a3d42] text-sm leading-7 mb-4">
+              {renderInline(l)}
+            </p>
+          ))
+        )}
+      </div>
+    );
+  });
+}
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -195,7 +254,7 @@ export default async function BlogArticle({ params }: Props) {
   return (
     <>
       <Navbar />
-      <main className="pt-[100px] min-h-screen bg-[#f7f5f0]">
+      <main className="pt-16 min-h-screen bg-[#f7f5f0]">
         <div className="bg-[#3a3d42] py-16 px-4">
           <div className="max-w-3xl mx-auto">
             <div className="flex items-center gap-3 mb-4">
@@ -213,12 +272,8 @@ export default async function BlogArticle({ params }: Props) {
         </div>
 
         <div className="max-w-3xl mx-auto px-4 py-12">
-          <div className="prose prose-stone max-w-none bg-white rounded-xl p-8 border border-[#b8cfc0]/30">
-            {article.content.trim().split("\n\n").map((para, i) => (
-              <p key={i} className="text-[#3a3d42] text-sm leading-7 mb-4">
-                {para}
-              </p>
-            ))}
+          <div className="max-w-none bg-white rounded-xl p-8 border border-[#b8cfc0]/30">
+            {renderMarkdown(article.content)}
           </div>
 
           <div className="mt-8 pt-6 border-t border-[#b8cfc0]/30 flex items-center justify-between">
