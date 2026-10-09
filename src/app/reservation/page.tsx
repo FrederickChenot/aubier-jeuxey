@@ -2,11 +2,15 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ReservationForm from "./ReservationForm";
+import { getDb } from "@/lib/db";
+import { getSettings, type SiteSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
   title: "Réservation",
   description: "Réservez votre séjour à L'Aubier directement, sans frais de plateforme.",
 };
+
+const DEFAULT_SETTINGS: SiteSettings = { prix_nuit: 75, frais_menage: 40, caution: 300 };
 
 type Props = {
   searchParams: Promise<{ checkin?: string; checkout?: string }>;
@@ -14,6 +18,13 @@ type Props = {
 
 export default async function ReservationPage({ searchParams }: Props) {
   const { checkin, checkout } = await searchParams;
+
+  let settings = DEFAULT_SETTINGS;
+  try {
+    settings = await getSettings(getDb());
+  } catch {
+    // keep defaults
+  }
 
   return (
     <>
@@ -29,7 +40,7 @@ export default async function ReservationPage({ searchParams }: Props) {
         </div>
 
         <div className="max-w-3xl mx-auto px-4 py-12">
-          <ReservationForm initialCheckin={checkin} initialCheckout={checkout} />
+          <ReservationForm initialCheckin={checkin} initialCheckout={checkout} settings={settings} />
         </div>
       </main>
       <Footer />

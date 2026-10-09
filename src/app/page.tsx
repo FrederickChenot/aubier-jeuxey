@@ -45,11 +45,7 @@ export default async function Home() {
         <Hero />
         <Gallery />
         <Amenities />
-        <PriceCalculator
-          pricePerNight={settings.prix_nuit}
-          cleaningFee={settings.frais_menage}
-          deposit={settings.caution}
-        />
+        <PriceCalculator settings={settings} />
         <LocationSection />
         <WhyDirect />
       </main>

@@ -69,6 +69,9 @@ export default async function AdminPage() {
     console.error("DB error /admin:", e);
   }
 
+  const baseUrl = process.env.NEXTAUTH_URL ?? "";
+  const icalUrl = `${baseUrl}/api/ical?token=${process.env.ICAL_TOKEN ?? ""}`;
+
   return (
     <AdminDashboard
       stats={{
@@ -78,6 +81,7 @@ export default async function AdminPage() {
         next_checkin: nextArrival?.checkin ?? null,
         next_guest: nextArrival?.guest_name ?? null,
       }}
+      icalUrl={icalUrl}
     />
   );
 }

@@ -1,34 +1,71 @@
 import { NextRequest } from "next/server";
+import { addDays, differenceInCalendarDays, parseISO, startOfDay, isValid } from "date-fns";
 import { getDb } from "@/lib/db";
+import { getSettings } from "@/lib/settings";
+import { calculatePrice } from "@/lib/pricing";
+import { isRangeAvailable } from "@/lib/availability";
 import { sendOwnerNotification, sendGuestConfirmation } from "@/lib/email";
 import ical from "ical-generator";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MAX_NIGHTS = 30;
+
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { checkin, checkout, guestName, guestEmail, guestPhone, guestsCount, totalPrice, message } = body;
+  const { checkin, checkout, guestName, guestEmail, guestPhone, guestsCount, message, website } = body;
 
-  if (!checkin || !checkout || !guestName || !guestEmail || !guestPhone) {
-    return Response.json({ error: "Champs requis manquants" }, { status: 400 });
+  // Honeypot — un champ caché rempli signale un bot : on répond succès sans rien enregistrer.
+  if (website) {
+    return Response.json({ ok: true });
+  }
+
+  if (typeof checkin !== "string" || typeof checkout !== "string") {
+    return Response.json({ error: "Dates invalides." }, { status: 400 });
+  }
+  const checkinDate = parseISO(checkin);
+  const checkoutDate = parseISO(checkout);
+  if (!isValid(checkinDate) || !isValid(checkoutDate)) {
+    return Response.json({ error: "Dates invalides." }, { status: 400 });
+  }
+
+  const tomorrow = startOfDay(addDays(new Date(), 1));
+  if (checkinDate < tomorrow) {
+    return Response.json({ error: "La date d'arrivée doit être au moins demain." }, { status: 400 });
+  }
+  if (checkoutDate <= checkinDate) {
+    return Response.json({ error: "La date de départ doit être après la date d'arrivée." }, { status: 400 });
+  }
+  if (differenceInCalendarDays(checkoutDate, checkinDate) > MAX_NIGHTS) {
+    return Response.json({ error: "Pour un séjour de plus de 30 nuits, contactez-nous." }, { status: 400 });
+  }
+
+  const guests = Number(guestsCount);
+  if (!Number.isInteger(guests) || guests < 1 || guests > 2) {
+    return Response.json({ error: "Le nombre de voyageurs doit être 1 ou 2." }, { status: 400 });
+  }
+
+  if (typeof guestName !== "string" || !guestName.trim() || guestName.length > 100) {
+    return Response.json({ error: "Nom invalide." }, { status: 400 });
+  }
+  if (typeof guestEmail !== "string" || !EMAIL_REGEX.test(guestEmail)) {
+    return Response.json({ error: "Email invalide." }, { status: 400 });
+  }
+  if (typeof guestPhone !== "string" || !guestPhone.trim() || guestPhone.length > 30) {
+    return Response.json({ error: "Téléphone invalide." }, { status: 400 });
+  }
+  if (message != null && (typeof message !== "string" || message.length > 2000)) {
+    return Response.json({ error: "Message trop long." }, { status: 400 });
   }
 
   const sql = getDb();
 
-  const [resConflict] = await sql`
-    SELECT id FROM reservations
-    WHERE status IN ('confirmed', 'pending')
-      AND checkin < ${checkout}::date
-      AND checkout > ${checkin}::date
-    LIMIT 1
-  `;
-  const [blockConflict] = await sql`
-    SELECT id FROM blocked_dates
-    WHERE date_start < ${checkout}::date
-      AND date_end > ${checkin}::date
-    LIMIT 1
-  `;
-  if (resConflict || blockConflict) {
+  const available = await isRangeAvailable(sql, checkin, checkout);
+  if (!available) {
     return Response.json({ error: "Ces dates ne sont plus disponibles." }, { status: 409 });
   }
+
+  const settings = await getSettings(sql);
+  const { total } = calculatePrice(checkinDate, checkoutDate, settings);
 
   const [reservation] = await sql`
     INSERT INTO reservations
@@ -36,25 +73,21 @@ export async function POST(request: NextRequest) {
        guests_count, total_price, status, source, message)
     VALUES
       (${checkin}, ${checkout}, ${guestName}, ${guestEmail},
-       ${guestPhone}, ${Number(guestsCount)}, ${Number(totalPrice)},
+       ${guestPhone}, ${guests}, ${total},
        'pending', 'direct', ${message || null})
     RETURNING *
   `;
 
   const cal = ical({ name: "L'Aubier", timezone: "Europe/Paris" });
   const ev = cal.createEvent({
-    start: new Date(checkin),
-    end: new Date(checkout),
+    start: checkinDate,
+    end: checkoutDate,
     summary: "Séjour à L'Aubier · Jeuxey · Vosges",
     description: "Votre demande de séjour à L'Aubier a été enregistrée.\nContact : contact@aubier-vosges.fr",
   });
   ev.uid(`reservation-${reservation.id}@aubier-vosges.fr`);
 
-  const ownerEmail = process.env.OWNER_EMAIL;
-  console.log("[reservation] OWNER_EMAIL défini :", !!ownerEmail, "→", ownerEmail ?? "(vide)");
-  console.log("[reservation] BREVO_API_KEY défini :", !!process.env.BREVO_API_KEY);
-
-  const data = { guestName, guestEmail, guestPhone, guestsCount: Number(guestsCount), checkin, checkout, totalPrice: Number(totalPrice), message };
+  const data = { guestName, guestEmail, guestPhone, guestsCount: guests, checkin, checkout, totalPrice: total, message };
 
   const [ownerResult, guestResult] = await Promise.allSettled([
     sendOwnerNotification(data),
@@ -62,15 +95,10 @@ export async function POST(request: NextRequest) {
   ]);
 
   if (ownerResult.status === "rejected") {
-    console.error("[reservation] ÉCHEC email propriétaire :", ownerResult.reason);
-  } else {
-    console.log("[reservation] email propriétaire envoyé OK");
+    console.error("[reservation] échec email propriétaire :", ownerResult.reason);
   }
-
   if (guestResult.status === "rejected") {
-    console.error("[reservation] ÉCHEC email voyageur :", guestResult.reason);
-  } else {
-    console.log("[reservation] email voyageur envoyé OK");
+    console.error("[reservation] échec email voyageur :", guestResult.reason);
   }
 
   return Response.json({ ok: true });

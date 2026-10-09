@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { getDb } from "@/lib/db";
+import { isRangeAvailable } from "@/lib/availability";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -11,24 +12,8 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const sql = getDb();
-
-    const conflicts = await sql`
-      SELECT COUNT(*) as count FROM reservations
-      WHERE status IN ('confirmed', 'pending')
-        AND checkin < ${checkout}
-        AND checkout > ${checkin}
-    `;
-
-    const blockedConflicts = await sql`
-      SELECT COUNT(*) as count FROM blocked_dates
-      WHERE date_start < ${checkout}
-        AND date_end > ${checkin}
-    `;
-
-    const total = Number(conflicts[0].count) + Number(blockedConflicts[0].count);
-
-    return Response.json({ available: total === 0 });
+    const available = await isRangeAvailable(getDb(), checkin, checkout);
+    return Response.json({ available });
   } catch (err) {
     console.error("Availability check error:", err);
     return Response.json({ error: "Server error" }, { status: 500 });

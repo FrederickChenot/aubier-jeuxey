@@ -2,26 +2,25 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { format, differenceInCalendarDays, addDays } from "date-fns";
-import { DEPOSIT_THRESHOLD_NIGHTS, DEPOSIT_RATE } from "@/lib/stripe";
+import { format, addDays } from "date-fns";
+import { calculatePrice } from "@/lib/pricing";
+import type { SiteSettings } from "@/lib/settings";
 
 interface Props {
-  pricePerNight: number;
-  cleaningFee: number;
-  deposit: number;
+  settings: SiteSettings;
 }
 
-export default function PriceCalculator({ pricePerNight, cleaningFee, deposit }: Props) {
+export default function PriceCalculator({ settings }: Props) {
   const router = useRouter();
   const today = new Date();
   const [checkin, setCheckin] = useState(format(addDays(today, 7), "yyyy-MM-dd"));
   const [checkout, setCheckout] = useState(format(addDays(today, 10), "yyyy-MM-dd"));
 
-  const nights = Math.max(0, differenceInCalendarDays(new Date(checkout), new Date(checkin)));
-  const nightsTotal = nights * pricePerNight;
-  const total = nightsTotal + cleaningFee;
-  const showDeposit = nights > DEPOSIT_THRESHOLD_NIGHTS;
-  const depositAmount = showDeposit ? Math.ceil(total * DEPOSIT_RATE) : null;
+  const { nights, nightsTotal, cleaningFee, total } = calculatePrice(
+    new Date(checkin),
+    new Date(checkout),
+    settings
+  );
 
   function handleReserve() {
     if (nights <= 0) return;
@@ -65,7 +64,7 @@ export default function PriceCalculator({ pricePerNight, cleaningFee, deposit }:
           {nights > 0 ? (
             <div className="space-y-3 mb-6">
               <div className="flex justify-between text-sm text-[#3a3d42]">
-                <span>{pricePerNight} € × {nights} nuit{nights > 1 ? "s" : ""}</span>
+                <span>{settings.prix_nuit} € × {nights} nuit{nights > 1 ? "s" : ""}</span>
                 <span>{nightsTotal} €</span>
               </div>
               <div className="flex justify-between text-sm text-[#3a3d42]">
@@ -74,17 +73,12 @@ export default function PriceCalculator({ pricePerNight, cleaningFee, deposit }:
               </div>
               <div className="flex justify-between text-sm text-[#8aab94] italic">
                 <span>Caution (non débitée)</span>
-                <span>{deposit} €</span>
+                <span>{settings.caution} €</span>
               </div>
               <div className="border-t border-[#b8cfc0] pt-3 flex justify-between font-medium text-[#3a3d42]">
                 <span>Total</span>
                 <span className="text-[#c8813a] text-lg">{total} €</span>
               </div>
-              {showDeposit && depositAmount && (
-                <p className="text-xs text-[#8aab94] bg-[#b8cfc0]/20 rounded px-3 py-2">
-                  Séjour &gt; 3 nuits · Acompte de {depositAmount} € disponible ({Math.round(DEPOSIT_RATE * 100)}% du total)
-                </p>
-              )}
             </div>
           ) : (
             <p className="text-sm text-[#8aab94] text-center mb-6 py-4">

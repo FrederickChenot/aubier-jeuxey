@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { format, addDays, differenceInCalendarDays } from "date-fns";
+import { format, addDays } from "date-fns";
 import Link from "next/link";
-import { PRICE_PER_NIGHT, CLEANING_FEE, DEPOSIT } from "@/lib/stripe";
+import { calculatePrice } from "@/lib/pricing";
+import type { SiteSettings } from "@/lib/settings";
 
 const today = new Date();
 
@@ -14,6 +15,7 @@ interface FormData {
   guestPhone: string;
   guestsCount: number;
   message: string;
+  website: string;
 }
 
 type Step = 1 | 2 | 3;
@@ -21,9 +23,11 @@ type Step = 1 | 2 | 3;
 export default function ReservationForm({
   initialCheckin,
   initialCheckout,
+  settings,
 }: {
   initialCheckin?: string;
   initialCheckout?: string;
+  settings: SiteSettings;
 }) {
   const router = useRouter();
   const [step, setStep] = useState<Step>(1);
@@ -37,14 +41,17 @@ export default function ReservationForm({
     guestPhone: "",
     guestsCount: 1,
     message: "",
+    website: "",
   });
   const [reglementAccepted, setReglementAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const nights = Math.max(0, differenceInCalendarDays(new Date(checkout), new Date(checkin)));
-  const nightsTotal = nights * PRICE_PER_NIGHT;
-  const total = nightsTotal + CLEANING_FEE;
+  const { nights, nightsTotal, cleaningFee, total } = calculatePrice(
+    new Date(checkin),
+    new Date(checkout),
+    settings
+  );
 
   async function checkAvailability() {
     if (nights <= 0) {
@@ -75,7 +82,7 @@ export default function ReservationForm({
       const res = await fetch("/api/reservation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ checkin, checkout, ...form, totalPrice: total }),
+        body: JSON.stringify({ checkin, checkout, ...form }),
       });
       if (!res.ok) {
         const { error } = await res.json();
@@ -98,6 +105,18 @@ export default function ReservationForm({
 
   return (
     <div>
+      {/* Honeypot — champ caché, ne doit jamais être rempli par un humain */}
+      <input
+        type="text"
+        name="website"
+        value={form.website}
+        onChange={(e) => setForm({ ...form, website: e.target.value })}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute left-[-9999px] w-px h-px opacity-0 overflow-hidden"
+      />
+
       {/* Progress */}
       <div className="flex items-center gap-2 mb-10">
         {steps.map((s, i) => (
@@ -154,18 +173,18 @@ export default function ReservationForm({
           {nights > 0 && (
             <div className="bg-[#f7f5f0] rounded-xl p-4 mb-4 text-sm text-[#3a3d42] space-y-2">
               <div className="flex justify-between">
-                <span>{PRICE_PER_NIGHT} € × {nights} nuit{nights > 1 ? "s" : ""}</span>
+                <span>{settings.prix_nuit} € × {nights} nuit{nights > 1 ? "s" : ""}</span>
                 <span>{nightsTotal} €</span>
               </div>
               <div className="flex justify-between">
                 <span>Ménage</span>
-                <span>{CLEANING_FEE} €</span>
+                <span>{cleaningFee} €</span>
               </div>
               <div className="flex justify-between font-medium border-t border-[#b8cfc0] pt-2">
                 <span>Total</span>
                 <span className="text-[#c8813a]">{total} €</span>
               </div>
-              <p className="text-xs text-[#8aab94]">Caution {DEPOSIT} € non débitée</p>
+              <p className="text-xs text-[#8aab94]">Caution {settings.caution} € non débitée</p>
             </div>
           )}
 

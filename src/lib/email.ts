@@ -25,38 +25,55 @@ function formatDate(d: string) {
   return format(new Date(d), "d MMMM yyyy", { locale: fr });
 }
 
+export function escapeHtml(input: string): string {
+  return input
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export async function sendOwnerNotification(data: ReservationData) {
   const ownerEmail = process.env.OWNER_EMAIL;
   if (!ownerEmail) throw new Error("OWNER_EMAIL n'est pas défini dans les variables d'environnement");
+
+  const guestName = escapeHtml(data.guestName);
+  const guestEmail = escapeHtml(data.guestEmail);
+  const guestPhone = escapeHtml(data.guestPhone);
+  const message = data.message ? escapeHtml(data.message) : null;
+
   await getMailer().transactionalEmails.sendTransacEmail({
     sender: SENDER,
     to: [{ email: ownerEmail }],
-    subject: `Nouvelle réservation — ${data.guestName} · ${formatDate(data.checkin)}`,
+    subject: `Nouvelle réservation — ${guestName} · ${formatDate(data.checkin)}`,
     htmlContent: `
       <h2>Nouvelle réservation confirmée</h2>
       <table>
-        <tr><td><strong>Voyageur</strong></td><td>${data.guestName}</td></tr>
-        <tr><td><strong>Email</strong></td><td>${data.guestEmail}</td></tr>
-        <tr><td><strong>Téléphone</strong></td><td>${data.guestPhone}</td></tr>
+        <tr><td><strong>Voyageur</strong></td><td>${guestName}</td></tr>
+        <tr><td><strong>Email</strong></td><td>${guestEmail}</td></tr>
+        <tr><td><strong>Téléphone</strong></td><td>${guestPhone}</td></tr>
         <tr><td><strong>Arrivée</strong></td><td>${formatDate(data.checkin)}</td></tr>
         <tr><td><strong>Départ</strong></td><td>${formatDate(data.checkout)}</td></tr>
         <tr><td><strong>Voyageurs</strong></td><td>${data.guestsCount} personne(s)</td></tr>
         <tr><td><strong>Total</strong></td><td>${data.totalPrice} €</td></tr>
         ${data.depositAmount ? `<tr><td><strong>Acompte perçu</strong></td><td>${data.depositAmount} €</td></tr>` : ""}
-        ${data.message ? `<tr><td><strong>Message</strong></td><td>${data.message}</td></tr>` : ""}
+        ${message ? `<tr><td><strong>Message</strong></td><td>${message}</td></tr>` : ""}
       </table>
     `,
   });
 }
 
 export async function sendGuestConfirmation(data: ReservationData, icsContent: string) {
+  const guestName = escapeHtml(data.guestName);
+
   await getMailer().transactionalEmails.sendTransacEmail({
     sender: SENDER,
     to: [{ email: data.guestEmail, name: data.guestName }],
     subject: `Confirmation de votre séjour à L'Aubier · ${formatDate(data.checkin)}`,
     htmlContent: `
       <h2>Votre demande de réservation est bien reçue !</h2>
-      <p>Bonjour ${data.guestName},</p>
+      <p>Bonjour ${guestName},</p>
       <p>Nous avons bien reçu votre demande et nous vous contacterons très prochainement pour confirmer votre séjour.</p>
       <h3>Détails du séjour</h3>
       <table>
@@ -69,7 +86,7 @@ export async function sendGuestConfirmation(data: ReservationData, icsContent: s
       <p>À très bientôt dans les Vosges !<br>L'équipe de L'Aubier</p>
     `,
     attachment: [
-      { name: "sejour-laubier.ics", content: Buffer.from(icsContent).toString("base64") },
+      { name: "sejour-aubier.ics", content: Buffer.from(icsContent).toString("base64") },
     ],
   });
 }
@@ -77,11 +94,15 @@ export async function sendGuestConfirmation(data: ReservationData, icsContent: s
 export async function sendContactEmail(name: string, email: string, message: string) {
   const ownerEmail = process.env.OWNER_EMAIL;
   if (!ownerEmail) throw new Error("OWNER_EMAIL n'est pas défini dans les variables d'environnement");
+
+  const safeName = escapeHtml(name);
+  const safeMessage = escapeHtml(message).replace(/\n/g, "<br>");
+
   await getMailer().transactionalEmails.sendTransacEmail({
     sender: SENDER,
     to: [{ email: ownerEmail }],
     replyTo: { email, name },
-    subject: `Message de contact — ${name}`,
-    htmlContent: `<p><strong>De :</strong> ${name} (${email})</p><p>${message.replace(/\n/g, "<br>")}</p>`,
+    subject: `Message de contact — ${safeName}`,
+    htmlContent: `<p><strong>De :</strong> ${safeName} (${escapeHtml(email)})</p><p>${safeMessage}</p>`,
   });
 }

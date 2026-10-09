@@ -32,11 +32,6 @@ export default function Footer() {
               </a>
             </li>
           </ul>
-          <div className="mt-4">
-            <Link href="/api/ical" className="text-xs text-[#8aab94] hover:text-[#f7f5f0] transition-colors">
-              Exporter le calendrier (.ics)
-            </Link>
-          </div>
         </div>
       </div>
 

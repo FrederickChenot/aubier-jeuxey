@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 
 interface Stats {
@@ -40,7 +41,7 @@ const cards = (stats: Stats) => [
   },
 ];
 
-export default function AdminDashboard({ stats }: { stats: Stats }) {
+export default function AdminDashboard({ stats, icalUrl }: { stats: Stats; icalUrl: string }) {
   return (
     <div className="flex min-h-screen bg-[#f7f5f0]">
       <AdminSidebar />
@@ -63,15 +64,13 @@ export default function AdminDashboard({ stats }: { stats: Stats }) {
             ))}
           </div>
 
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-3 flex-wrap mb-6">
             <SyncButton />
-            <a
-              href="/api/ical"
-              target="_blank"
-              className="text-sm border border-[#b8cfc0] text-[#8aab94] px-4 py-2 rounded hover:border-[#8aab94] transition-colors"
-            >
-              Exporter iCal
-            </a>
+          </div>
+
+          <div className="bg-white rounded-xl p-5 border border-[#b8cfc0]/30 max-w-xl">
+            <p className="text-xs uppercase tracking-widest text-[#8aab94] mb-2">URL du calendrier iCal (privée)</p>
+            <IcalUrlField icalUrl={icalUrl} />
           </div>
         </div>
       </div>
@@ -79,17 +78,60 @@ export default function AdminDashboard({ stats }: { stats: Stats }) {
   );
 }
 
-function SyncButton() {
+function IcalUrlField({ icalUrl }: { icalUrl: string }) {
+  const [copied, setCopied] = useState(false);
+
+  async function copy() {
+    await navigator.clipboard.writeText(icalUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
   return (
-    <button
-      onClick={async () => {
-        const res = await fetch("/api/ical/sync", { method: "POST" });
-        const data = await res.json();
-        alert(data.message ?? "Sync terminée");
-      }}
-      className="text-sm bg-[#8aab94] text-white px-4 py-2 rounded hover:bg-[#8aab94]/80 transition-colors"
-    >
-      Sync Airbnb
-    </button>
+    <div className="flex items-center gap-2">
+      <input
+        readOnly
+        value={icalUrl}
+        onFocus={(e) => e.target.select()}
+        className="flex-1 border border-[#b8cfc0] rounded-lg px-3 py-2 text-xs text-[#3a3d42] bg-[#f7f5f0] focus:outline-none"
+      />
+      <button
+        onClick={copy}
+        className="text-sm bg-[#8aab94] text-white px-4 py-2 rounded hover:bg-[#8aab94]/80 transition-colors whitespace-nowrap"
+      >
+        {copied ? "Copié !" : "Copier"}
+      </button>
+    </div>
+  );
+}
+
+function SyncButton() {
+  const [result, setResult] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function sync() {
+    setLoading(true);
+    setResult(null);
+    try {
+      const res = await fetch("/api/admin/sync-airbnb", { method: "POST" });
+      const data = await res.json();
+      setResult(res.ok ? data.message ?? "Sync terminée" : data.error ?? "Erreur de synchronisation");
+    } catch {
+      setResult("Erreur réseau lors de la synchronisation.");
+    }
+    setLoading(false);
+  }
+
+  return (
+    <div className="flex flex-col gap-2">
+      <button
+        onClick={sync}
+        disabled={loading}
+        className="text-sm bg-[#8aab94] text-white px-4 py-2 rounded hover:bg-[#8aab94]/80 disabled:opacity-40 transition-colors"
+      >
+        {loading ? "Synchronisation…" : "Sync Airbnb"}
+      </button>
+      {result && <p className="text-xs text-[#8aab94]">{result}</p>}
+    </div>
   );
 }

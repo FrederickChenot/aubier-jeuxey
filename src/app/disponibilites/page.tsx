@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CalendarClient from "./CalendarClient";
 import { getDb } from "@/lib/db";
+import { getBlockedNights } from "@/lib/availability";
 
 export const metadata: Metadata = {
   title: "Disponibilités",
@@ -11,14 +12,7 @@ export const metadata: Metadata = {
 
 async function getBlockedDates(): Promise<string[]> {
   try {
-    const sql = getDb();
-    const rows = await sql`
-      SELECT checkin::text as date FROM reservations WHERE status IN ('confirmed','pending')
-      UNION
-      SELECT generate_series(date_start, date_end - INTERVAL '1 day', INTERVAL '1 day')::date::text
-      FROM blocked_dates
-    `;
-    return rows.map((r) => r.date as string);
+    return await getBlockedNights(getDb());
   } catch {
     return [];
   }
