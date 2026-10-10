@@ -2,20 +2,48 @@
 
 import { useState } from "react";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import type { SiteSettings } from "@/lib/settings";
 
-interface Settings {
-  prix_nuit: number;
-  frais_menage: number;
-  caution: number;
-  cadeau_direct: string;
+type NumberKey =
+  | "prix_nuit"
+  | "frais_menage"
+  | "caution"
+  | "seuil_caution_nuits"
+  | "ts_taux"
+  | "ts_plafond"
+  | "ts_majoration";
+
+interface NumberField {
+  key: NumberKey;
+  label: string;
+  unit: string;
+  help: string;
 }
 
-export default function ParametresManager({ settings }: { settings: Settings }) {
+const tarifFields: NumberField[] = [
+  { key: "prix_nuit", label: "Tarif par nuit", unit: "€", help: "Affiché sur la page d'accueil et dans le calculateur" },
+  { key: "frais_menage", label: "Frais de ménage", unit: "€", help: "Ajoutés au total de chaque réservation" },
+  { key: "caution", label: "Caution", unit: "€", help: "Montant affiché dans le calculateur, le règlement et les conditions" },
+  { key: "seuil_caution_nuits", label: "Seuil caution", unit: "nuits", help: "Jusqu'à ce nombre de nuits : empreinte bancaire sans débit. Au-delà : virement." },
+];
+
+const taxeFields: NumberField[] = [
+  { key: "ts_taux", label: "Taux", unit: "", help: "Part du prix de la nuit par occupant — 0.05 = 5 %" },
+  { key: "ts_plafond", label: "Plafond", unit: "€", help: "Plafond par personne et par nuit, avant majoration" },
+  { key: "ts_majoration", label: "Taxe additionnelle", unit: "", help: "Majoration appliquée après plafonnement — 0.10 = 10 %" },
+];
+
+export default function ParametresManager({ settings }: { settings: SiteSettings }) {
   const [values, setValues] = useState({
     prix_nuit: String(settings.prix_nuit),
     frais_menage: String(settings.frais_menage),
     caution: String(settings.caution),
+    seuil_caution_nuits: String(settings.seuil_caution_nuits),
+    ts_taux: String(settings.ts_taux),
+    ts_plafond: String(settings.ts_plafond),
+    ts_majoration: String(settings.ts_majoration),
     cadeau_direct: settings.cadeau_direct,
+    numero_enregistrement: settings.numero_enregistrement,
   });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -39,11 +67,29 @@ export default function ParametresManager({ settings }: { settings: Settings }) 
     }
   }
 
-  const numberFields: { key: "prix_nuit" | "frais_menage" | "caution"; label: string; unit: string; help: string }[] = [
-    { key: "prix_nuit", label: "Tarif par nuit", unit: "€", help: "Affiché sur la page d'accueil et dans le calculateur" },
-    { key: "frais_menage", label: "Frais de ménage", unit: "€", help: "Ajoutés au total de chaque réservation" },
-    { key: "caution", label: "Caution", unit: "€", help: "Non débitée, affichée à titre indicatif" },
-  ];
+  function renderNumberFields(fields: NumberField[]) {
+    return (
+      <div className="space-y-5">
+        {fields.map(({ key, label, unit, help }) => (
+          <div key={key}>
+            <label className="text-xs uppercase tracking-widest text-[#8aab94] block mb-1">{label}</label>
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                min="0"
+                step={key === "seuil_caution_nuits" ? "1" : "any"}
+                value={values[key]}
+                onChange={(e) => setValues({ ...values, [key]: e.target.value })}
+                className="w-32 border border-[#b8cfc0] rounded-lg px-3 py-2 text-sm text-[#3a3d42] focus:outline-none focus:ring-2 focus:ring-[#c8813a]"
+              />
+              <span className="text-sm text-[#8aab94]">{unit}</span>
+            </div>
+            <p className="text-xs text-[#8aab94] mt-1">{help}</p>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen bg-[#f7f5f0]">
@@ -56,27 +102,19 @@ export default function ParametresManager({ settings }: { settings: Settings }) 
 
           <div className="bg-white rounded-xl border border-[#b8cfc0]/30 p-6 mb-6">
             <h2 className="font-medium text-[#3a3d42] mb-6">Tarifs</h2>
-            <div className="space-y-5">
-              {numberFields.map(({ key, label, unit, help }) => (
-                <div key={key}>
-                  <label className="text-xs uppercase tracking-widest text-[#8aab94] block mb-1">{label}</label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      min="0"
-                      value={values[key]}
-                      onChange={(e) => setValues({ ...values, [key]: e.target.value })}
-                      className="w-32 border border-[#b8cfc0] rounded-lg px-3 py-2 text-sm text-[#3a3d42] focus:outline-none focus:ring-2 focus:ring-[#c8813a]"
-                    />
-                    <span className="text-sm text-[#8aab94]">{unit}</span>
-                  </div>
-                  <p className="text-xs text-[#8aab94] mt-1">{help}</p>
-                </div>
-              ))}
-            </div>
+            {renderNumberFields(tarifFields)}
           </div>
 
-          <div className="bg-white rounded-xl border border-[#b8cfc0]/30 p-6">
+          <div className="bg-white rounded-xl border border-[#b8cfc0]/30 p-6 mb-6">
+            <h2 className="font-medium text-[#3a3d42] mb-2">Taxe de séjour</h2>
+            <p className="text-xs text-[#8aab94] mb-6">
+              Tarif proportionnel (meublé non classé) — par adulte et par nuit : min(prix de la nuit ÷ occupants × taux,
+              plafond) × (1 + taxe additionnelle). Les mineurs sont exonérés.
+            </p>
+            {renderNumberFields(taxeFields)}
+          </div>
+
+          <div className="bg-white rounded-xl border border-[#b8cfc0]/30 p-6 mb-6">
             <h2 className="font-medium text-[#3a3d42] mb-6">Réservation directe</h2>
             <div>
               <label className="text-xs uppercase tracking-widest text-[#8aab94] block mb-1">
@@ -95,6 +133,25 @@ export default function ParametresManager({ settings }: { settings: Settings }) 
             </div>
           </div>
 
+          <div className="bg-white rounded-xl border border-[#b8cfc0]/30 p-6">
+            <h2 className="font-medium text-[#3a3d42] mb-6">Meublé de tourisme</h2>
+            <div>
+              <label className="text-xs uppercase tracking-widest text-[#8aab94] block mb-1">
+                Numéro d'enregistrement (vide = masqué)
+              </label>
+              <input
+                type="text"
+                maxLength={200}
+                value={values.numero_enregistrement}
+                onChange={(e) => setValues({ ...values, numero_enregistrement: e.target.value })}
+                className="w-full border border-[#b8cfc0] rounded-lg px-3 py-2 text-sm text-[#3a3d42] focus:outline-none focus:ring-2 focus:ring-[#c8813a]"
+              />
+              <p className="text-xs text-[#8aab94] mt-1">
+                Affiché dans le pied de page et sur la page « Le logement » s'il est renseigné.
+              </p>
+            </div>
+          </div>
+
           <div className="mt-6 flex items-center gap-4">
             <button
               onClick={handleSave}
@@ -108,7 +165,7 @@ export default function ParametresManager({ settings }: { settings: Settings }) 
           </div>
 
           <p className="text-xs text-[#8aab94] mt-4">
-            Les nouveaux tarifs sont pris en compte immédiatement sur le site.
+            Les nouveaux réglages sont pris en compte immédiatement sur le site.
           </p>
         </div>
       </div>

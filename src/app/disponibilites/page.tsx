@@ -8,6 +8,7 @@ import { getBlockedNights } from "@/lib/availability";
 export const metadata: Metadata = {
   title: "Disponibilités",
   description: "Consultez le calendrier des disponibilités de L'Aubier et réservez votre séjour dans les Vosges.",
+  alternates: { canonical: "/disponibilites" },
 };
 
 async function getBlockedDates(): Promise<string[]> {

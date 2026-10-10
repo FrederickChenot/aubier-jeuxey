@@ -1,6 +1,7 @@
 import { BrevoClient } from "@getbrevo/brevo";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { formatEuro } from "./pricing";
 
 function getMailer() {
   return new BrevoClient({ apiKey: process.env.BREVO_API_KEY! });
@@ -13,8 +14,11 @@ interface ReservationData {
   guestEmail: string;
   guestPhone: string;
   guestsCount: number;
+  adults: number;
+  children: number;
   checkin: string;
   checkout: string;
+  touristTax: number;
   totalPrice: number;
   depositAmount?: number;
   message?: string;
@@ -23,6 +27,11 @@ interface ReservationData {
 
 function formatDate(d: string) {
   return format(new Date(d), "d MMMM yyyy", { locale: fr });
+}
+
+function formatGuests(data: ReservationData) {
+  const adults = `${data.adults} adulte${data.adults > 1 ? "s" : ""}`;
+  return data.children > 0 ? `${adults} + ${data.children} enfant de moins de 18 ans` : adults;
 }
 
 export function escapeHtml(input: string): string {
@@ -55,8 +64,9 @@ export async function sendOwnerNotification(data: ReservationData) {
         <tr><td><strong>Téléphone</strong></td><td>${guestPhone}</td></tr>
         <tr><td><strong>Arrivée</strong></td><td>${formatDate(data.checkin)}</td></tr>
         <tr><td><strong>Départ</strong></td><td>${formatDate(data.checkout)}</td></tr>
-        <tr><td><strong>Voyageurs</strong></td><td>${data.guestsCount} personne(s)</td></tr>
-        <tr><td><strong>Total</strong></td><td>${data.totalPrice} €</td></tr>
+        <tr><td><strong>Voyageurs</strong></td><td>${formatGuests(data)}</td></tr>
+        <tr><td><strong>Taxe de séjour</strong></td><td>${formatEuro(data.touristTax)} € (incluse dans le total)</td></tr>
+        <tr><td><strong>Total</strong></td><td>${formatEuro(data.totalPrice)} €</td></tr>
         ${data.depositAmount ? `<tr><td><strong>Acompte perçu</strong></td><td>${data.depositAmount} €</td></tr>` : ""}
         ${message ? `<tr><td><strong>Message</strong></td><td>${message}</td></tr>` : ""}
       </table>
@@ -74,13 +84,14 @@ export async function sendGuestConfirmation(data: ReservationData, icsContent: s
     htmlContent: `
       <h2>Votre demande de réservation est bien reçue !</h2>
       <p>Bonjour ${guestName},</p>
-      <p>Nous avons bien reçu votre demande et nous vous contacterons très prochainement pour confirmer votre séjour.</p>
+      <p>Nous avons bien reçu votre demande et nous vous répondons sous 48h. Si elle est acceptée, vous recevrez un lien de paiement sécurisé par carte : la réservation est confirmée à réception du paiement.</p>
       <h3>Détails du séjour</h3>
       <table>
         <tr><td><strong>Arrivée</strong></td><td>${formatDate(data.checkin)}</td></tr>
         <tr><td><strong>Départ</strong></td><td>${formatDate(data.checkout)}</td></tr>
-        <tr><td><strong>Voyageurs</strong></td><td>${data.guestsCount} personne(s)</td></tr>
-        <tr><td><strong>Total estimé</strong></td><td>${data.totalPrice} €</td></tr>
+        <tr><td><strong>Voyageurs</strong></td><td>${formatGuests(data)}</td></tr>
+        <tr><td><strong>Taxe de séjour</strong></td><td>${formatEuro(data.touristTax)} € (incluse dans le total)</td></tr>
+        <tr><td><strong>Total</strong></td><td>${formatEuro(data.totalPrice)} €</td></tr>
       </table>
       <p>Le fichier calendrier (.ics) est joint à cet email pour bloquer les dates dans votre agenda.</p>
       <p>À très bientôt dans les Vosges !<br>L'équipe de L'Aubier</p>

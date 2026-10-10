@@ -5,29 +5,17 @@ import Gallery from "@/components/Gallery";
 import Amenities from "@/components/Amenities";
 import MapEmbed from "@/components/MapEmbed";
 import Link from "next/link";
-import { getDb } from "@/lib/db";
-import { getSettings, type SiteSettings } from "@/lib/settings";
+import { loadSettings } from "@/lib/loadSettings";
 
 export const metadata: Metadata = {
   title: "Le logement",
   description:
     "Découvrez L'Aubier en détail : galerie complète, équipements, superficie et informations pratiques pour votre séjour dans les Vosges.",
-};
-
-const DEFAULT_SETTINGS: SiteSettings = {
-  prix_nuit: 75,
-  frais_menage: 40,
-  caution: 300,
-  cadeau_direct: "",
+  alternates: { canonical: "/logement" },
 };
 
 export default async function LogementPage() {
-  let settings = DEFAULT_SETTINGS;
-  try {
-    settings = await getSettings(getDb());
-  } catch {
-    // keep defaults
-  }
+  const settings = await loadSettings();
 
   return (
     <>
@@ -69,10 +57,21 @@ export default async function LogementPage() {
               <ul className="space-y-3 text-sm text-[#3a3d42]">
                 <li><strong>Arrivée :</strong> autonome (boîte à clés) à partir de 16h, sans heure limite</li>
                 <li><strong>Départ :</strong> avant 10h</li>
-                <li><strong>Caution :</strong> {settings.caution} € (non débitée, libérée 48h après départ)</li>
+                <li>
+                  <strong>Caution :</strong> {settings.caution} € — empreinte bancaire sans débit jusqu&apos;à{" "}
+                  {settings.seuil_caution_nuits} nuits, virement au-delà (
+                  <Link href="/conditions" className="text-[#c8813a] underline hover:text-[#e8b87a]">
+                    conditions
+                  </Link>
+                  )
+                </li>
                 <li><strong>Ménage :</strong> {settings.frais_menage} € par séjour, ajoutés au total</li>
+                <li><strong>Taxe de séjour :</strong> en supplément, par adulte et par nuit (mineurs exonérés)</li>
                 <li><strong>Animaux :</strong> non acceptés</li>
                 <li><strong>Fumeur :</strong> non fumeur (toléré en extérieur uniquement)</li>
+                {settings.numero_enregistrement && (
+                  <li><strong>N° d&apos;enregistrement :</strong> {settings.numero_enregistrement}</li>
+                )}
               </ul>
             </div>
             <div>

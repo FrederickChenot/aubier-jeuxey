@@ -1,15 +1,23 @@
 import Link from "next/link";
+import { loadSettings } from "@/lib/loadSettings";
 
-export default function Footer() {
+export default async function Footer() {
+  const { numero_enregistrement } = await loadSettings();
+
   return (
     <footer className="bg-[#3a3d42] text-[#b8cfc0] py-10 mt-auto">
-      <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
         <div>
           <p className="font-[family-name:var(--font-playfair)] text-lg italic text-[#f7f5f0] mb-2">
             L&apos;Aubier
           </p>
           <p className="text-sm">Studio design · Jeuxey · Vosges</p>
           <p className="text-sm mt-1">Rénovation 2025</p>
+          {numero_enregistrement && (
+            <p className="text-xs text-[#8aab94] mt-3">
+              Meublé de tourisme — n° d&apos;enregistrement : {numero_enregistrement}
+            </p>
+          )}
         </div>
 
         <div>
@@ -19,7 +27,16 @@ export default function Footer() {
             <li><Link href="/disponibilites" className="hover:text-[#f7f5f0] transition-colors">Disponibilités</Link></li>
             <li><Link href="/reservation" className="hover:text-[#f7f5f0] transition-colors">Réserver</Link></li>
             <li><Link href="/blog" className="hover:text-[#f7f5f0] transition-colors">Blog</Link></li>
+          </ul>
+        </div>
+
+        <div>
+          <p className="text-xs uppercase tracking-widest text-[#8aab94] mb-3">Informations</p>
+          <ul className="space-y-2 text-sm">
             <li><Link href="/reglement" className="hover:text-[#f7f5f0] transition-colors">Règlement intérieur</Link></li>
+            <li><Link href="/conditions" className="hover:text-[#f7f5f0] transition-colors">Conditions de réservation</Link></li>
+            <li><Link href="/mentions-legales" className="hover:text-[#f7f5f0] transition-colors">Mentions légales</Link></li>
+            <li><Link href="/confidentialite" className="hover:text-[#f7f5f0] transition-colors">Confidentialité</Link></li>
           </ul>
         </div>
 

@@ -17,7 +17,7 @@ export default async function AdminReservationsPage() {
     const rows = await sql`
       SELECT
         id, guest_name, guest_email, guest_phone, guests_count,
-        total_price, deposit_amount, status, source, message,
+        adults, children, tourist_tax, total_price, deposit_amount, status, source, message,
         checkin::text, checkout::text, created_at::text
       FROM reservations
       ORDER BY checkin DESC

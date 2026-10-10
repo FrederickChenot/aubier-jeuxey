@@ -6,6 +6,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Demande envoyée",
   description: "Votre demande de réservation à L'Aubier a bien été reçue. Nous vous répondons très vite !",
+  alternates: { canonical: "/reservation/success" },
 };
 
 export default function SuccessPage() {
@@ -25,7 +26,7 @@ export default function SuccessPage() {
           </h1>
           <p className="text-[#8aab94] mb-8">
             Votre demande de réservation a bien été reçue. Un email de confirmation vous a été envoyé.
-            Le propriétaire vous contactera très prochainement pour confirmer votre séjour.
+            Le propriétaire vous répond sous 48h.
           </p>
 
           <div className="bg-white rounded-xl p-6 border border-[#b8cfc0]/30 mb-8 text-left space-y-3">
@@ -39,12 +40,12 @@ export default function SuccessPage() {
               <span>Fichier .ics joint pour bloquer les dates dans votre agenda</span>
             </div>
             <div className="flex gap-3 text-sm text-[#8aab94]">
-              <span>📱</span>
-              <span>Le propriétaire vous contacte pour finaliser</span>
+              <span>💳</span>
+              <span>Si votre demande est acceptée, un lien de paiement sécurisé (valable 48h) confirme la réservation</span>
             </div>
             <div className="flex gap-3 text-sm text-[#8aab94]">
               <span>🔑</span>
-              <span>Remise des clés à votre arrivée</span>
+              <span>Code d&apos;accès communiqué après validation de la caution</span>
             </div>
           </div>
 

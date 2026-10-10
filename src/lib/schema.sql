@@ -8,6 +8,9 @@ CREATE TABLE IF NOT EXISTS reservations (
   guest_email      TEXT NOT NULL,
   guest_phone      TEXT NOT NULL,
   guests_count     INTEGER NOT NULL DEFAULT 1,
+  adults           INTEGER,
+  children         INTEGER NOT NULL DEFAULT 0,
+  tourist_tax      NUMERIC(10,2) NOT NULL DEFAULT 0,
   total_price      NUMERIC(10,2) NOT NULL,
   deposit_amount   NUMERIC(10,2),
   status           TEXT NOT NULL DEFAULT 'pending',
@@ -47,5 +50,10 @@ INSERT INTO settings VALUES
   ('prix_nuit', '75'),
   ('frais_menage', '40'),
   ('caution', '300'),
-  ('cadeau_direct', '')
+  ('cadeau_direct', ''),
+  ('ts_taux', '0.05'),
+  ('ts_plafond', '3.64'),
+  ('ts_majoration', '0.10'),
+  ('seuil_caution_nuits', '5'),
+  ('numero_enregistrement', '')
 ON CONFLICT (key) DO NOTHING;

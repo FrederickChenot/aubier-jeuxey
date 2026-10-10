@@ -5,6 +5,6 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       { userAgent: "*", allow: "/", disallow: ["/admin", "/api"] },
     ],
-    sitemap: "https://laubier.fr/sitemap.xml",
+    sitemap: "https://www.aubier-vosges.fr/sitemap.xml",
   };
 }

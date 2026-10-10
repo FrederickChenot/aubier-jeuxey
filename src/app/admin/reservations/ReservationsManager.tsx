@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import { formatEuro } from "@/lib/pricing";
 
 interface Reservation {
   id: number;
@@ -12,6 +13,9 @@ interface Reservation {
   guest_email: string;
   guest_phone: string;
   guests_count: number;
+  adults: number | null;
+  children: number | null;
+  tourist_tax: number | null;
   total_price: number;
   status: string;
   source: string;
@@ -123,7 +127,7 @@ export default function ReservationsManager({ reservations }: { reservations: Re
                       </td>
                       <td className="px-4 py-3 text-[#8aab94] text-xs whitespace-nowrap">{r.guest_phone}</td>
                       <td className="px-4 py-3 text-[#8aab94] text-center">{r.guests_count}</td>
-                      <td className="px-4 py-3 text-[#3a3d42] font-medium whitespace-nowrap">{Number(r.total_price).toFixed(0)} €</td>
+                      <td className="px-4 py-3 text-[#3a3d42] font-medium whitespace-nowrap">{formatEuro(Number(r.total_price))} €</td>
                       <td className="px-4 py-3">
                         <span className={`text-xs px-2 py-0.5 rounded-full whitespace-nowrap ${statusColors[r.status] ?? "bg-gray-100 text-gray-600"}`}>
                           {statusLabels[r.status] ?? r.status}
@@ -198,8 +202,14 @@ export default function ReservationsManager({ reservations }: { reservations: Re
                 ["Téléphone", detail.guest_phone],
                 ["Arrivée", new Date(detail.checkin).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })],
                 ["Départ", new Date(detail.checkout).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })],
-                ["Personnes", String(detail.guests_count)],
-                ["Total", `${Number(detail.total_price).toFixed(0)} €`],
+                [
+                  "Personnes",
+                  detail.adults == null
+                    ? String(detail.guests_count)
+                    : `${detail.adults} adulte(s)${detail.children ? ` + ${detail.children} enfant` : ""}`,
+                ],
+                ["Taxe séjour", `${formatEuro(Number(detail.tourist_tax ?? 0))} €`],
+                ["Total", `${formatEuro(Number(detail.total_price))} €`],
                 ["Statut", statusLabels[detail.status] ?? detail.status],
                 ["Source", detail.source],
                 ["Créé le", new Date(detail.created_at).toLocaleDateString("fr-FR")],

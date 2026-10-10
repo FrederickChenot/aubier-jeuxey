@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { format, addDays } from "date-fns";
 import Link from "next/link";
-import { calculatePrice } from "@/lib/pricing";
+import { calculatePrice, formatEuro } from "@/lib/pricing";
 import type { SiteSettings } from "@/lib/settings";
 
 const today = new Date();
@@ -13,7 +13,8 @@ interface FormData {
   guestName: string;
   guestEmail: string;
   guestPhone: string;
-  guestsCount: number;
+  adults: number;
+  children: number;
   message: string;
   website: string;
 }
@@ -23,10 +24,12 @@ type Step = 1 | 2 | 3;
 export default function ReservationForm({
   initialCheckin,
   initialCheckout,
+  initialAdults = 1,
   settings,
 }: {
   initialCheckin?: string;
   initialCheckout?: string;
+  initialAdults?: number;
   settings: SiteSettings;
 }) {
   const router = useRouter();
@@ -39,7 +42,8 @@ export default function ReservationForm({
     guestName: "",
     guestEmail: "",
     guestPhone: "",
-    guestsCount: 1,
+    adults: initialAdults,
+    children: 0,
     message: "",
     website: "",
   });
@@ -47,10 +51,11 @@ export default function ReservationForm({
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const { nights, nightsTotal, cleaningFee, total } = calculatePrice(
+  const { nights, nightsTotal, cleaningFee, touristTax, total } = calculatePrice(
     new Date(checkin),
     new Date(checkout),
-    settings
+    settings,
+    { adults: form.adults, children: form.children }
   );
 
   async function checkAvailability() {
@@ -82,7 +87,7 @@ export default function ReservationForm({
       const res = await fetch("/api/reservation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ checkin, checkout, ...form }),
+        body: JSON.stringify({ checkin, checkout, ...form, termsAccepted: reglementAccepted }),
       });
       if (!res.ok) {
         const { error } = await res.json();
@@ -98,7 +103,7 @@ export default function ReservationForm({
   }
 
   const steps = [
-    { n: 1, label: "Dates" },
+    { n: 1, label: "Séjour" },
     { n: 2, label: "Coordonnées" },
     { n: 3, label: "Confirmation" },
   ];
@@ -140,7 +145,7 @@ export default function ReservationForm({
       {step === 1 && (
         <div className="bg-white rounded-2xl p-6 border border-[#b8cfc0]/30">
           <h2 className="font-[family-name:var(--font-playfair)] text-xl italic text-[#3a3d42] mb-6">
-            Choisissez vos dates
+            Dates et voyageurs
           </h2>
 
           <div className="grid grid-cols-2 gap-4 mb-4">
@@ -166,6 +171,36 @@ export default function ReservationForm({
             </div>
           </div>
 
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label className="text-xs uppercase tracking-widest text-[#8aab94] block mb-1">Adultes</label>
+              <select
+                value={form.adults}
+                onChange={(e) => {
+                  const adults = Number(e.target.value);
+                  setForm({ ...form, adults, children: adults === 2 ? 0 : form.children });
+                }}
+                className="w-full border border-[#b8cfc0] rounded-lg px-3 py-2 text-sm text-[#3a3d42] focus:outline-none focus:ring-2 focus:ring-[#c8813a]"
+              >
+                <option value={1}>1 adulte</option>
+                <option value={2}>2 adultes</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-xs uppercase tracking-widest text-[#8aab94] block mb-1">Enfants de moins de 18 ans</label>
+              <select
+                value={form.children}
+                disabled={form.adults === 2}
+                onChange={(e) => setForm({ ...form, children: Number(e.target.value) })}
+                className="w-full border border-[#b8cfc0] rounded-lg px-3 py-2 text-sm text-[#3a3d42] disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-[#c8813a]"
+              >
+                <option value={0}>Aucun</option>
+                <option value={1}>1 enfant</option>
+              </select>
+            </div>
+          </div>
+          <p className="text-xs text-[#8aab94] mb-4">2 personnes maximum au total.</p>
+
           {availabilityError && (
             <p className="text-red-500 text-sm mb-4">{availabilityError}</p>
           )}
@@ -180,11 +215,20 @@ export default function ReservationForm({
                 <span>Ménage</span>
                 <span>{cleaningFee} €</span>
               </div>
+              <div className="flex justify-between">
+                <span>Taxe de séjour</span>
+                <span>{formatEuro(touristTax)} €</span>
+              </div>
               <div className="flex justify-between font-medium border-t border-[#b8cfc0] pt-2">
                 <span>Total</span>
-                <span className="text-[#c8813a]">{total} €</span>
+                <span className="text-[#c8813a]">{formatEuro(total)} €</span>
               </div>
-              <p className="text-xs text-[#8aab94]">Caution {settings.caution} € non débitée</p>
+              <p className="text-xs text-[#8aab94]">
+                Caution {settings.caution} € —{" "}
+                {nights <= settings.seuil_caution_nuits
+                  ? "empreinte bancaire sans débit"
+                  : "par virement, restituée sous 48h après le départ"}
+              </p>
             </div>
           )}
 
@@ -237,17 +281,6 @@ export default function ReservationForm({
               />
             </div>
             <div>
-              <label className="text-xs uppercase tracking-widest text-[#8aab94] block mb-1">Nombre de voyageurs</label>
-              <select
-                value={form.guestsCount}
-                onChange={(e) => setForm({ ...form, guestsCount: Number(e.target.value) })}
-                className="w-full border border-[#b8cfc0] rounded-lg px-3 py-2 text-sm text-[#3a3d42] focus:outline-none focus:ring-2 focus:ring-[#c8813a]"
-              >
-                <option value={1}>1 voyageur</option>
-                <option value={2}>2 voyageurs</option>
-              </select>
-            </div>
-            <div>
               <label className="text-xs uppercase tracking-widest text-[#8aab94] block mb-1">Message (optionnel)</label>
               <textarea
                 value={form.message}
@@ -271,6 +304,10 @@ export default function ReservationForm({
                 J&apos;ai lu et j&apos;accepte le{" "}
                 <Link href="/reglement" target="_blank" className="text-[#c8813a] underline hover:text-[#e8b87a]">
                   règlement intérieur
+                </Link>{" "}
+                et les{" "}
+                <Link href="/conditions" target="_blank" className="text-[#c8813a] underline hover:text-[#e8b87a]">
+                  conditions de réservation
                 </Link>{" "}
                 *
               </span>
@@ -316,17 +353,33 @@ export default function ReservationForm({
               <span>{form.guestName}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#8aab94]">Personnes</span>
-              <span>{form.guestsCount}</span>
+              <span className="text-[#8aab94]">Voyageurs</span>
+              <span>
+                {form.adults} adulte{form.adults > 1 ? "s" : ""}
+                {form.children > 0 ? ` + ${form.children} enfant` : ""}
+              </span>
             </div>
             <div className="border-t border-[#b8cfc0] pt-3 flex justify-between">
-              <span className="text-[#8aab94]">Total estimé</span>
-              <span className="font-medium text-[#c8813a]">{total} €</span>
+              <span className="text-[#8aab94]">{settings.prix_nuit} € × {nights} nuit{nights > 1 ? "s" : ""}</span>
+              <span>{nightsTotal} €</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-[#8aab94]">Ménage</span>
+              <span>{cleaningFee} €</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-[#8aab94]">Taxe de séjour</span>
+              <span>{formatEuro(touristTax)} €</span>
+            </div>
+            <div className="border-t border-[#b8cfc0] pt-3 flex justify-between">
+              <span className="text-[#8aab94]">Total</span>
+              <span className="font-medium text-[#c8813a]">{formatEuro(total)} €</span>
             </div>
           </div>
 
           <p className="text-xs text-[#8aab94] mb-6">
-            Aucun paiement en ligne. Le propriétaire vous contactera pour confirmer et convenir des modalités.
+            Aucun paiement à cette étape. Le propriétaire répond sous 48h ; si votre demande est acceptée, vous
+            recevez un lien de paiement sécurisé par carte.
           </p>
 
           {submitError && (

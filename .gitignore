@@ -20,6 +20,9 @@
 # production
 /build
 
+# généré par scripts/gen-photos.mjs
+/src/generated/
+
 # misc
 .DS_Store
 *.pem

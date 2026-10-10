@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { format, addDays } from "date-fns";
-import { calculatePrice } from "@/lib/pricing";
+import { calculatePrice, formatEuro } from "@/lib/pricing";
 import type { SiteSettings } from "@/lib/settings";
 
 interface Props {
@@ -15,16 +15,18 @@ export default function PriceCalculator({ settings }: Props) {
   const today = new Date();
   const [checkin, setCheckin] = useState(format(addDays(today, 7), "yyyy-MM-dd"));
   const [checkout, setCheckout] = useState(format(addDays(today, 10), "yyyy-MM-dd"));
+  const [adults, setAdults] = useState(2);
 
-  const { nights, nightsTotal, cleaningFee, total } = calculatePrice(
+  const { nights, nightsTotal, cleaningFee, touristTax, total } = calculatePrice(
     new Date(checkin),
     new Date(checkout),
-    settings
+    settings,
+    { adults, children: 0 }
   );
 
   function handleReserve() {
     if (nights <= 0) return;
-    router.push(`/reservation?checkin=${checkin}&checkout=${checkout}`);
+    router.push(`/reservation?checkin=${checkin}&checkout=${checkout}&adults=${adults}`);
   }
 
   return (
@@ -38,7 +40,7 @@ export default function PriceCalculator({ settings }: Props) {
         </p>
 
         <div className="max-w-2xl mx-auto bg-[#f7f5f0] rounded-2xl p-6 md:p-8">
-          <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
               <label className="text-xs uppercase tracking-widest text-[#8aab94] block mb-1">Arrivée</label>
               <input
@@ -61,6 +63,18 @@ export default function PriceCalculator({ settings }: Props) {
             </div>
           </div>
 
+          <div className="mb-6">
+            <label className="text-xs uppercase tracking-widest text-[#8aab94] block mb-1">Adultes</label>
+            <select
+              value={adults}
+              onChange={(e) => setAdults(Number(e.target.value))}
+              className="w-full border border-[#b8cfc0] rounded-lg px-3 py-2 text-[#3a3d42] text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#c8813a]"
+            >
+              <option value={1}>1 adulte</option>
+              <option value={2}>2 adultes</option>
+            </select>
+          </div>
+
           {nights > 0 ? (
             <div className="space-y-3 mb-6">
               <div className="flex justify-between text-sm text-[#3a3d42]">
@@ -71,13 +85,21 @@ export default function PriceCalculator({ settings }: Props) {
                 <span>Frais de ménage</span>
                 <span>{cleaningFee} €</span>
               </div>
+              <div className="flex justify-between text-sm text-[#3a3d42]">
+                <span>Taxe de séjour</span>
+                <span>{formatEuro(touristTax)} €</span>
+              </div>
               <div className="flex justify-between text-sm text-[#8aab94] italic">
-                <span>Caution (non débitée)</span>
+                <span>
+                  {nights <= settings.seuil_caution_nuits
+                    ? "Caution (empreinte bancaire, non débitée)"
+                    : "Caution (virement, restituée sous 48h)"}
+                </span>
                 <span>{settings.caution} €</span>
               </div>
               <div className="border-t border-[#b8cfc0] pt-3 flex justify-between font-medium text-[#3a3d42]">
                 <span>Total</span>
-                <span className="text-[#c8813a] text-lg">{total} €</span>
+                <span className="text-[#c8813a] text-lg">{formatEuro(total)} €</span>
               </div>
             </div>
           ) : (

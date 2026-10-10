@@ -2,34 +2,22 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ReservationForm from "./ReservationForm";
-import { getDb } from "@/lib/db";
-import { getSettings, type SiteSettings } from "@/lib/settings";
+import { loadSettings } from "@/lib/loadSettings";
 
 export const metadata: Metadata = {
   title: "Réservation",
   description: "Réservez votre séjour à L'Aubier directement, sans frais de plateforme.",
-};
-
-const DEFAULT_SETTINGS: SiteSettings = {
-  prix_nuit: 75,
-  frais_menage: 40,
-  caution: 300,
-  cadeau_direct: "",
+  alternates: { canonical: "/reservation" },
 };
 
 type Props = {
-  searchParams: Promise<{ checkin?: string; checkout?: string }>;
+  searchParams: Promise<{ checkin?: string; checkout?: string; adults?: string }>;
 };
 
 export default async function ReservationPage({ searchParams }: Props) {
-  const { checkin, checkout } = await searchParams;
+  const { checkin, checkout, adults } = await searchParams;
 
-  let settings = DEFAULT_SETTINGS;
-  try {
-    settings = await getSettings(getDb());
-  } catch {
-    // keep defaults
-  }
+  const settings = await loadSettings();
 
   return (
     <>
@@ -45,7 +33,12 @@ export default async function ReservationPage({ searchParams }: Props) {
         </div>
 
         <div className="max-w-3xl mx-auto px-4 py-12">
-          <ReservationForm initialCheckin={checkin} initialCheckout={checkout} settings={settings} />
+          <ReservationForm
+            initialCheckin={checkin}
+            initialCheckout={checkout}
+            initialAdults={adults === "2" ? 2 : 1}
+            settings={settings}
+          />
         </div>
       </main>
       <Footer />

@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "gen:photos": "node scripts/gen-photos.mjs",
+    "predev": "npm run gen:photos",
     "dev": "next dev",
+    "prebuild": "npm run gen:photos",
     "build": "next build",
     "start": "next start",
     "db:migrate": "node scripts/migrate.mjs"
@@ -28,6 +31,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "image-size": "^2.0.4",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

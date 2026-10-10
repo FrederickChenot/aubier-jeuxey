@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { addDays, differenceInCalendarDays, parseISO, startOfDay, isValid } from "date-fns";
 import { getDb } from "@/lib/db";
 import { getSettings } from "@/lib/settings";
-import { calculatePrice } from "@/lib/pricing";
+import { calculatePrice, isValidGuests } from "@/lib/pricing";
 import { isRangeAvailable } from "@/lib/availability";
 import { sendOwnerNotification, sendGuestConfirmation } from "@/lib/email";
 import ical from "ical-generator";
@@ -12,7 +12,7 @@ const MAX_NIGHTS = 30;
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { checkin, checkout, guestName, guestEmail, guestPhone, guestsCount, message, website } = body;
+  const { checkin, checkout, guestName, guestEmail, guestPhone, message, website, termsAccepted } = body;
 
   // Honeypot — un champ caché rempli signale un bot : on répond succès sans rien enregistrer.
   if (website) {
@@ -39,9 +39,21 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: "Pour un séjour de plus de 30 nuits, contactez-nous." }, { status: 400 });
   }
 
-  const guests = Number(guestsCount);
-  if (!Number.isInteger(guests) || guests < 1 || guests > 2) {
-    return Response.json({ error: "Le nombre de voyageurs doit être 1 ou 2." }, { status: 400 });
+  const adults = Number(body.adults);
+  const children = Number(body.children ?? 0);
+  if (!isValidGuests({ adults, children })) {
+    return Response.json(
+      { error: "1 ou 2 adultes, 1 enfant au plus, 2 personnes maximum au total." },
+      { status: 400 }
+    );
+  }
+  const guests = adults + children;
+
+  if (termsAccepted !== true) {
+    return Response.json(
+      { error: "Vous devez accepter le règlement intérieur et les conditions de réservation." },
+      { status: 400 }
+    );
   }
 
   if (typeof guestName !== "string" || !guestName.trim() || guestName.length > 100) {
@@ -65,15 +77,16 @@ export async function POST(request: NextRequest) {
   }
 
   const settings = await getSettings(sql);
-  const { total } = calculatePrice(checkinDate, checkoutDate, settings);
+  // Le total et la taxe de séjour sont toujours recalculés ici, jamais repris du client.
+  const { total, touristTax } = calculatePrice(checkinDate, checkoutDate, settings, { adults, children });
 
   const [reservation] = await sql`
     INSERT INTO reservations
       (checkin, checkout, guest_name, guest_email, guest_phone,
-       guests_count, total_price, status, source, message)
+       guests_count, adults, children, tourist_tax, total_price, status, source, message)
     VALUES
       (${checkin}, ${checkout}, ${guestName}, ${guestEmail},
-       ${guestPhone}, ${guests}, ${total},
+       ${guestPhone}, ${guests}, ${adults}, ${children}, ${touristTax}, ${total},
        'pending', 'direct', ${message || null})
     RETURNING *
   `;
@@ -88,7 +101,10 @@ export async function POST(request: NextRequest) {
   });
   ev.uid(`reservation-${reservation.id}@aubier-vosges.fr`);
 
-  const data = { guestName, guestEmail, guestPhone, guestsCount: guests, checkin, checkout, totalPrice: total, message };
+  const data = {
+    guestName, guestEmail, guestPhone, guestsCount: guests, adults, children,
+    checkin, checkout, touristTax, totalPrice: total, message,
+  };
 
   const [ownerResult, guestResult] = await Promise.allSettled([
     sendOwnerNotification(data),

@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { getDb } from "@/lib/db";
-import { getSettings } from "@/lib/settings";
+import { DEFAULT_SETTINGS, getSettings } from "@/lib/settings";
 import ParametresManager from "./ParametresManager";
 
 export default async function AdminParametresPage() {
@@ -12,7 +12,7 @@ export default async function AdminParametresPage() {
   try { session = await getServerSession(authOptions); } catch { session = null; }
   if (!session) redirect("/admin/login");
 
-  let settings = { prix_nuit: 75, frais_menage: 40, caution: 300, cadeau_direct: "" };
+  let settings = DEFAULT_SETTINGS;
   try {
     const sql = getDb();
     settings = await getSettings(sql);

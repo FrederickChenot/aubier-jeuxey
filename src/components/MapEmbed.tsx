@@ -1,4 +1,28 @@
+"use client";
+
+import { useState } from "react";
+
+// La carte n'est chargée qu'à la demande : aucun appel à Google tant que le visiteur ne clique pas.
 export default function MapEmbed() {
+  const [shown, setShown] = useState(false);
+
+  if (!shown) {
+    return (
+      <div className="w-full h-[280px] md:h-[420px] rounded-xl bg-[#b8cfc0]/30 border border-[#b8cfc0]/60 flex flex-col items-center justify-center gap-4 px-4 text-center">
+        <p className="text-sm text-[#3a3d42]">44a Rue d&apos;Épinal, 88000 Jeuxey</p>
+        <button
+          onClick={() => setShown(true)}
+          className="bg-[#c8813a] hover:bg-[#e8b87a] text-white text-sm font-medium px-6 py-3 rounded-lg transition-colors"
+        >
+          Afficher la carte (Google Maps)
+        </button>
+        <p className="text-xs text-[#8aab94] max-w-sm">
+          L&apos;affichage de la carte transmet des données à Google (adresse IP, cookies).
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full rounded-xl overflow-hidden shadow-md">
       <iframe
@@ -6,7 +30,6 @@ export default function MapEmbed() {
         width="100%"
         className="h-[280px] md:h-[420px] w-full border-0"
         allowFullScreen
-        loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
         title="L'Aubier — 44a Rue d'Épinal, 88000 Jeuxey"
       />

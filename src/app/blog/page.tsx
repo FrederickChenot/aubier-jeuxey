@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Blog — Vosges & Nature",
   description:
     "Découvrez nos articles sur les Vosges : randonnées, gastronomie, patrimoine et conseils pour préparer votre séjour à L'Aubier.",
+  alternates: { canonical: "/blog" },
 };
 
 const articles = [

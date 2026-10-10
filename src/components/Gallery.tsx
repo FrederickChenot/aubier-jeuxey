@@ -1,8 +1,7 @@
-import { getPhotos } from "@/lib/photos";
+import { photos } from "@/lib/photos";
 import GalleryGrid from "./GalleryGrid";
 
 export default function Gallery({ title = "Le logement" }: { title?: string }) {
-  const photos = getPhotos();
   if (photos.length === 0) return null;
 
   return (
