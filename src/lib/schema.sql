@@ -58,5 +58,6 @@ INSERT INTO settings VALUES
   ('ts_plafond', '3.64'),
   ('ts_majoration', '0.10'),
   ('seuil_caution_nuits', '5'),
-  ('numero_enregistrement', '')
+  ('numero_enregistrement', ''),
+  ('reservations_ouvertes', 'false')
 ON CONFLICT (key) DO NOTHING;

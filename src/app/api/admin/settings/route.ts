@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getDb } from "@/lib/db";
-import { getSettings, NUMERIC_SETTING_KEYS, TEXT_SETTING_KEYS } from "@/lib/settings";
+import { BOOLEAN_SETTING_KEYS, getSettings, NUMERIC_SETTING_KEYS, TEXT_SETTING_KEYS } from "@/lib/settings";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -21,6 +21,7 @@ export async function PATCH(request: NextRequest) {
   const body = await request.json() as Record<string, unknown>;
   const numericKeys: readonly string[] = NUMERIC_SETTING_KEYS;
   const textKeys: readonly string[] = TEXT_SETTING_KEYS;
+  const booleanKeys: readonly string[] = BOOLEAN_SETTING_KEYS;
   const sql = getDb();
 
   for (const [key, rawValue] of Object.entries(body)) {
@@ -35,6 +36,9 @@ export async function PATCH(request: NextRequest) {
     } else if (textKeys.includes(key)) {
       if (typeof rawValue !== "string" || rawValue.length > 200) continue;
       value = rawValue.trim();
+    } else if (booleanKeys.includes(key)) {
+      if (typeof rawValue !== "boolean") continue;
+      value = String(rawValue);
     } else {
       continue;
     }

@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import BookingLink from "@/components/BookingLink";
+import { loadSettings } from "@/lib/loadSettings";
 
 const articles: Record<string, { title: string; date: string; tag: string; content: string; description?: string }> = {
   "randonnees-vosges": {
@@ -248,6 +250,7 @@ export function generateStaticParams() {
 
 export default async function BlogArticle({ params }: Props) {
   const { slug } = await params;
+  const { reservations_ouvertes } = await loadSettings();
   const article = articles[slug];
 
   if (!article) notFound();
@@ -281,12 +284,11 @@ export default async function BlogArticle({ params }: Props) {
             <Link href="/blog" className="text-sm text-[#8aab94] hover:text-[#c8813a] transition-colors">
               ← Retour au blog
             </Link>
-            <Link
-              href="/reservation"
+            <BookingLink
+              reservationsOpen={reservations_ouvertes}
+              label="Réserver L'Aubier"
               className="text-sm bg-[#c8813a] hover:bg-[#e8b87a] text-white px-4 py-2 rounded transition-colors"
-            >
-              Réserver L&apos;Aubier
-            </Link>
+            />
           </div>
         </div>
       </main>

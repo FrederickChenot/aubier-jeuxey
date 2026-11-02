@@ -53,6 +53,7 @@ export default function ParametresManager({ settings }: { settings: SiteSettings
     ts_majoration: String(settings.ts_majoration),
     cadeau_direct: settings.cadeau_direct,
     numero_enregistrement: settings.numero_enregistrement,
+    reservations_ouvertes: settings.reservations_ouvertes,
   });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -108,6 +109,22 @@ export default function ParametresManager({ settings }: { settings: SiteSettings
           <h1 className="font-[family-name:var(--font-playfair)] text-2xl italic text-[#3a3d42] mb-6">
             Paramètres
           </h1>
+
+          <div className="bg-white rounded-xl border border-[#b8cfc0]/30 p-6 mb-6">
+            <h2 className="font-medium text-[#3a3d42] mb-6">Réservations</h2>
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={values.reservations_ouvertes}
+                onChange={(e) => setValues({ ...values, reservations_ouvertes: e.target.checked })}
+                className="mt-0.5 w-4 h-4 accent-[#c8813a] flex-shrink-0"
+              />
+              <span className="text-sm text-[#3a3d42]">Réservations ouvertes sur le site</span>
+            </label>
+            <p className="text-xs text-[#8aab94] mt-2">
+              Décoché : mode vitrine, tous les boutons « Réserver » mènent à l&apos;annonce Airbnb et les demandes directes sont refusées.
+            </p>
+          </div>
 
           <div className="bg-white rounded-xl border border-[#b8cfc0]/30 p-6 mb-6">
             <h2 className="font-medium text-[#3a3d42] mb-6">Tarifs</h2>

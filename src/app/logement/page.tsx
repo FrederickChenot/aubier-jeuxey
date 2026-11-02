@@ -7,6 +7,7 @@ import MapEmbed from "@/components/MapEmbed";
 import Link from "next/link";
 import { loadSettings } from "@/lib/loadSettings";
 import { formatEuro, weekendNightPrice } from "@/lib/pricing";
+import BookingLink from "@/components/BookingLink";
 
 export const metadata: Metadata = {
   title: "Le logement",
@@ -109,13 +110,14 @@ export default async function LogementPage() {
 
         {/* CTA */}
         <div className="bg-[#3a3d42] py-12 px-4 text-center">
-          <p className="text-[#b8cfc0] mb-4">Convaincu ? Réservez directement sans frais.</p>
-          <Link
-            href="/reservation"
+          <p className="text-[#b8cfc0] mb-4">
+            {settings.reservations_ouvertes ? "Convaincu ? Réservez directement sans frais." : "Convaincu ? Réservez sur Airbnb."}
+          </p>
+          <BookingLink
+            reservationsOpen={settings.reservations_ouvertes}
+            label="Réserver"
             className="inline-block bg-[#c8813a] hover:bg-[#e8b87a] text-white font-medium px-8 py-3 rounded transition-colors"
-          >
-            Réserver
-          </Link>
+          />
         </div>
       </main>
       <Footer />

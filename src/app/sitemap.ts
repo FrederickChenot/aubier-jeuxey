@@ -1,13 +1,22 @@
 import type { MetadataRoute } from "next";
+import { loadSettings } from "@/lib/loadSettings";
 
 const BASE = "https://www.aubier-vosges.fr";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const { reservations_ouvertes } = await loadSettings();
+  // En mode vitrine, ces deux pages sont en noindex : elles n'ont pas leur place dans le sitemap.
+  const bookingPages: MetadataRoute.Sitemap = reservations_ouvertes
+    ? [
+        { url: `${BASE}/disponibilites`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
+        { url: `${BASE}/reservation`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+      ]
+    : [];
+
   return [
     { url: BASE, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
     { url: `${BASE}/logement`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.9 },
-    { url: `${BASE}/disponibilites`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
-    { url: `${BASE}/reservation`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    ...bookingPages,
     { url: `${BASE}/reglement`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.5 },
     { url: `${BASE}/conditions`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.4 },
     { url: `${BASE}/mentions-legales`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },

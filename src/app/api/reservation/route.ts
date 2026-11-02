@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { addDays, differenceInCalendarDays, parseISO, startOfDay, isValid } from "date-fns";
 import { getDb } from "@/lib/db";
 import { getSettings } from "@/lib/settings";
+import { loadSettings } from "@/lib/loadSettings";
 import { calculatePrice, isValidGuests } from "@/lib/pricing";
 import { isRangeAvailable } from "@/lib/availability";
 import { syncAirbnbIfStale } from "@/lib/airbnbSync";
@@ -11,6 +12,12 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_NIGHTS = 30;
 
 export async function POST(request: NextRequest) {
+  // Mode vitrine : refus avant toute lecture de la demande ou écriture en base.
+  const { reservations_ouvertes } = await loadSettings();
+  if (!reservations_ouvertes) {
+    return Response.json({ error: "Réservations fermées" }, { status: 403 });
+  }
+
   const body = await request.json();
   const { checkin, checkout, guestName, guestEmail, guestPhone, message, website, termsAccepted } = body;
 

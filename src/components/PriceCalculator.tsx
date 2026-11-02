@@ -36,7 +36,7 @@ export default function PriceCalculator({ settings }: Props) {
           Calculez votre séjour
         </h2>
         <p className="text-[#8aab94] text-center text-sm mb-10">
-          Tarif direct · pas de frais de plateforme
+          {settings.reservations_ouvertes ? "Tarif direct · pas de frais de plateforme" : "Tarif indicatif"}
         </p>
 
         <div className="max-w-2xl mx-auto bg-[#f7f5f0] rounded-2xl p-6 md:p-8">
@@ -116,13 +116,15 @@ export default function PriceCalculator({ settings }: Props) {
             </p>
           )}
 
-          <button
-            onClick={handleReserve}
-            disabled={nights <= 0}
-            className="w-full bg-[#c8813a] hover:bg-[#e8b87a] disabled:opacity-40 disabled:cursor-not-allowed text-white font-medium py-3 rounded-lg transition-colors"
-          >
-            Réserver ce séjour
-          </button>
+          {settings.reservations_ouvertes && (
+            <button
+              onClick={handleReserve}
+              disabled={nights <= 0}
+              className="w-full bg-[#c8813a] hover:bg-[#e8b87a] disabled:opacity-40 disabled:cursor-not-allowed text-white font-medium py-3 rounded-lg transition-colors"
+            >
+              Réserver ce séjour
+            </button>
+          )}
         </div>
       </div>
     </section>

@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { loadSettings } from "@/lib/loadSettings";
+import BookingLink from "./BookingLink";
 
 export default async function Footer() {
-  const { numero_enregistrement } = await loadSettings();
+  const { numero_enregistrement, reservations_ouvertes } = await loadSettings();
 
   return (
     <footer className="bg-[#3a3d42] text-[#b8cfc0] py-10 mt-auto">
@@ -25,7 +26,13 @@ export default async function Footer() {
           <ul className="space-y-2 text-sm">
             <li><Link href="/logement" className="hover:text-[#f7f5f0] transition-colors">Le logement</Link></li>
             <li><Link href="/disponibilites" className="hover:text-[#f7f5f0] transition-colors">Disponibilités</Link></li>
-            <li><Link href="/reservation" className="hover:text-[#f7f5f0] transition-colors">Réserver</Link></li>
+            <li>
+              <BookingLink
+                reservationsOpen={reservations_ouvertes}
+                label="Réserver"
+                className="hover:text-[#f7f5f0] transition-colors"
+              />
+            </li>
             <li><Link href="/blog" className="hover:text-[#f7f5f0] transition-colors">Blog</Link></li>
           </ul>
         </div>

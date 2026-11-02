@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: "L'Aubier — Studio design · Jeuxey · Vosges",
-    description: `Studio 37 m² plain-pied entièrement rénové en 2025, au cœur des Vosges. Lit 140×190, douche italienne, terrasse privative et jardin japonais, stationnement gratuit devant le portillon. Dès ${settings.prix_nuit} €/nuit sans frais de plateforme.`,
+    description: `Studio 37 m² plain-pied entièrement rénové en 2025, au cœur des Vosges. Lit 140×190, douche italienne, terrasse privative et jardin japonais, stationnement gratuit devant le portillon. Dès ${settings.prix_nuit} €/nuit${settings.reservations_ouvertes ? " sans frais de plateforme" : ""}.`,
     alternates: { canonical: "/" },
     openGraph: {
       title: "L'Aubier — Studio design · Jeuxey · Vosges",
@@ -32,12 +32,16 @@ export default async function Home() {
     <>
       <Navbar />
       <main>
-        <Hero pricePerNight={settings.prix_nuit} cadeauDirect={settings.cadeau_direct} />
+        <Hero
+          pricePerNight={settings.prix_nuit}
+          cadeauDirect={settings.cadeau_direct}
+          reservationsOpen={settings.reservations_ouvertes}
+        />
         <Gallery />
         <Amenities />
         <PriceCalculator settings={settings} />
         <LocationSection />
-        <WhyDirect cadeauDirect={settings.cadeau_direct} />
+        {settings.reservations_ouvertes && <WhyDirect cadeauDirect={settings.cadeau_direct} />}
       </main>
       <Footer />
       <JsonLd pricePerNight={settings.prix_nuit} />

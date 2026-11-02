@@ -1,14 +1,17 @@
 import Link from "next/link";
+import BookingLink from "./BookingLink";
 
 interface Props {
   pricePerNight: number;
   cadeauDirect: string;
+  reservationsOpen: boolean;
 }
 
-export default function Hero({ pricePerNight, cadeauDirect }: Props) {
-  const badgeText = cadeauDirect
+export default function Hero({ pricePerNight, cadeauDirect, reservationsOpen }: Props) {
+  const directBadge = cadeauDirect
     ? `Réservez en direct : ${cadeauDirect}`
     : "Réservez en direct auprès du propriétaire";
+  const badgeText = reservationsOpen ? directBadge : "Réservations sur Airbnb";
 
   return (
     <section className="relative min-h-screen bg-[#3a3d42] flex items-center justify-center text-center px-4">
@@ -36,12 +39,11 @@ export default function Hero({ pricePerNight, cadeauDirect }: Props) {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            href="/reservation"
+          <BookingLink
+            reservationsOpen={reservationsOpen}
+            label="Réserver maintenant"
             className="bg-[#c8813a] hover:bg-[#e8b87a] text-white font-medium px-8 py-3 rounded transition-colors text-sm"
-          >
-            Réserver maintenant
-          </Link>
+          />
           <Link
             href="/logement"
             className="border border-[#8aab94]/50 hover:border-[#8aab94] text-[#b8cfc0] hover:text-[#f7f5f0] font-medium px-8 py-3 rounded transition-colors text-sm"

@@ -42,6 +42,13 @@ async function main() {
     ON CONFLICT (key) DO NOTHING
   `;
   console.log("Migration OK — majoration_weekend / reduc_semaine / reduc_mois prêts.");
+
+  // Mode vitrine : les réservations passent par Airbnb tant que ce réglage n'est pas activé dans l'admin.
+  await sql`
+    INSERT INTO settings (key, value) VALUES ('reservations_ouvertes', 'false')
+    ON CONFLICT (key) DO NOTHING
+  `;
+  console.log("Migration OK — reservations_ouvertes prêt.");
 }
 
 main().catch((err) => {

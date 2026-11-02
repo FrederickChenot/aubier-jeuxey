@@ -7,12 +7,21 @@ import CalendarClient from "./CalendarClient";
 import { getDb } from "@/lib/db";
 import { getBlockedNights } from "@/lib/availability";
 import { syncAirbnbIfStale } from "@/lib/airbnbSync";
+import { loadSettings } from "@/lib/loadSettings";
+import AirbnbNotice from "@/components/AirbnbNotice";
 
-export const metadata: Metadata = {
-  title: "Disponibilités",
-  description: "Consultez le calendrier des disponibilités de L'Aubier et réservez votre séjour dans les Vosges.",
-  alternates: { canonical: "/disponibilites" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { reservations_ouvertes } = await loadSettings();
+
+  return {
+    title: "Disponibilités",
+    description: reservations_ouvertes
+      ? "Consultez le calendrier des disponibilités de L'Aubier et réservez votre séjour dans les Vosges."
+      : "Les réservations de L'Aubier se font actuellement sur Airbnb.",
+    alternates: { canonical: "/disponibilites" },
+    ...(reservations_ouvertes ? {} : { robots: { index: false } }),
+  };
+}
 
 async function getBlockedDates(): Promise<string[]> {
   try {
@@ -23,8 +32,9 @@ async function getBlockedDates(): Promise<string[]> {
 }
 
 export default async function DisponibilitesPage() {
-  await syncAirbnbIfStale(15);
-  const blockedDates = await getBlockedDates();
+  const { reservations_ouvertes } = await loadSettings();
+  if (reservations_ouvertes) await syncAirbnbIfStale(15);
+  const blockedDates = reservations_ouvertes ? await getBlockedDates() : [];
 
   return (
     <>
@@ -35,14 +45,16 @@ export default async function DisponibilitesPage() {
             <h1 className="font-[family-name:var(--font-playfair)] text-4xl italic text-[#f7f5f0] mb-2">
               Disponibilités
             </h1>
-            <p className="text-[#8aab94]">
-              Choisissez votre date d&apos;arrivée
-            </p>
+            {reservations_ouvertes && (
+              <p className="text-[#8aab94]">
+                Choisissez votre date d&apos;arrivée
+              </p>
+            )}
           </div>
         </div>
 
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <CalendarClient blockedDates={blockedDates} />
+          {reservations_ouvertes ? <CalendarClient blockedDates={blockedDates} /> : <AirbnbNotice />}
         </div>
       </main>
       <Footer />
