@@ -6,7 +6,6 @@ import { calculatePrice, isValidGuests } from "@/lib/pricing";
 import { isRangeAvailable } from "@/lib/availability";
 import { syncAirbnbIfStale } from "@/lib/airbnbSync";
 import { sendOwnerNotification, sendGuestConfirmation } from "@/lib/email";
-import ical from "ical-generator";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_NIGHTS = 30;
@@ -83,7 +82,7 @@ export async function POST(request: NextRequest) {
   // Le total et la taxe de séjour sont toujours recalculés ici, jamais repris du client.
   const { total, touristTax } = calculatePrice(checkinDate, checkoutDate, settings, { adults, children });
 
-  const [reservation] = await sql`
+  await sql`
     INSERT INTO reservations
       (checkin, checkout, guest_name, guest_email, guest_phone,
        guests_count, adults, children, tourist_tax, total_price, status, source, message)
@@ -91,18 +90,7 @@ export async function POST(request: NextRequest) {
       (${checkin}, ${checkout}, ${guestName}, ${guestEmail},
        ${guestPhone}, ${guests}, ${adults}, ${children}, ${touristTax}, ${total},
        'pending', 'direct', ${message || null})
-    RETURNING *
   `;
-
-  const cal = ical({ name: "L'Aubier" });
-  const ev = cal.createEvent({
-    start: checkin,
-    end: checkout,
-    allDay: true,
-    summary: "Séjour à L'Aubier · Jeuxey · Vosges",
-    description: "Votre demande de séjour à L'Aubier a été enregistrée.\nContact : contact@aubier-vosges.fr",
-  });
-  ev.uid(`reservation-${reservation.id}@aubier-vosges.fr`);
 
   const data = {
     guestName, guestEmail, guestPhone, guestsCount: guests, adults, children,
@@ -111,7 +99,7 @@ export async function POST(request: NextRequest) {
 
   const [ownerResult, guestResult] = await Promise.allSettled([
     sendOwnerNotification(data),
-    sendGuestConfirmation(data, cal.toString()),
+    sendGuestConfirmation(data),
   ]);
 
   if (ownerResult.status === "rejected") {

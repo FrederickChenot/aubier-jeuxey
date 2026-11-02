@@ -74,7 +74,7 @@ export async function sendOwnerNotification(data: ReservationData) {
   });
 }
 
-export async function sendGuestConfirmation(data: ReservationData, icsContent: string) {
+export async function sendGuestConfirmation(data: ReservationData) {
   const guestName = escapeHtml(data.guestName);
 
   await getMailer().transactionalEmails.sendTransacEmail({
@@ -93,12 +93,8 @@ export async function sendGuestConfirmation(data: ReservationData, icsContent: s
         <tr><td><strong>Taxe de séjour</strong></td><td>${formatEuro(data.touristTax)} € (incluse dans le total)</td></tr>
         <tr><td><strong>Total</strong></td><td>${formatEuro(data.totalPrice)} €</td></tr>
       </table>
-      <p>Le fichier calendrier (.ics) est joint à cet email pour bloquer les dates dans votre agenda.</p>
       <p>À très bientôt dans les Vosges !<br>L'équipe de L'Aubier</p>
     `,
-    attachment: [
-      { name: "sejour-aubier.ics", content: Buffer.from(icsContent).toString("base64") },
-    ],
   });
 }
 

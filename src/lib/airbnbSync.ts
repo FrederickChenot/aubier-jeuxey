@@ -38,8 +38,10 @@ async function importCalendar(sql: NeonQueryFunction<false, false>, url: string)
     throw new Error("Réponse Airbnb invalide : ce n'est pas un calendrier iCal.");
   }
 
-  const nodeIcal = await import("node-ical");
-  const events = nodeIcal.sync.parseICS(text);
+  // Selon l'environnement (Node seul ou bundle Next), sync est exposé directement ou via default.
+  const mod: any = await import("node-ical");
+  const nodeIcal = mod.sync ? mod : mod.default;
+  const events: Record<string, any> = nodeIcal.sync.parseICS(text);
 
   const seenUids: string[] = [];
   let synced = 0;

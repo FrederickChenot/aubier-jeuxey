@@ -36,10 +36,6 @@ export default function SuccessPage() {
               <span>Email de confirmation dans votre boîte mail</span>
             </div>
             <div className="flex gap-3 text-sm text-[#8aab94]">
-              <span>📅</span>
-              <span>Fichier .ics joint pour bloquer les dates dans votre agenda</span>
-            </div>
-            <div className="flex gap-3 text-sm text-[#8aab94]">
               <span>💳</span>
               <span>Si votre demande est acceptée, un lien de paiement sécurisé (valable 48h) confirme la réservation</span>
             </div>
