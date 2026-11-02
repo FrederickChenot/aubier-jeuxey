@@ -7,6 +7,9 @@ import type { SiteSettings } from "@/lib/settings";
 type NumberKey =
   | "prix_nuit"
   | "frais_menage"
+  | "majoration_weekend"
+  | "reduc_semaine"
+  | "reduc_mois"
   | "caution"
   | "seuil_caution_nuits"
   | "ts_taux"
@@ -21,14 +24,17 @@ interface NumberField {
 }
 
 const tarifFields: NumberField[] = [
-  { key: "prix_nuit", label: "Tarif par nuit", unit: "€", help: "Affiché sur la page d'accueil et dans le calculateur" },
-  { key: "frais_menage", label: "Frais de ménage", unit: "€", help: "Ajoutés au total de chaque réservation" },
+  { key: "prix_nuit", label: "Tarif par nuit", unit: "€", help: "Tarif en semaine, affiché sur la page d'accueil et dans le calculateur" },
+  { key: "majoration_weekend", label: "Majoration week-end", unit: "%", help: "Appliquée aux nuits du vendredi et du samedi" },
+  { key: "reduc_semaine", label: "Réduction semaine", unit: "%", help: "Sur le total des nuits, dès 7 nuits" },
+  { key: "reduc_mois", label: "Réduction mois", unit: "%", help: "Sur le total des nuits, dès 28 nuits (remplace la réduction semaine)" },
+  { key: "frais_menage", label: "Frais de ménage", unit: "€", help: "Ajoutés au total de chaque réservation — 0 = ligne masquée" },
   { key: "caution", label: "Caution", unit: "€", help: "Montant affiché dans le calculateur, le règlement et les conditions" },
   { key: "seuil_caution_nuits", label: "Seuil caution", unit: "nuits", help: "Jusqu'à ce nombre de nuits : empreinte bancaire sans débit. Au-delà : virement." },
 ];
 
 const taxeFields: NumberField[] = [
-  { key: "ts_taux", label: "Taux", unit: "", help: "Part du prix de la nuit par occupant — 0.05 = 5 %" },
+  { key: "ts_taux", label: "Taux", unit: "", help: "Part du prix moyen de la nuit par occupant — 0.05 = 5 %" },
   { key: "ts_plafond", label: "Plafond", unit: "€", help: "Plafond par personne et par nuit, avant majoration" },
   { key: "ts_majoration", label: "Taxe additionnelle", unit: "", help: "Majoration appliquée après plafonnement — 0.10 = 10 %" },
 ];
@@ -37,6 +43,9 @@ export default function ParametresManager({ settings }: { settings: SiteSettings
   const [values, setValues] = useState({
     prix_nuit: String(settings.prix_nuit),
     frais_menage: String(settings.frais_menage),
+    majoration_weekend: String(settings.majoration_weekend),
+    reduc_semaine: String(settings.reduc_semaine),
+    reduc_mois: String(settings.reduc_mois),
     caution: String(settings.caution),
     seuil_caution_nuits: String(settings.seuil_caution_nuits),
     ts_taux: String(settings.ts_taux),
@@ -108,7 +117,7 @@ export default function ParametresManager({ settings }: { settings: SiteSettings
           <div className="bg-white rounded-xl border border-[#b8cfc0]/30 p-6 mb-6">
             <h2 className="font-medium text-[#3a3d42] mb-2">Taxe de séjour</h2>
             <p className="text-xs text-[#8aab94] mb-6">
-              Tarif proportionnel (meublé non classé) — par adulte et par nuit : min(prix de la nuit ÷ occupants × taux,
+              Tarif proportionnel (meublé non classé) — par adulte et par nuit : min(prix moyen de la nuit après réduction ÷ occupants × taux,
               plafond) × (1 + taxe additionnelle). Les mineurs sont exonérés.
             </p>
             {renderNumberFields(taxeFields)}

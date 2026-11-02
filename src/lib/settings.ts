@@ -1,8 +1,11 @@
-import { NeonQueryFunction } from "@neondatabase/serverless";
+import type { NeonQueryFunction } from "@neondatabase/serverless";
 
 export interface SiteSettings {
   prix_nuit: number;
   frais_menage: number;
+  majoration_weekend: number;
+  reduc_semaine: number;
+  reduc_mois: number;
   caution: number;
   cadeau_direct: string;
   ts_taux: number;
@@ -14,7 +17,10 @@ export interface SiteSettings {
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   prix_nuit: 75,
-  frais_menage: 40,
+  frais_menage: 0,
+  majoration_weekend: 5,
+  reduc_semaine: 10,
+  reduc_mois: 30,
   caution: 300,
   cadeau_direct: "",
   ts_taux: 0.05,
@@ -27,6 +33,9 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 export const NUMERIC_SETTING_KEYS = [
   "prix_nuit",
   "frais_menage",
+  "majoration_weekend",
+  "reduc_semaine",
+  "reduc_mois",
   "caution",
   "ts_taux",
   "ts_plafond",

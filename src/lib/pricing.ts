@@ -1,4 +1,4 @@
-import { differenceInCalendarDays } from "date-fns";
+import { addDays, differenceInCalendarDays } from "date-fns";
 import type { SiteSettings } from "./settings";
 
 export const MAX_GUESTS = 2;
@@ -13,14 +13,16 @@ export interface Guests {
 export interface PriceBreakdown {
   nights: number;
   nightsTotal: number;
+  discount: number;
+  discountLabel: string;
   cleaningFee: number;
-  touristTaxPerPerson: number;
   touristTax: number;
   total: number;
 }
 
 function roundCents(value: number): number {
-  return Math.round((value + Number.EPSILON) * 100) / 100;
+  // toPrecision écarte le bruit des flottants : un demi-centime exact (4,125) doit monter.
+  return Math.round(Number((value * 100).toPrecision(12))) / 100;
 }
 
 export function isValidGuests({ adults, children }: Guests): boolean {
@@ -35,16 +37,22 @@ export function isValidGuests({ adults, children }: Guests): boolean {
   );
 }
 
-// Taxe de séjour au tarif proportionnel (meublé non classé) : par nuit et par adulte,
-// un pourcentage du prix de la nuit par occupant, plafonné, puis majoré de la taxe additionnelle.
-// Les mineurs comptent comme occupants mais sont exonérés.
-export function touristTaxPerPersonPerNight(settings: SiteSettings, guests: Guests): number {
-  const occupants = guests.adults + guests.children;
-  if (occupants <= 0) return 0;
-  const base = Math.min((settings.prix_nuit / occupants) * settings.ts_taux, settings.ts_plafond);
-  return roundCents(base * (1 + settings.ts_majoration));
+export function weekendNightPrice(settings: SiteSettings): number {
+  return roundCents(settings.prix_nuit * (1 + settings.majoration_weekend / 100));
 }
 
+// Taxe de séjour au tarif proportionnel (meublé non classé) : par nuit et par adulte,
+// un pourcentage du prix moyen de la nuit après réduction par occupant, plafonné, puis majoré
+// de la taxe additionnelle. Les mineurs comptent comme occupants mais sont exonérés.
+// Comme Airbnb, seul le montant final est arrondi.
+function touristTaxTotal(nightsAfterDiscount: number, nights: number, settings: SiteSettings, guests: Guests): number {
+  const occupants = guests.adults + guests.children;
+  if (occupants <= 0 || !(nights > 0)) return 0;
+  const base = Math.min((nightsAfterDiscount / nights / occupants) * settings.ts_taux, settings.ts_plafond);
+  return roundCents(base * (1 + settings.ts_majoration) * guests.adults * nights);
+}
+
+// Les dates doivent être à minuit heure locale (parseISO) : le jour de la semaine en dépend.
 export function calculatePrice(
   checkin: Date,
   checkout: Date,
@@ -52,12 +60,25 @@ export function calculatePrice(
   guests: Guests
 ): PriceBreakdown {
   const nights = Math.max(0, differenceInCalendarDays(checkout, checkin));
-  const nightsTotal = nights * settings.prix_nuit;
-  const touristTaxPerPerson = touristTaxPerPersonPerNight(settings, guests);
-  const touristTax = roundCents(touristTaxPerPerson * nights * guests.adults);
-  const total = roundCents(nightsTotal + settings.frais_menage + touristTax);
 
-  return { nights, nightsTotal, cleaningFee: settings.frais_menage, touristTaxPerPerson, touristTax, total };
+  let sum = 0;
+  for (let i = 0; i < nights; i++) {
+    const day = addDays(checkin, i).getDay();
+    const isWeekend = day === 5 || day === 6;
+    sum += settings.prix_nuit * (isWeekend ? 1 + settings.majoration_weekend / 100 : 1);
+  }
+  const nightsTotal = roundCents(sum);
+
+  const isMonth = nights >= 28;
+  const discountPercent = isMonth ? settings.reduc_mois : nights >= 7 ? settings.reduc_semaine : 0;
+  const discount = roundCents((nightsTotal * discountPercent) / 100);
+  const discountLabel = isMonth ? "Réduction mois" : "Réduction semaine";
+  const nightsAfterDiscount = roundCents(nightsTotal - discount);
+
+  const touristTax = touristTaxTotal(nightsAfterDiscount, nights, settings, guests);
+  const total = roundCents(nightsAfterDiscount + settings.frais_menage + touristTax);
+
+  return { nights, nightsTotal, discount, discountLabel, cleaningFee: settings.frais_menage, touristTax, total };
 }
 
 export function formatEuro(amount: number): string {

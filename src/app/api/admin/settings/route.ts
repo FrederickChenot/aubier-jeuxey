@@ -31,6 +31,7 @@ export async function PATCH(request: NextRequest) {
       const n = Number(value);
       if (value === "" || !Number.isFinite(n) || n < 0) continue;
       if (key === "seuil_caution_nuits" && !Number.isInteger(n)) continue;
+      if ((key === "reduc_semaine" || key === "reduc_mois") && n > 100) continue;
     } else if (textKeys.includes(key)) {
       if (typeof rawValue !== "string" || rawValue.length > 200) continue;
       value = rawValue.trim();

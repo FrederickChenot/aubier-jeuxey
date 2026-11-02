@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { format, addDays } from "date-fns";
+import { format, addDays, parseISO } from "date-fns";
 import { calculatePrice, formatEuro } from "@/lib/pricing";
 import type { SiteSettings } from "@/lib/settings";
 
@@ -17,9 +17,9 @@ export default function PriceCalculator({ settings }: Props) {
   const [checkout, setCheckout] = useState(format(addDays(today, 10), "yyyy-MM-dd"));
   const [adults, setAdults] = useState(2);
 
-  const { nights, nightsTotal, cleaningFee, touristTax, total } = calculatePrice(
-    new Date(checkin),
-    new Date(checkout),
+  const { nights, nightsTotal, discount, discountLabel, cleaningFee, touristTax, total } = calculatePrice(
+    parseISO(checkin),
+    parseISO(checkout),
     settings,
     { adults, children: 0 }
   );
@@ -78,13 +78,21 @@ export default function PriceCalculator({ settings }: Props) {
           {nights > 0 ? (
             <div className="space-y-3 mb-6">
               <div className="flex justify-between text-sm text-[#3a3d42]">
-                <span>{settings.prix_nuit} € × {nights} nuit{nights > 1 ? "s" : ""}</span>
-                <span>{nightsTotal} €</span>
+                <span>{nights} nuit{nights > 1 ? "s" : ""}</span>
+                <span>{formatEuro(nightsTotal)} €</span>
               </div>
-              <div className="flex justify-between text-sm text-[#3a3d42]">
-                <span>Frais de ménage</span>
-                <span>{cleaningFee} €</span>
-              </div>
+              {discount > 0 && (
+                <div className="flex justify-between text-sm text-[#3a3d42]">
+                  <span>{discountLabel}</span>
+                  <span>−{formatEuro(discount)} €</span>
+                </div>
+              )}
+              {cleaningFee > 0 && (
+                <div className="flex justify-between text-sm text-[#3a3d42]">
+                  <span>Frais de ménage</span>
+                  <span>{formatEuro(cleaningFee)} €</span>
+                </div>
+              )}
               <div className="flex justify-between text-sm text-[#3a3d42]">
                 <span>Taxe de séjour</span>
                 <span>{formatEuro(touristTax)} €</span>

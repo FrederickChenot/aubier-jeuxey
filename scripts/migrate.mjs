@@ -32,6 +32,16 @@ async function main() {
   await sql`ALTER TABLE reservations ADD COLUMN IF NOT EXISTS children INTEGER NOT NULL DEFAULT 0`;
   await sql`ALTER TABLE reservations ADD COLUMN IF NOT EXISTS tourist_tax NUMERIC(10,2) NOT NULL DEFAULT 0`;
   console.log("Migration OK — reservations.adults / children / tourist_tax prêtes.");
+
+  // Tarification alignée sur Airbnb : les valeurs déjà présentes ne sont pas écrasées.
+  await sql`
+    INSERT INTO settings (key, value) VALUES
+      ('majoration_weekend', '5'),
+      ('reduc_semaine', '10'),
+      ('reduc_mois', '30')
+    ON CONFLICT (key) DO NOTHING
+  `;
+  console.log("Migration OK — majoration_weekend / reduc_semaine / reduc_mois prêts.");
 }
 
 main().catch((err) => {

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { format, addDays } from "date-fns";
+import { format, addDays, parseISO } from "date-fns";
 import Link from "next/link";
 import { calculatePrice, formatEuro } from "@/lib/pricing";
 import type { SiteSettings } from "@/lib/settings";
@@ -51,9 +51,9 @@ export default function ReservationForm({
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const { nights, nightsTotal, cleaningFee, touristTax, total } = calculatePrice(
-    new Date(checkin),
-    new Date(checkout),
+  const { nights, nightsTotal, discount, discountLabel, cleaningFee, touristTax, total } = calculatePrice(
+    parseISO(checkin),
+    parseISO(checkout),
     settings,
     { adults: form.adults, children: form.children }
   );
@@ -208,13 +208,21 @@ export default function ReservationForm({
           {nights > 0 && (
             <div className="bg-[#f7f5f0] rounded-xl p-4 mb-4 text-sm text-[#3a3d42] space-y-2">
               <div className="flex justify-between">
-                <span>{settings.prix_nuit} € × {nights} nuit{nights > 1 ? "s" : ""}</span>
-                <span>{nightsTotal} €</span>
+                <span>{nights} nuit{nights > 1 ? "s" : ""}</span>
+                <span>{formatEuro(nightsTotal)} €</span>
               </div>
-              <div className="flex justify-between">
-                <span>Ménage</span>
-                <span>{cleaningFee} €</span>
-              </div>
+              {discount > 0 && (
+                <div className="flex justify-between">
+                  <span>{discountLabel}</span>
+                  <span>−{formatEuro(discount)} €</span>
+                </div>
+              )}
+              {cleaningFee > 0 && (
+                <div className="flex justify-between">
+                  <span>Ménage</span>
+                  <span>{formatEuro(cleaningFee)} €</span>
+                </div>
+              )}
               <div className="flex justify-between">
                 <span>Taxe de séjour</span>
                 <span>{formatEuro(touristTax)} €</span>
@@ -360,13 +368,21 @@ export default function ReservationForm({
               </span>
             </div>
             <div className="border-t border-[#b8cfc0] pt-3 flex justify-between">
-              <span className="text-[#8aab94]">{settings.prix_nuit} € × {nights} nuit{nights > 1 ? "s" : ""}</span>
-              <span>{nightsTotal} €</span>
+              <span className="text-[#8aab94]">{nights} nuit{nights > 1 ? "s" : ""}</span>
+              <span>{formatEuro(nightsTotal)} €</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-[#8aab94]">Ménage</span>
-              <span>{cleaningFee} €</span>
-            </div>
+            {discount > 0 && (
+              <div className="flex justify-between">
+                <span className="text-[#8aab94]">{discountLabel}</span>
+                <span>−{formatEuro(discount)} €</span>
+              </div>
+            )}
+            {cleaningFee > 0 && (
+              <div className="flex justify-between">
+                <span className="text-[#8aab94]">Ménage</span>
+                <span>{formatEuro(cleaningFee)} €</span>
+              </div>
+            )}
             <div className="flex justify-between">
               <span className="text-[#8aab94]">Taxe de séjour</span>
               <span>{formatEuro(touristTax)} €</span>

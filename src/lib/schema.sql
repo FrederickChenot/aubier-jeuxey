@@ -48,7 +48,10 @@ CREATE INDEX IF NOT EXISTS idx_blocked_dates ON blocked_dates (date_start, date_
 CREATE TABLE IF NOT EXISTS settings (key VARCHAR PRIMARY KEY, value TEXT);
 INSERT INTO settings VALUES
   ('prix_nuit', '75'),
-  ('frais_menage', '40'),
+  ('frais_menage', '0'),
+  ('majoration_weekend', '5'),
+  ('reduc_semaine', '10'),
+  ('reduc_mois', '30'),
   ('caution', '300'),
   ('cadeau_direct', ''),
   ('ts_taux', '0.05'),

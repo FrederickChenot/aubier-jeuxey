@@ -6,6 +6,7 @@ import Amenities from "@/components/Amenities";
 import MapEmbed from "@/components/MapEmbed";
 import Link from "next/link";
 import { loadSettings } from "@/lib/loadSettings";
+import { formatEuro, weekendNightPrice } from "@/lib/pricing";
 
 export const metadata: Metadata = {
   title: "Le logement",
@@ -65,7 +66,14 @@ export default async function LogementPage() {
                   </Link>
                   )
                 </li>
-                <li><strong>Ménage :</strong> {settings.frais_menage} € par séjour, ajoutés au total</li>
+                <li>
+                  <strong>Tarifs :</strong> {formatEuro(settings.prix_nuit)} € en semaine,{" "}
+                  {formatEuro(weekendNightPrice(settings))} € vendredi et samedi, −{settings.reduc_semaine} % dès 7 nuits,
+                  −{settings.reduc_mois} % dès 28 nuits
+                </li>
+                {settings.frais_menage > 0 && (
+                  <li><strong>Ménage :</strong> {settings.frais_menage} € par séjour, ajoutés au total</li>
+                )}
                 <li><strong>Taxe de séjour :</strong> en supplément, par adulte et par nuit (mineurs exonérés)</li>
                 <li><strong>Animaux :</strong> non acceptés</li>
                 <li><strong>Fumeur :</strong> non fumeur (toléré en extérieur uniquement)</li>

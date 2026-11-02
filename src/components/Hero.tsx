@@ -53,7 +53,7 @@ export default function Hero({ pricePerNight, cadeauDirect }: Props) {
         {/* Key stats */}
         <div className="mt-16 grid grid-cols-3 gap-4 max-w-sm mx-auto">
           <div>
-            <p className="text-[#c8813a] text-2xl font-medium">{pricePerNight}€</p>
+            <p className="text-[#c8813a] text-2xl font-medium">dès {pricePerNight} €</p>
             <p className="text-[#8aab94] text-xs">la nuit</p>
           </div>
           <div className="border-x border-white/10">
