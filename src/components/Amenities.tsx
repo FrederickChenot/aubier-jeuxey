@@ -11,8 +11,13 @@ const amenities = [
   },
   {
     icon: "🚗",
-    title: "Parking privé",
-    desc: "1 place privée devant le logement",
+    title: "Stationnement gratuit",
+    desc: "Sur le trottoir devant le portillon",
+  },
+  {
+    icon: "📶",
+    title: "Wifi",
+    desc: "Connexion disponible dans le logement",
   },
   {
     icon: "🍋",

@@ -39,7 +39,7 @@ export default async function LogementPage() {
             <span>🛏️ Lit double 140×190 cm</span>
             <span>🚿 Douche italienne · WC suspendu · sèche-serviette</span>
             <span>🌿 Terrasse privative & jardin japonais</span>
-            <span>🚗 1 place privée</span>
+            <span>🚗 Stationnement gratuit sur le trottoir devant le portillon</span>
           </div>
         </div>
 
@@ -56,7 +56,7 @@ export default async function LogementPage() {
               </h2>
               <ul className="space-y-3 text-sm text-[#3a3d42]">
                 <li><strong>Arrivée :</strong> autonome (boîte à clés) à partir de 16h, sans heure limite</li>
-                <li><strong>Départ :</strong> avant 10h</li>
+                <li><strong>Départ :</strong> avant 11h</li>
                 <li>
                   <strong>Caution :</strong> {settings.caution} € — empreinte bancaire sans débit jusqu&apos;à{" "}
                   {settings.seuil_caution_nuits} nuits, virement au-delà (

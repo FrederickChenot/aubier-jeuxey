@@ -21,7 +21,7 @@ export default async function ReglementPage() {
   const articles: LegalArticle[] = [
     {
       title: "Arrivée et départ",
-      content: <p>Arrivée autonome (boîte à clés) à partir de 16h, sans heure limite. Départ avant 10h. Tout départ tardif non convenu préalablement avec le propriétaire pourra être facturé.</p>,
+      content: <p>Arrivée autonome (boîte à clés) à partir de 16h, sans heure limite. Départ avant 11h. Tout départ tardif non convenu préalablement avec le propriétaire pourra être facturé.</p>,
     },
     {
       title: "Capacité maximale",
@@ -40,8 +40,8 @@ export default async function ReglementPage() {
       content: <p>Silence demandé à partir de 22h00. Les fêtes et soirées bruyantes sont soumises à l&apos;accord préalable du propriétaire.</p>,
     },
     {
-      title: "Parking",
-      content: <p>Une place de stationnement privée est incluse pour un seul véhicule.</p>,
+      title: "Stationnement",
+      content: <p>Stationnement gratuit sur le trottoir devant le portillon.</p>,
     },
     {
       title: "Propreté",

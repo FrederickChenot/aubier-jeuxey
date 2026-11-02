@@ -84,7 +84,7 @@ export default async function ConditionsPage() {
       title: "Modalités du séjour",
       content: (
         <p>
-          Le logement accueille 2 personnes au maximum. Arrivée autonome dès 16h, départ avant 10h. Le séjour est
+          Le logement accueille 2 personnes au maximum. Arrivée autonome dès 16h, départ avant 11h. Le séjour est
           soumis au{" "}
           <Link href="/reglement" className="text-[#c8813a] underline hover:text-[#e8b87a]">
             règlement intérieur
