@@ -61,18 +61,22 @@ export function calculatePrice(
 ): PriceBreakdown {
   const nights = Math.max(0, differenceInCalendarDays(checkout, checkin));
 
+  const isMonth = nights >= 28;
+  const discountPercent = isMonth ? settings.reduc_mois : nights >= 7 ? settings.reduc_semaine : 0;
+  const discountLabel = isMonth ? "Réduction mois" : "Réduction semaine";
+
+  // Comme Airbnb, la réduction est arrondie au centime nuit par nuit, puis additionnée.
   let sum = 0;
+  let discountSum = 0;
   for (let i = 0; i < nights; i++) {
     const day = addDays(checkin, i).getDay();
     const isWeekend = day === 5 || day === 6;
-    sum += settings.prix_nuit * (isWeekend ? 1 + settings.majoration_weekend / 100 : 1);
+    const nightPrice = settings.prix_nuit * (isWeekend ? 1 + settings.majoration_weekend / 100 : 1);
+    sum += nightPrice;
+    discountSum += roundCents((nightPrice * discountPercent) / 100);
   }
   const nightsTotal = roundCents(sum);
-
-  const isMonth = nights >= 28;
-  const discountPercent = isMonth ? settings.reduc_mois : nights >= 7 ? settings.reduc_semaine : 0;
-  const discount = roundCents((nightsTotal * discountPercent) / 100);
-  const discountLabel = isMonth ? "Réduction mois" : "Réduction semaine";
+  const discount = roundCents(discountSum);
   const nightsAfterDiscount = roundCents(nightsTotal - discount);
 
   const touristTax = touristTaxTotal(nightsAfterDiscount, nights, settings, guests);

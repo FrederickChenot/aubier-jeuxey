@@ -16,13 +16,13 @@ test("Airbnb : mardi 17/11 → 18/11, 1 adulte = 79,00 € (taxe plafonnée)", (
   assert.equal(cents(price("2026-11-17", "2026-11-18", 1).total), 7900);
 });
 
-test("Airbnb : lundi 16/11 → 23/11, 2 adultes = 505,60 € à 1 centime près", () => {
+test("Airbnb : lundi 16/11 → 23/11, 2 adultes = 505,60 € (réduction arrondie nuit par nuit)", () => {
   const p = price("2026-11-16", "2026-11-23", 2);
   assert.equal(p.nights, 7);
   assert.equal(cents(p.nightsTotal), 53250);
-  assert.equal(cents(p.discount), 5325);
+  assert.equal(cents(p.discount), 5326);
   assert.equal(p.discountLabel, "Réduction semaine");
-  assert.ok(Math.abs(cents(p.total) - 50560) <= 1, `total obtenu : ${p.total}`);
+  assert.equal(cents(p.total), 50560);
 });
 
 test("vendredi et samedi sont majorés, pas le jeudi ni le dimanche", () => {
@@ -37,9 +37,9 @@ test("6 nuits : pas de réduction ; 28 nuits : réduction mois", () => {
   const p = price("2026-11-16", "2026-12-14", 2);
   assert.equal(p.discountLabel, "Réduction mois");
   assert.equal(cents(p.nightsTotal), 213000);
-  assert.equal(cents(p.discount), 63900);
-  assert.equal(cents(p.touristTax), 8201);
-  assert.equal(cents(p.total), 157301);
+  assert.equal(cents(p.discount), 63904);
+  assert.equal(cents(p.touristTax), 8200);
+  assert.equal(cents(p.total), 157296);
 });
 
 test("l'enfant compte comme occupant mais ne paie pas la taxe", () => {

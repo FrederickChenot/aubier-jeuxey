@@ -15,11 +15,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: "L'Aubier — Studio design · Jeuxey · Vosges",
-    description: `Studio 37 m² plain-pied entièrement rénové en 2025, au cœur des Vosges. Lit 140×190, douche italienne, terrasse privative et jardin japonais, stationnement gratuit devant le portillon. ${settings.prix_nuit}€/nuit sans frais de plateforme.`,
+    description: `Studio 37 m² plain-pied entièrement rénové en 2025, au cœur des Vosges. Lit 140×190, douche italienne, terrasse privative et jardin japonais, stationnement gratuit devant le portillon. Dès ${settings.prix_nuit} €/nuit sans frais de plateforme.`,
     alternates: { canonical: "/" },
     openGraph: {
       title: "L'Aubier — Studio design · Jeuxey · Vosges",
-      description: `Studio 37 m² rénové 2025 dans les Vosges. Terrasse privative, stationnement gratuit, douche italienne. ${settings.prix_nuit}€/nuit.`,
+      description: `Studio 37 m² rénové 2025 dans les Vosges. Terrasse privative, stationnement gratuit, douche italienne. Dès ${settings.prix_nuit} €/nuit.`,
       url: "https://www.aubier-vosges.fr",
     },
   };
