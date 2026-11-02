@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { getDb } from "@/lib/db";
 import { isRangeAvailable } from "@/lib/availability";
+import { syncAirbnbIfStale } from "@/lib/airbnbSync";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -10,6 +11,8 @@ export async function GET(request: NextRequest) {
   if (!checkin || !checkout) {
     return Response.json({ error: "checkin and checkout required" }, { status: 400 });
   }
+
+  await syncAirbnbIfStale(15);
 
   try {
     const available = await isRangeAvailable(getDb(), checkin, checkout);

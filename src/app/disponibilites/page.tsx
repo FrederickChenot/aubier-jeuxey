@@ -1,9 +1,12 @@
+export const dynamic = "force-dynamic";
+
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CalendarClient from "./CalendarClient";
 import { getDb } from "@/lib/db";
 import { getBlockedNights } from "@/lib/availability";
+import { syncAirbnbIfStale } from "@/lib/airbnbSync";
 
 export const metadata: Metadata = {
   title: "Disponibilités",
@@ -20,6 +23,7 @@ async function getBlockedDates(): Promise<string[]> {
 }
 
 export default async function DisponibilitesPage() {
+  await syncAirbnbIfStale(15);
   const blockedDates = await getBlockedDates();
 
   return (

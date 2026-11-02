@@ -80,7 +80,7 @@ export async function sendGuestConfirmation(data: ReservationData, icsContent: s
   await getMailer().transactionalEmails.sendTransacEmail({
     sender: SENDER,
     to: [{ email: data.guestEmail, name: data.guestName }],
-    subject: `Confirmation de votre séjour à L'Aubier · ${formatDate(data.checkin)}`,
+    subject: `Demande de séjour reçue · ${formatDate(data.checkin)}`,
     htmlContent: `
       <h2>Votre demande de réservation est bien reçue !</h2>
       <p>Bonjour ${guestName},</p>

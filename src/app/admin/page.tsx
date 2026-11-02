@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { getDb } from "@/lib/db";
+import { getLastAirbnbSync } from "@/lib/airbnbSync";
 import AdminDashboard from "./AdminDashboard";
 
 export default async function AdminPage() {
@@ -21,10 +22,11 @@ export default async function AdminPage() {
   let statsData = { this_month_count: "0", this_month_revenue: "0" };
   let nextArrival: { checkin: string; guest_name: string } | null = null;
   let occupationRate = 0;
+  let lastAirbnbSync: string | null = null;
 
   try {
     const sql = getDb();
-    const [stats, nextArrivalRows, monthResRows] = await Promise.all([
+    const [stats, nextArrivalRows, monthResRows, lastSync] = await Promise.all([
       sql`
         SELECT
           COUNT(*) FILTER (WHERE status != 'cancelled'
@@ -46,7 +48,9 @@ export default async function AdminPage() {
           AND checkout > ${monthStartStr}
           AND checkin <= ${monthEndStr}
       `,
+      getLastAirbnbSync(sql),
     ]);
+    lastAirbnbSync = lastSync;
 
     statsData = {
       this_month_count: String(stats[0].this_month_count),
@@ -82,6 +86,7 @@ export default async function AdminPage() {
         next_guest: nextArrival?.guest_name ?? null,
       }}
       icalUrl={icalUrl}
+      lastAirbnbSync={lastAirbnbSync}
     />
   );
 }

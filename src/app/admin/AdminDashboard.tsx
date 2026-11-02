@@ -41,7 +41,15 @@ const cards = (stats: Stats) => [
   },
 ];
 
-export default function AdminDashboard({ stats, icalUrl }: { stats: Stats; icalUrl: string }) {
+export default function AdminDashboard({
+  stats,
+  icalUrl,
+  lastAirbnbSync,
+}: {
+  stats: Stats;
+  icalUrl: string;
+  lastAirbnbSync: string | null;
+}) {
   return (
     <div className="flex min-h-screen bg-[#f7f5f0]">
       <AdminSidebar />
@@ -65,7 +73,7 @@ export default function AdminDashboard({ stats, icalUrl }: { stats: Stats; icalU
           </div>
 
           <div className="flex gap-3 flex-wrap mb-6">
-            <SyncButton />
+            <SyncButton initialLastSync={lastAirbnbSync} />
           </div>
 
           <div className="bg-white rounded-xl p-5 border border-[#b8cfc0]/30 max-w-xl">
@@ -105,7 +113,15 @@ function IcalUrlField({ icalUrl }: { icalUrl: string }) {
   );
 }
 
-function SyncButton() {
+function formatSyncDate(iso: string): string {
+  const date = new Date(iso);
+  const day = date.toLocaleDateString("fr-FR", { timeZone: "Europe/Paris", day: "numeric", month: "long", year: "numeric" });
+  const time = date.toLocaleTimeString("fr-FR", { timeZone: "Europe/Paris", hour: "2-digit", minute: "2-digit" });
+  return `${day} à ${time}`;
+}
+
+function SyncButton({ initialLastSync }: { initialLastSync: string | null }) {
+  const [lastSync, setLastSync] = useState(initialLastSync);
   const [result, setResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -116,6 +132,7 @@ function SyncButton() {
       const res = await fetch("/api/admin/sync-airbnb", { method: "POST" });
       const data = await res.json();
       setResult(res.ok ? data.message ?? "Sync terminée" : data.error ?? "Erreur de synchronisation");
+      if (res.ok && data.lastSync) setLastSync(data.lastSync);
     } catch {
       setResult("Erreur réseau lors de la synchronisation.");
     }
@@ -124,13 +141,18 @@ function SyncButton() {
 
   return (
     <div className="flex flex-col gap-2">
-      <button
-        onClick={sync}
-        disabled={loading}
-        className="text-sm bg-[#8aab94] text-white px-4 py-2 rounded hover:bg-[#8aab94]/80 disabled:opacity-40 transition-colors"
-      >
-        {loading ? "Synchronisation…" : "Sync Airbnb"}
-      </button>
+      <div className="flex items-center gap-3 flex-wrap">
+        <button
+          onClick={sync}
+          disabled={loading}
+          className="text-sm bg-[#8aab94] text-white px-4 py-2 rounded hover:bg-[#8aab94]/80 disabled:opacity-40 transition-colors"
+        >
+          {loading ? "Synchronisation…" : "Sync Airbnb"}
+        </button>
+        <p className="text-xs text-[#8aab94]">
+          Dernière synchro : {lastSync ? formatSyncDate(lastSync) : "jamais"}
+        </p>
+      </div>
       {result && <p className="text-xs text-[#8aab94]">{result}</p>}
     </div>
   );

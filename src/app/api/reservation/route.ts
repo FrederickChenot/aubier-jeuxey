@@ -4,6 +4,7 @@ import { getDb } from "@/lib/db";
 import { getSettings } from "@/lib/settings";
 import { calculatePrice, isValidGuests } from "@/lib/pricing";
 import { isRangeAvailable } from "@/lib/availability";
+import { syncAirbnbIfStale } from "@/lib/airbnbSync";
 import { sendOwnerNotification, sendGuestConfirmation } from "@/lib/email";
 import ical from "ical-generator";
 
@@ -68,6 +69,8 @@ export async function POST(request: NextRequest) {
   if (message != null && (typeof message !== "string" || message.length > 2000)) {
     return Response.json({ error: "Message trop long." }, { status: 400 });
   }
+
+  await syncAirbnbIfStale(15);
 
   const sql = getDb();
 
