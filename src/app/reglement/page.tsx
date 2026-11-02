@@ -41,7 +41,7 @@ export default async function ReglementPage() {
     },
     {
       title: "Stationnement",
-      content: <p>Stationnement gratuit sur le trottoir devant le portillon.</p>,
+      content: <p>Stationnement gratuit devant le portillon.</p>,
     },
     {
       title: "Propreté",

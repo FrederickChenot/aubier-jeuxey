@@ -12,12 +12,17 @@ const amenities = [
   {
     icon: "🚗",
     title: "Stationnement gratuit",
-    desc: "Sur le trottoir devant le portillon",
+    desc: "Devant le portillon",
   },
   {
     icon: "📶",
     title: "Wifi",
     desc: "Connexion disponible dans le logement",
+  },
+  {
+    icon: "🧺",
+    title: "Buanderie",
+    desc: "Lave-linge et sèche-linge",
   },
   {
     icon: "🍋",

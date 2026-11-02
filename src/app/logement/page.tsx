@@ -39,7 +39,7 @@ export default async function LogementPage() {
             <span>🛏️ Lit double 140×190 cm</span>
             <span>🚿 Douche italienne · WC suspendu · sèche-serviette</span>
             <span>🌿 Terrasse privative & jardin japonais</span>
-            <span>🚗 Stationnement gratuit sur le trottoir devant le portillon</span>
+            <span>🚗 Stationnement gratuit devant le portillon</span>
           </div>
         </div>
 
